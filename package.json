@@ -1,0 +1,47 @@
+{
+  "name": "Elementify",
+  "version": "1.0.0",
+  "description": "Ultra lightweight library for DOM manipulation, event manipulation, form manipulation and custom for elements",
+  "main": "lib/elementify.js",
+  "scripts": {
+    "build": "webpack --env build",
+    "dev": "webpack --progress --colors --watch --env dev",
+    "test": "mocha --compilers js:babel-core/register --colors ./test/*.spec.js",
+    "test:watch": "mocha --compilers js:babel-core/register --colors -w ./test/*.spec.js"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.1.2",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "babel-preset-env": "^1.6.1",
+    "chai": "^4.1.2",
+    "clean-webpack-plugin": "^0.1.17",
+    "eslint": "^4.14.0",
+    "eslint-loader": "^1.9.0",
+    "mocha": "^4.1.0",
+    "webpack": "^3.10.0",
+    "webpack-bundle-analyzer": "^2.9.1",
+    "yargs": "7.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/krasimir/webpack-library-starter.git"
+  },
+  "keywords": [
+    "webpack",
+    "es6",
+    "starter",
+    "library",
+    "universal",
+    "umd",
+    "commonjs"
+  ],
+  "author": "Krasimir Tsonev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/krasimir/webpack-library-starter/issues"
+  },
+  "homepage": "https://github.com/krasimir/webpack-library-starter"
+}
