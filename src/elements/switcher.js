@@ -2,9 +2,9 @@
 *  @file Switch element
 */
 
-import Element from 'lib/elements/element';
-import FormElement from 'lib/elements/formelement';
-import isset from 'lib/utilities/isset';
+import Element from 'elements/element';
+import FormElement from 'elements/formelement';
+import isset from 'utilities/isset';
 
 export default class Switcher extends FormElement {
   constructor(node, options = {}) {

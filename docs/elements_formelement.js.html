@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>elements/formelement.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="elementify.Collection.html">Collection</a></li><li><a href="elementify.Element.html">Element</a></li><li><a href="HtmlElement.html">HtmlElement</a><ul class='methods'><li data-type='method'><a href="HtmlElement.html#~addClass">addClass</a></li><li data-type='method'><a href="HtmlElement.html#~after">after</a></li><li data-type='method'><a href="HtmlElement.html#~append">append</a></li><li data-type='method'><a href="HtmlElement.html#~attr">attr</a></li><li data-type='method'><a href="HtmlElement.html#~before">before</a></li><li data-type='method'><a href="HtmlElement.html#~child">child</a></li><li data-type='method'><a href="HtmlElement.html#~childs">childs</a></li><li data-type='method'><a href="HtmlElement.html#~clone">clone</a></li><li data-type='method'><a href="HtmlElement.html#~data">data</a></li><li data-type='method'><a href="HtmlElement.html#~display">display</a></li><li data-type='method'><a href="HtmlElement.html#~empty">empty</a></li><li data-type='method'><a href="HtmlElement.html#~fadeIn">fadeIn</a></li><li data-type='method'><a href="HtmlElement.html#~fadeIn">fadeIn</a></li><li data-type='method'><a href="HtmlElement.html#~forEach">forEach</a></li><li data-type='method'><a href="HtmlElement.html#~hasClass">hasClass</a></li><li data-type='method'><a href="HtmlElement.html#~hide">hide</a></li><li data-type='method'><a href="HtmlElement.html#~html">html</a></li><li data-type='method'><a href="HtmlElement.html#~matches">matches</a></li><li data-type='method'><a href="HtmlElement.html#~nextSibling">nextSibling</a></li><li data-type='method'><a href="HtmlElement.html#~nextSiblings">nextSiblings</a></li><li data-type='method'><a href="HtmlElement.html#~parent">parent</a></li><li data-type='method'><a href="HtmlElement.html#~parents">parents</a></li><li data-type='method'><a href="HtmlElement.html#~prepend">prepend</a></li><li data-type='method'><a href="HtmlElement.html#~previousSibling">previousSibling</a></li><li data-type='method'><a href="HtmlElement.html#~previousSiblings">previousSiblings</a></li><li data-type='method'><a href="HtmlElement.html#~remove">remove</a></li><li data-type='method'><a href="HtmlElement.html#~removeClass">removeClass</a></li><li data-type='method'><a href="HtmlElement.html#~shallow">shallow</a></li><li data-type='method'><a href="HtmlElement.html#~show">show</a></li><li data-type='method'><a href="HtmlElement.html#~show">show</a></li><li data-type='method'><a href="HtmlElement.html#~style">style</a></li><li data-type='method'><a href="HtmlElement.html#~toggleClass">toggleClass</a></li><li data-type='method'><a href="HtmlElement.html#~unwrap">unwrap</a></li><li data-type='method'><a href="HtmlElement.html#~wrap">wrap</a></li></ul></li><li><a href="module.html#.exports">exports</a></li></ul><h3>Namespaces</h3><ul><li><a href="elementify.html">elementify</a><ul class='methods'><li data-type='method'><a href="elementify.html#.Q">Q</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">elements/formelement.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+* @file Form classics elements Class
+*/
+
+import HtmlElement from 'elements/htmlelement';
+import $ from 'elements/query';
+
+export default class FormElement extends HtmlElement {
+  constructor(node, options = {}) {
+    super(node, options);
+
+    this.dirty = false;
+
+    if (this.node.nodeName === 'TEXTAREA') this.node.setAttribute('type', 'textarea');
+    if (this.node.nodeName === 'SELECT') {
+      this.node.setAttribute('type', 'select');
+      if (options.options) {
+        for (let key in options.options) {
+          this.append('&lt;option value="' + key + '">' + options.options[key] + '&lt;/option>');
+        }
+      }
+    }
+
+    if (options.value !== undefined &amp;&amp; options.value !== null) {
+      this.value = this.defaultValue = options.value;
+      this.data('defaultValue', options.value);
+    }
+  }
+
+  get value() {
+    var ret;
+
+    switch (this.element.getAttribute('type')) {
+      case 'checkbox' :
+      case 'radio' :
+        ret = this.element.checked ? this.element.value : '';
+        break;
+      default:
+        ret = this.element.value;
+        break;
+    }
+    if (ret) ret = ret.trim();
+    else ret = '';
+    return ret;
+  }
+
+  set value(val) {
+    val = (String(val)).trim();
+
+    switch (this.element.getAttribute('type')) {
+      case 'textarea' :
+        this.element.value = val;
+        this.element.innerHTML = val;
+        break;
+      default:
+        this.element.value = val;
+        break;
+    }
+    this.dirty = true;
+
+    return this;
+  }
+
+  get placeholder() {
+    return this.element.getAttribute('placeholder');
+  }
+
+  set placeholder(val) {
+    this.element.setAttribute('placeholder', val);
+    return this;
+  }
+
+  reset() {
+    this.value = this.defaultValue || '';
+  }
+
+  validate() {
+    var validate = true;
+
+    // IE FIX
+    if (this.value === this.placeholder) this.value = '';
+
+    if (this.element.hasAttribute('required')) {
+      if (this.value === '') validate = false;
+    }
+
+    if (this.element.hasAttribute('sameas')) {
+      if (this.value !== $('@' + this.element.getAttribute('sameas')).value) validate = false;
+    }
+
+    if (this.element.hasAttribute('rule')) {
+      let rule = this.element.getAttribute('rule');
+
+      if (typeof rule === 'string') {
+        switch (rule) {
+          case 'integer':
+            if (!this.value.match(/^\d+$/)) validate = false;
+            break;
+          case 'email':
+          case 'mail':
+            // eslint-disable-next-line max-len
+            if (!this.value.match(/^(([^&lt;>()\[\]\\.,;:\s@"]+(\.[^&lt;>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) validate = false;
+            break;
+        }
+      } else if (!this.value.match(rule)) validate = false;
+    }
+
+    return validate;
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Feb 19 2018 12:08:44 GMT+0100 (Paris, Madrid) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

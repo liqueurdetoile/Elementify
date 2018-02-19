@@ -2,9 +2,26 @@
 *  @file Collection
 */
 
-import HtmlElement from 'lib/elements/htmlelement';
+import HtmlElement from 'elements/htmlelement';
 
-export default class Collection {
+/**
+*  @classdesc Basic class for handling a collection of any HtmlElement objects
+*
+*  A collection is pretty straight forwarding. All methods from HtmlElement class
+*  are mapped to a collection to enable direct calls on items from collection itself.
+*
+*  @class elementify.Collection
+*/
+
+class Collection {
+  /**
+  *  Description
+  *
+  *  @method Collection.constructor
+  *
+  *  @param {String} query Stores the DOM query that generated the current collection
+  *  @returns {Collection} A collection of [HtmlElement]{@link HtmlElements} objects
+  */
   constructor(query) {
     this.query = query;
     this.elements = [];
@@ -44,4 +61,10 @@ export default class Collection {
 
     return container;
   }
+
+  get node() {
+    return this.element;
+  }
 }
+
+export default Collection;

@@ -1,13 +1,15 @@
 {
   "name": "Elementify",
   "version": "1.0.0",
-  "description": "Ultra lightweight library for DOM manipulation, event manipulation, form manipulation and custom for elements",
-  "main": "lib/elementify.js",
+  "description": "Ultra lightweight library for DOM manipulation, event manipulation, form manipulation and custom elements",
+  "main": "dist/elementify.min.js",
   "scripts": {
-    "build": "webpack --env build",
-    "dev": "webpack --progress --colors --watch --env dev",
-    "test": "mocha --compilers js:babel-core/register --colors ./test/*.spec.js",
-    "test:watch": "mocha --compilers js:babel-core/register --colors -w ./test/*.spec.js"
+    "build": "webpack --config webpack.conf/build.js",
+    "dev": "webpack --progress --colors --watch --config webpack.conf/dev.js",
+    "test": "./node_modules/.bin/karma start --single-run --browsers Chrome && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "test:test": "./node_modules/.bin/karma start --single-run --browsers Chrome",
+    "tests:dev": "karma start",
+    "docs": "jsdoc ./src -c .jsdoc && jsdoc2md ./src/*.js  > docs/api.md"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -17,31 +19,62 @@
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
-    "clean-webpack-plugin": "^0.1.17",
-    "eslint": "^4.14.0",
+    "clean-webpack-plugin": "^0.1.18",
+    "coveralls": "^3.0.0",
+    "css-loader": "^0.28.9",
+    "docdash": "^0.4.0",
+    "eslint": "^4.18.0",
     "eslint-loader": "^1.9.0",
+    "istanbul-instrumenter-loader": "^3.0.0",
+    "jsdoc": "^3.5.5",
+    "jsdoc-to-markdown": "^4.0.1",
+    "karma": "^2.0.0",
+    "karma-babel-preprocessor": "^7.0.0",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-coverage-istanbul-reporter": "^1.4.1",
+    "karma-firefox-launcher": "^1.1.0",
+    "karma-ie-launcher": "^1.0.0",
+    "karma-mocha": "^1.3.0",
+    "karma-opera-launcher": "^1.0.0",
+    "karma-phantomjs-launcher": "^1.0.4",
+    "karma-safari-launcher": "^1.0.0",
+    "karma-webpack": "^2.0.9",
     "mocha": "^4.1.0",
-    "webpack": "^3.10.0",
-    "webpack-bundle-analyzer": "^2.9.1",
-    "yargs": "7.1.0"
+    "phantomjs-prebuilt": "^2.1.16",
+    "postcss-cssnext": "^3.1.0",
+    "postcss-loader": "^2.1.0",
+    "postcss-reporter": "^5.0.0",
+    "semantic-release": "^12.4.1",
+    "style-loader": "^0.20.2",
+    "webpack": "^3.11.0",
+    "webpack-bundle-analyzer": "^2.10.0",
+    "webpack-merge": "^4.1.1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/krasimir/webpack-library-starter.git"
+    "url": "https://github.com/liqueurdetoile/elementify.git"
   },
   "keywords": [
-    "webpack",
-    "es6",
-    "starter",
     "library",
-    "universal",
-    "umd",
-    "commonjs"
+    "html",
+    "node",
+    "element",
+    "cross-browser",
+    "jquery",
+    "lightweight"
   ],
-  "author": "Krasimir Tsonev",
-  "license": "MIT",
+  "author": "Liqueur de Toile",
+  "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/krasimir/webpack-library-starter/issues"
+    "url": "https://github.com/liqueurdetoile/elementify/issues"
   },
-  "homepage": "https://github.com/krasimir/webpack-library-starter"
+  "homepage": "https://github.com/liqueurdetoile/elementify",
+  "dependencies": {
+    "dot-object-array": "^1.1.0",
+    "element-dataset": "^2.2.6",
+    "es6-promise": "^4.2.4",
+    "handjs": "^1.3.11",
+    "polyfill-function-prototype-bind": "0.0.1"
+  }
 }

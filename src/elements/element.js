@@ -2,35 +2,68 @@
 *  @file Element Class
 */
 
-import Collection from 'lib/elements/collection';
-import HtmlElement from 'lib/elements/htmlelement';
-import FormElement from 'lib/elements/formelement';
-import Form from 'lib/elements/form';
-import Selector from 'lib/elements/selector';
-import Switcher from 'lib/elements/switcher';
-import isset from 'lib/utilities/isset';
+import Collection from 'elements/collection';
+import HtmlElement from 'elements/htmlelement';
+import FormElement from 'elements/formelement';
+import Form from 'elements/form';
+import Selector from 'elements/selector';
+import Switcher from 'elements/switcher';
 
-export default class Element {
+/**
+*  The Element class will take any string or node and returns the appropriate enhanced Element object
+*
+*  @class elementify.Element
+*
+*  @param
+*  {String|Node|HTMLElement}
+*  input
+*  Description for input
+*  @param
+*  {keyValueObject}
+*  [options = {}]
+*  An option/value object that will be passed to the resulting object.
+*  It may contain any HTML attributes and options. See each object for legible values.
+*  @returns {HtmlElement|Form|FormElement|Selector|Switcher|elementify.Collection}
+*/
+class Element {
   constructor(input, options = {}) {
-    var tag;
+    var node;
 
-    if (!isset(input)) return document.createDocumentFragment();
+    if (!input) return new HtmlElement(document.createDocumentFragment(), options);
 
     if (typeof input === 'string') {
-      tag = input.match(/^[a-zA-Z]*$/);
-      if (isset(tag)) { // Tag is used
-        return this.nodeToElement(document.createElement(tag[0]), options);
+      try {
+        node = document.createElement(input);
+        return this.nodeToElement(node, options); // Import node
+      } catch (e) {
+        return this.stringToElements(input, options); // Import tag string
       }
-      // Analyze import string
-      return this.stringToElements(input, options);
-    } else if (input instanceof Node && !isset(input.element)) { // Import node
+    } else if (input instanceof Node && !input.element) { // Import node
       return this.nodeToElement(input, options);
     }
 
     return input;
   }
 
-  // IMPORT FUNCTIONS
+  /**
+  *  Converts a string to an Element.
+  *  You don't usually need to call directly this method.
+  *
+  *  @method Element.stringToElements
+  *  @private
+  *
+  *  @param
+  *  {String}
+  *  s
+  *  String value to be converted to an Element
+  *
+  *  @params
+  *  {keyValueObject}
+  *  [options = {}]
+  *  An option/value object that will be passed to the resulting object.
+  *  It may contain any HTML attributes and options. See each object for legible values.
+  *  @returns {HtmlElement|Form|FormElement|Selector|Switcher|Collection} Node
+  */
   stringToElements(s, options) {
     var element, frag;
 
@@ -56,6 +89,24 @@ export default class Element {
     return element;
   }
 
+  /**
+  *  Converts an HTML node to an Element.
+  *  You don't usually need to call directly this method.
+  *
+  *  @method Element.nodeToElement
+  *  @private
+  *
+  *  @param
+  *  {Node}
+  *  node
+  *  HTML Node
+  *  @param
+  *  {keyValueObject}
+  *  [options = {}]
+  *  An option/value object that will be passed to the resulting object.
+  *  It may contain any HTML attributes and options. See each object for legible values.
+  *  @returns {HtmlElement|Form|FormElement|Selector|Switcher|Collection} Node
+  */
   nodeToElement(node, options) {
     var element;
 
@@ -88,11 +139,6 @@ export default class Element {
 
     return element;
   }
-
-  collectionToElement(collection) {
-    const element = new DocumentFragment();
-
-    collection.forEach((element) => this.append(element));
-    return element;
-  }
 }
+
+export default Element;

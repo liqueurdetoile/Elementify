@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ajax/jq.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="elementify.Collection.html">Collection</a></li><li><a href="elementify.Element.html">Element</a></li><li><a href="HtmlElement.html">HtmlElement</a><ul class='methods'><li data-type='method'><a href="HtmlElement.html#~addClass">addClass</a></li><li data-type='method'><a href="HtmlElement.html#~after">after</a></li><li data-type='method'><a href="HtmlElement.html#~append">append</a></li><li data-type='method'><a href="HtmlElement.html#~attr">attr</a></li><li data-type='method'><a href="HtmlElement.html#~before">before</a></li><li data-type='method'><a href="HtmlElement.html#~child">child</a></li><li data-type='method'><a href="HtmlElement.html#~childs">childs</a></li><li data-type='method'><a href="HtmlElement.html#~clone">clone</a></li><li data-type='method'><a href="HtmlElement.html#~data">data</a></li><li data-type='method'><a href="HtmlElement.html#~display">display</a></li><li data-type='method'><a href="HtmlElement.html#~empty">empty</a></li><li data-type='method'><a href="HtmlElement.html#~fadeIn">fadeIn</a></li><li data-type='method'><a href="HtmlElement.html#~fadeIn">fadeIn</a></li><li data-type='method'><a href="HtmlElement.html#~forEach">forEach</a></li><li data-type='method'><a href="HtmlElement.html#~hasClass">hasClass</a></li><li data-type='method'><a href="HtmlElement.html#~hide">hide</a></li><li data-type='method'><a href="HtmlElement.html#~html">html</a></li><li data-type='method'><a href="HtmlElement.html#~matches">matches</a></li><li data-type='method'><a href="HtmlElement.html#~nextSibling">nextSibling</a></li><li data-type='method'><a href="HtmlElement.html#~nextSiblings">nextSiblings</a></li><li data-type='method'><a href="HtmlElement.html#~parent">parent</a></li><li data-type='method'><a href="HtmlElement.html#~parents">parents</a></li><li data-type='method'><a href="HtmlElement.html#~prepend">prepend</a></li><li data-type='method'><a href="HtmlElement.html#~previousSibling">previousSibling</a></li><li data-type='method'><a href="HtmlElement.html#~previousSiblings">previousSiblings</a></li><li data-type='method'><a href="HtmlElement.html#~remove">remove</a></li><li data-type='method'><a href="HtmlElement.html#~removeClass">removeClass</a></li><li data-type='method'><a href="HtmlElement.html#~shallow">shallow</a></li><li data-type='method'><a href="HtmlElement.html#~show">show</a></li><li data-type='method'><a href="HtmlElement.html#~show">show</a></li><li data-type='method'><a href="HtmlElement.html#~style">style</a></li><li data-type='method'><a href="HtmlElement.html#~toggleClass">toggleClass</a></li><li data-type='method'><a href="HtmlElement.html#~unwrap">unwrap</a></li><li data-type='method'><a href="HtmlElement.html#~wrap">wrap</a></li></ul></li><li><a href="module.html#.exports">exports</a></li></ul><h3>Namespaces</h3><ul><li><a href="elementify.html">elementify</a><ul class='methods'><li data-type='method'><a href="elementify.html#.Q">Q</a></li></ul></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">ajax/jq.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ *  @file Liqueur de Toile Jquery-like ajax request module
+ *  @author Liqueur de Toile (https://liqueurdetoile.com)
+ *  @version 1.0.0
+ *  @copyright 2017, Liqueur de Toile
+ *  @license Apache 2.0
+ *
+*/
+
+import isset from 'lib/utilities/isset';
+
+export default function (options) {
+
+  return new Promise((resolve, reject) => {
+
+    const method = options.method || 'GET';
+    const url = options.url;
+    var xhr;
+
+    if (window.XMLHttpRequest) {
+      xhr = new window.XMLHttpRequest();
+    } else if (window.ActiveXObject) {
+      xhr = new window.ActiveXObject('Microsoft.XMLHTTP');
+    } else {
+      reject('Your browser does not support Ajax. Sadly to say, you cannot use this site');
+    }
+
+    xhr.open(method, url, true);
+
+    // Additional parameters
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    if (options.headers) {for (let key in options.headers) xhr.setRequestHeader(key, options.headers[key]);}
+    if (options.mimeType) xhr.overrideMimeType(options.mimeType);
+    if (options.responseType) xhr.responseType = options.responseType;
+
+    // Following request results
+    xhr.onreadystatechange = function (e) {
+      var response, jsonFail;
+
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        response = xhr.response;
+        jsonFail = false;
+
+        // Checking response and parsing data
+        // Check for JSON valid data and IE fix
+        if (xhr.status === 200 &amp;&amp; options.responseType === 'json' &amp;&amp; !isset(xhr.response)) jsonFail = true;
+
+        // IE Hack
+        if ((options.responseType === 'json' || xhr.getResponseHeader('Content-Type') === 'application/json') &amp;&amp;
+            xhr.responseType !== 'json' &amp;&amp; isset(xhr.responseText)) {
+          try {
+            response = JSON.parse(xhr.responseText);
+          } catch (e) { jsonFail = true; }
+        }
+
+        if (xhr.status >= 200 &amp;&amp; xhr.status &lt; 400 &amp;&amp; !jsonFail) {
+          if (isset(options.success)) options.success(response);
+          resolve(response);
+        }
+
+        // Calling callbacks before reject for digest
+        if (options.statusCode) {
+          if (options.statusCode[xhr.status]) {
+            if (xhr.status >= 200 &amp;&amp; xhr.status &lt; 400 &amp;&amp; !jsonFail) options.statusCode[xhr.status](response);
+            else {
+              options.statusCode[xhr.status](xhr,
+                jsonFail ? xhr.statusText : 'Unable to parse JSON response from server',
+                xhr.status);
+            }
+          }
+        }
+
+        if (xhr.status >= 400) {
+          if (isset(options.error)) options.error(xhr, xhr.statusText, xhr.status);
+          reject(xhr.status);
+        }
+
+        if (jsonFail) {
+          if (isset(options.error)) options.error(xhr, 'Unable to parse JSON response from server', xhr.status);
+          reject('Unable to parse JSON response from server');
+        }
+
+        if (isset(options.complete)) {
+          options.complete(xhr,
+            jsonFail ? xhr.statusText : 'Unable to parse JSON response from server',
+            xhr.status);
+        }
+      }
+    };
+
+    // Running beforeSend callback
+    if (options.beforeSend instanceof Function) options.beforeSend(xhr);
+    xhr.send(isset(options.data) ? options.data : null);
+  });
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Feb 19 2018 12:08:44 GMT+0100 (Paris, Madrid) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

@@ -2,8 +2,8 @@
 *  @file Form
 */
 
-import $ from 'lib/query/q';
-import HtmlElement from 'lib/elements/htmlelement';
+import HtmlElement from 'elements/htmlelement';
+import $ from 'elements/query';
 
 export default class Form extends HtmlElement {
   constructor(node, options = {}) {
@@ -37,6 +37,10 @@ export default class Form extends HtmlElement {
       } else field.removeClass('field-not-validate').addClass('field-validate');
     });
     return validate;
+  }
+
+  reset() {
+    this.fields.forEach(field => field.reset());
   }
 
   submit() {

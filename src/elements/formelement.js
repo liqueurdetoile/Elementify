@@ -2,24 +2,28 @@
 * @file Form classics elements Class
 */
 
-import $ from 'lib/query/q';
-import isset from 'lib/utilities/isset';
-import foreach from 'lib/utilities/foreach';
-import HtmlElement from 'lib/elements/htmlelement';
+import HtmlElement from 'elements/htmlelement';
+import $ from 'elements/query';
 
 export default class FormElement extends HtmlElement {
-  constructor(node, options) {
+  constructor(node, options = {}) {
     super(node, options);
 
     this.dirty = false;
 
-    if (this.element.nodeName === 'SELECT' && !isset(this.element.getAttribute('type'))) {
-      this.element.setAttribute('type', 'select');
+    if (this.node.nodeName === 'TEXTAREA') this.node.setAttribute('type', 'textarea');
+    if (this.node.nodeName === 'SELECT') {
+      this.node.setAttribute('type', 'select');
+      if (options.options) {
+        for (let key in options.options) {
+          this.append('<option value="' + key + '">' + options.options[key] + '</option>');
+        }
+      }
     }
-    if (this.element.nodeName === 'TEXTAREA') this.element.setAttribute('type', 'textarea');
 
-    if (this.element.nodeName === 'SELECT' && isset(options.options)) {
-      foreach(options.options, (value, label) => this.append('<option value="' + value + '">' + label + '</option>'));
+    if (options.value !== undefined && options.value !== null) {
+      this.value = this.defaultValue = options.value;
+      this.data('defaultValue', options.value);
     }
   }
 
@@ -29,13 +33,13 @@ export default class FormElement extends HtmlElement {
     switch (this.element.getAttribute('type')) {
       case 'checkbox' :
       case 'radio' :
-        ret = isset(this.element.checked) ? this.element.value : '';
+        ret = this.element.checked ? this.element.value : '';
         break;
       default:
         ret = this.element.value;
         break;
     }
-    if (isset(ret)) ret = ret.trim();
+    if (ret) ret = ret.trim();
     else ret = '';
     return ret;
   }
@@ -64,6 +68,10 @@ export default class FormElement extends HtmlElement {
   set placeholder(val) {
     this.element.setAttribute('placeholder', val);
     return this;
+  }
+
+  reset() {
+    this.value = this.defaultValue || '';
   }
 
   validate() {

@@ -3,11 +3,10 @@
 *
 */
 
-import 'lib/elements/selector.sss';
-import Element from 'lib/elements/element';
-import FormElement from 'lib/elements/formelement';
-import isset from 'lib/utilities/isset';
-import foreach from 'lib/utilities/foreach';
+import Element from 'elements/element';
+import FormElement from 'elements/formelement';
+import isset from 'utilities/isset';
+import foreach from 'utilities/foreach';
 
 export default class Selector extends FormElement {
   constructor(node, options) {
