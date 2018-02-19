@@ -2,6 +2,7 @@
 // Generated on Sun Feb 18 2018 11:29:12 GMT+0100 (Paris, Madrid)
 
 var webpackConfig = require('./webpack.conf/tests.js');
+process.env.CHROME_BIN = require('puppeteer').executablePath()
 
 module.exports = function(config) {
   config.set({
