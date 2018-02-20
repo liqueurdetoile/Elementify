@@ -7,6 +7,11 @@ const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 
 module.exports = merge(base, {
   devtool: 'source-map',
+  output: {
+    path: path.resolve('./dev'),
+    filename: 'elementify.tests.js',
+    chunkFilename: 'modules/[name].tests.js'    
+  },
   module: {
     rules: [
       {
