@@ -59,10 +59,13 @@ function Q(s, e) {
   if (s.nodeType && s.nodeType === 1) return new Element(s, e);
   if (s[0] === '+') return new Element(s.slice(1), e);
 
-  if (typeof e === 'undefined') {e = document;} else if (e.node) {
+  if (typeof e === 'undefined') e = document;
+  if (e.node) {
     e = e.node;
-    // Let ID search into a node
+    // Let ID search into a node not in DOM
     if (s[0] === '#') s = s.replace('#', '[id="') + '"]';
+    // Let name search into a node not in DOM
+    if (s[0] === '@') s = s.replace('@', '[name="') + '"]';
   }
 
   try {
@@ -75,13 +78,12 @@ function Q(s, e) {
   } catch (ex) {
     try {
       q = e.querySelectorAll(s);
-    } catch (ex) { console.log(e); }
+    } catch (ex) { throw new TypeError('Invalid CSS query Selector'); }
   }
 
-  if (q === null) return new Collection();
+  if (q === null) return new Element();
 
   if (typeof q !== 'undefined' && typeof q.length !== 'undefined') {
-    if (q.nodeName && q.nodeName === 'FORM') return new Element(q);
     if (q.length > 1) {
       r = new Collection();
       r.query = s;
