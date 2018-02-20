@@ -69,21 +69,19 @@ class Element {
 
     try {
       frag = document.createRange().createContextualFragment(s);
-    } catch (e) {
+    } catch (e) /* istanbul ignore next */ {
       let c = document.createElement('span');
 
       c.innerHTML = s;
       frag = c;
     }
 
-    if (frag.childNodes.length) {
-      if (frag.childNodes.length === 1) {
-        element = this.nodeToElement(frag.childNodes.item(0));
-      } else {
-        element = new Collection(s);
-        for (let i = 0; i < frag.childNodes.length; i++) {
-          element.push(Element.prototype.nodeToElement(frag.childNodes.item([i])));
-        }
+    if (frag.childNodes.length === 1) {
+      element = this.nodeToElement(frag.childNodes.item(0), options);
+    } else {
+      element = new Collection(s);
+      for (let i = 0; i < frag.childNodes.length; i++) {
+        element.push(this.nodeToElement(frag.childNodes.item([i], options)));
       }
     }
     return element;
@@ -107,10 +105,10 @@ class Element {
   *  It may contain any HTML attributes and options. See each object for legible values.
   *  @returns {HtmlElement|Form|FormElement|Selector|Switcher|Collection} Node
   */
-  nodeToElement(node, options) {
+  nodeToElement(node, options = {}) {
     var element;
 
-    options = options || {};
+    if (node.nodeType !== 1) return new HtmlElement(document.createDocumentFragment(), options);
     if (node.id) options.id = node.id;
     switch (node.nodeName.toLowerCase()) {
       case 'input':
