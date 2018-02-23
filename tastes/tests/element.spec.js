@@ -5,8 +5,15 @@ describe('Element Class', function () {
   var html = ['a', 'abbr', 'acronym', 'address', 'applet', 'h1'];
   var formElements = ['input', 'select', 'button', 'textarea'];
 
-  it('should create a DocumentFragment in case of void input', function () {
+  it('should create a DocumentFragment HtmlElement in case of void input', function () {
     var e = new Element();
+
+    e.node.nodeType.should.equal(11);
+  });
+
+  it('should create a DocumentFragment HtmlElement in case of silly string input', function () {
+    // var e = new Element('my silly input');
+    var e = new Element(null);
 
     e.node.nodeType.should.equal(11);
   });

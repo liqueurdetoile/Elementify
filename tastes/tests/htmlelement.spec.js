@@ -1,9 +1,9 @@
-import {Element, Q} from 'index';
+import {Element} from 'index';
+import {Q} from 'index';
 
 describe('HTMLElement Class', function () {
-
-  beforeEach(function () {
-    var e = new Element('div', {
+  window.beforeEach(function () { // eslint-disable-line
+    let e = new Element('div', {
       class: 'fixture',
       id: 'fixture',
       innerHTML: 'fixture'
@@ -12,8 +12,38 @@ describe('HTMLElement Class', function () {
     document.body.appendChild(e.node);
   });
 
-  afterEach(function () {
+  window.afterEach(function () { // eslint-disable-line
     Q('#fixture').remove();
+  });
+
+  describe('Constructor', function () {
+    it('should add attributes', function () {
+      let stringdiv = new Element('div', {
+        class: 'class1',
+        style: 'text-align:left; display:none'
+      });
+      let arraydiv = new Element('div', {
+        class: ['class1', 'class2'],
+        style: {
+          display: 'none',
+          padding: '20px',
+          marginLeft: '10em'
+        }
+      });
+
+      stringdiv.node.className.should.equal('class1');
+      stringdiv.style('text-align').should.equal('left');
+      stringdiv.style('display').should.equal('none');
+      arraydiv.node.className.should.equal('class1 class2');
+      arraydiv.style(['display', 'padding', 'marginLeft']).should.eql({
+        display: 'none',
+        padding: '20px',
+        marginLeft: '10em'
+      });
+      arraydiv.style('display').should.equal('none');
+      arraydiv.style('padding').should.equal('20px');
+      arraydiv.style('margin-left').should.equal('10em');
+    });
   });
 
   describe('forEach', function () {
@@ -54,7 +84,7 @@ describe('HTMLElement Class', function () {
         fixture2: 'fixture2',
         fixture3: 'fixture3'
       });
-      var r = Q('#fixture').attr(['fixture1', 'fixture2', 'fixture3']);
+      let r = Q('#fixture').attr(['fixture1', 'fixture2', 'fixture3']);
 
       expect(r).to.eql({
         fixture1: 'fixture1',
@@ -93,7 +123,7 @@ describe('HTMLElement Class', function () {
       expect(Q('#fixture').node.getAttribute('fixture3')).to.equal(null);
     });
     it('should get all attributes', function () {
-      var r = Q('#fixture').attr();
+      let r = Q('#fixture').attr();
 
       r.should.eql({
         class: 'fixture',
@@ -105,15 +135,16 @@ describe('HTMLElement Class', function () {
       Q('#fixture').data('fixture', 'fixture');
       Q('#fixture').node.getAttribute('data-fixture').should.equal('fixture');
     });
-    it('should get a single attribute', function () {
+    it('should get a single data attribute', function () {
       Q('#fixture').data('fixture', 'fixture');
       Q('#fixture').data('fixture').should.equal('fixture');
+      expect(Q('#fixture').data('foo')).to.equal(undefined);
     });
     it('should remove a single data attribute', function () {
       Q('#fixture').data('fixture', null);
       expect(Q('#fixture').node.getAttribute('data-fixture')).to.equal(null);
     });
-    it('should create multiple data attributes', function () {
+    it('should set multiple data attributes', function () {
       Q('#fixture').data({
         fixture1: 'fixture1',
         fixture2: 'fixture2',
@@ -129,7 +160,7 @@ describe('HTMLElement Class', function () {
         fixture2: 'fixture2',
         fixture3: 'fixture3'
       });
-      var r = Q('#fixture').data(['fixture1', 'fixture2', 'fixture3']);
+      let r = Q('#fixture').data(['fixture1', 'fixture2', 'fixture3']);
 
       expect(r).to.eql({
         fixture1: 'fixture1',
@@ -172,7 +203,7 @@ describe('HTMLElement Class', function () {
         id: 'id',
         id2: 'id2'
       });
-      var r = Q('#fixture').data();
+      let r = Q('#fixture').data();
 
       r.should.eql({
         id: 'id',
@@ -186,8 +217,8 @@ describe('HTMLElement Class', function () {
   });
 
   describe('Tree traversing', function () {
-    beforeEach(function () {
-      var ul = new Element(
+    window.beforeEach(function () { // eslint-disable-line
+      let ul = new Element(
         '<ul id="list" class="list">' +
         '<li id="li11"></li>' +
         '<li id="li12">' +
@@ -202,7 +233,7 @@ describe('HTMLElement Class', function () {
       document.body.appendChild(ul.node);
     });
 
-    afterEach(function () {
+    window.afterEach(function () { // eslint-disable-line
       Q('#list').remove();
     });
 
@@ -250,7 +281,7 @@ describe('HTMLElement Class', function () {
       });
 
       it('should find the childs with class "lisubsub"', function () {
-        var r = Q('#list').child('.lisubsub');
+        let r = Q('#list').child('.lisubsub');
 
         r.length.should.equal(2);
         r.elements[0].node.id.should.equal('li22');
@@ -322,7 +353,7 @@ describe('HTMLElement Class', function () {
         Q('#fixture').empty();
       });
       it('should append tag to documentFragment', function () {
-        var f = new Element();
+        let f = new Element();
 
         f.append('span');
         f.child().node.nodeName.should.equal('SPAN');
@@ -366,7 +397,7 @@ describe('HTMLElement Class', function () {
     describe('Wrap', function () {
       it('should wrap element and return wrapped element', function () {
         Q('#fixture').append('span');
-        var test = Q('#fixture').child().wrap('div');
+        let test = Q('#fixture').child().wrap('div');
 
         Q('#fixture').child().node.nodeName.should.equal('DIV');
         Q('#fixture').child().child().node.nodeName.should.equal('SPAN');
@@ -376,7 +407,7 @@ describe('HTMLElement Class', function () {
 
       it('should wrap element and return wrapping element', function () {
         Q('#fixture').append('span');
-        var test = Q('#fixture').child().wrap('div', false);
+        let test = Q('#fixture').child().wrap('div', false);
 
         Q('#fixture').child().node.nodeName.should.equal('DIV');
         Q('#fixture').child().child().node.nodeName.should.equal('SPAN');
@@ -388,7 +419,7 @@ describe('HTMLElement Class', function () {
     describe('Unwrap', function () {
       it('should unwrap element', function () {
         Q('#fixture').append('span');
-        var span = Q('#fixture').child();
+        let span = Q('#fixture').child();
 
         Q('#fixture').child().wrap('div');
         span.unwrap();
@@ -418,7 +449,7 @@ describe('HTMLElement Class', function () {
     describe('Remove', function () {
       it('should remove element from DOM', function () {
         Q('#fixture').after('div');
-        var div = Q('#fixture').nextSibling();
+        let div = Q('#fixture').nextSibling();
 
         div.isInDom.should.equal(true);
         div.remove();
@@ -434,7 +465,7 @@ describe('HTMLElement Class', function () {
       });
       it('should set the html content', function () {
         Q('#fixture').after('div');
-        var div = Q('#fixture').nextSibling();
+        let div = Q('#fixture').nextSibling();
 
         div.html('test');
         div.node.innerHTML.should.equal('test');
@@ -452,7 +483,7 @@ describe('HTMLElement Class', function () {
       it('should create a clone', function () {
         Q('#fixture').empty().append('div');
         Q('#fixture').child().append('<div class="1"></div><div class="2"></div>');
-        var clone = Q('#fixture').child().clone();
+        let clone = Q('#fixture').child().clone();
 
         Q('#fixture').append(clone);
         Q('#fixture').child(1).html().should.equal(Q('#fixture').child(2).html());
@@ -465,7 +496,7 @@ describe('HTMLElement Class', function () {
       it('should create a shallow copy', function () {
         Q('#fixture').empty().append('div');
         Q('#fixture').child().append('<div class="1"></div><div class="2"></div>');
-        var clone = Q('#fixture').child().shallow();
+        let clone = Q('#fixture').child().shallow();
 
         Q('#fixture').append(clone);
         Q('#fixture').child(2).html().should.equal('');
@@ -474,7 +505,7 @@ describe('HTMLElement Class', function () {
 
     describe('isInDom', function () {
       it('should be true if is in dom', function () {
-        var div = new Element('div');
+        let div = new Element('div');
 
         div.isInDom.should.equal(false);
         Q('#fixture').append(div);
@@ -485,23 +516,432 @@ describe('HTMLElement Class', function () {
 
     describe('root', function () {
       it('should return the root object container of the element', function () {
-        var div = new Element('div');
+        let div = new Element('div');
 
-        should.equal(div.root, null);
-        var df = new Element();
+        expect(div.root).to.equal(div.node);
+        document.body.appendChild(div.node);
+        expect(div.root).to.equal(document);
+        div.remove();
+      });
+    });
+  });
 
-        df.append(div);
-        div.root.toString().should.equal('[object DocumentFragment]');
-        Q('#fixture').append(df);
-        div.root.should.equal(document);
-        Q('#fixture').empty();
+  describe('Styles and display functions', function () {
+    describe('Styles', function () {
+      it('should return node style properties', function () {
+        Q('#fixture').styles.should.eql(getComputedStyle(document.getElementById('fixture')));
+      });
+    });
+    describe('Style', function () {
+      it('should return the initial style properties values', function () {
+        let div = Q('+div', {
+          style: {
+            color: 'red',
+            margin: '1em'
+          }
+        });
+
+        expect(div.style()).to.eql({color: 'red', margin: '1em'});
+        expect(div.style('color')).to.equal('red');
+        expect(div.style('unknown')).to.equal(undefined);
+        expect(div.style(['color', 'margin'])).to.eql({color: 'red', margin: '1em'});
+      });
+
+      it('should set style properties', function () {
+        let div = Q('+div');
+
+        div.style('background-color', 'red');
+        div.node.style.backgroundColor.should.equal('red');
+        div.style({backgroundColor: 'yellow', margin: '1em'});
+        div.node.style.backgroundColor.should.equal('yellow');
+        div.node.style.margin.should.equal('1em');
+        div.style({align: 'left'}, true).style().should.eql({align: 'left'});
+        expect(div.style(56)).to.equal(undefined);
+      });
+    });
+    describe('Visible, display, hide, show, toggle', function () {
+      it('should return false for an element not in DOM', function () {
+        let div = Q('+div');
+
+        expect(div.visible).to.equal(false);
+      });
+      it('should return true/false for an element in DOM', function () {
+        let div = Q('+div', {id: 'visible-fixture'});
+
+        document.body.appendChild(div.node);
+        expect(div.visible).to.equal(true);
+        div.display('none');
+        expect(div.visible).to.equal(false);
+        div.show();
+        expect(div.visible).to.equal(true);
+        div.hide();
+        expect(div.visible).to.equal(false);
+        div.toggle();
+        expect(div.visible).to.equal(true);
+        div.toggle();
+        expect(div.visible).to.equal(false);
+        div.remove();
+      });
+    });
+    describe('Classes', function () {
+      it('should check class', function () {
+        let div = Q('+div', {class: 'one two'});
+
+        div.hasClass('one').should.equal(true);
+        div.hasClass('one two').should.equal(false);
+        div.hasClass('one', 'two').should.equal(true);
+        div.hasClass('three').should.equal(false);
+        div.hasClass('one three').should.equal(false);
+        div.hasClass('one', 'three').should.equal(false);
+        div.hasClass('one', 'two', 'three').should.equal(false);
+      });
+
+      it('should add class', function () {
+        let div = Q('+div');
+
+        div.addClass('one').hasClass('one').should.equal(true);
+        div.addClass('one', 'two').hasClass('one', 'two').should.equal(true);
+      });
+
+      it('should remove class', function () {
+        let div = Q('+div', { class: ['one', 'two', 'three']});
+
+        div.removeClass('one').hasClass('one').should.equal(false);
+        div.removeClass('four').should.eql(div);
+        div.removeClass('three', 'two').node.className.should.equal('');
+      });
+
+      it('should toggle class', function () {
+        let div = Q('+div');
+
+        div.toggleClass('one').hasClass('one').should.equal(true);
+        div.toggleClass('one').hasClass('one').should.equal(false);
+        div.toggleClass('one', 'two').hasClass('one', 'two').should.equal(true);
+        div.toggleClass('one', 'two').hasClass('one', 'two').should.equal(false);
+        div.toggleClass('one', 'two').hasClass('one', 'two').should.equal(true);
+        div.toggleClass('one').hasClass('two').should.equal(true);
+        div.toggleClass('one').hasClass('one', 'two').should.equal(true);
+      });
+    });
+  });
+
+  describe('NodeMetrics', function () {
+    describe('Position', function () {
+      it('should return NodeMetrics object', function () {
+        let i = Q('+div', {
+          id: 'pFixture',
+          style: {
+            position: 'absolute',
+            top: '50px',
+            left: '50px',
+            width: '100px',
+            height: '100px',
+            border: '1px solid #000'
+          }
+        });
+
+        expect(i.position).to.be.an('object')
+          .to.have.all.keys('left', 'right', 'width', 'height', 'top', 'bottom', 'scrollX', 'scrollY');
+        i.position.should.eql({
+          left: undefined,
+          right: undefined,
+          width: undefined,
+          top: undefined,
+          bottom: undefined,
+          height: undefined,
+          scrollX: undefined,
+          scrollY: undefined
+        });
+        Q('=body').append(i);
+        i.position.should.contain({
+          left: 50,
+          top: 50,
+          width: 100,
+          height: 100
+        });
+      });
+
+      it('should set object position', function () {
+        Q('#pFixture').left = null;
+        Q('#pFixture').right = 50;
+        Q('#pFixture').position.should.contain({
+          right: 50,
+          top: 50,
+          width: 100,
+          height: 100
+        });
+      });
+    });
+  });
+
+  describe('Events', function () {
+    describe('Update events manager', function () {
+      var i, spy1, spy2, spy3;
+
+      window.beforeEach(function () {
+        i = Q('+div');
+        spy1 = () => {this.name = 'spy1';};
+        spy2 = () => {this.name = 'spy2';};
+        spy3 = () => {this.name = 'spy3';};
+
+        Q('body').append(i);
+        i.on('click', spy1);
+        i.on('click', spy2);
+        i.on('mouseover', spy3);
+      });
+
+      window.afterEach(function () {
+        i.remove();
+      });
+
+      it('should remove all listeners when element removed from DOM', function () {
+        i.remove();
+        i.hasEvent().should.be.false;
+      });
+
+      it('should remove all listeners when calling off()', function () {
+        i.off();
+        i.hasEvent().should.be.false;
+      });
+
+      it('should remove all clicks events when calling off(\'click\')', function () {
+        i.off('click');
+        i.hasEvent('click').should.be.false;
+        i.hasEvent('mouseover').should.be.true;
+      });
+
+      it('should remove only one click event when calling off(\'click\', spy1)', function () {
+        i.off('click', spy1);
+        i.hasEvent('click', spy1).should.be.false;
+        i.hasEvent('click', spy2).should.be.true;
+        i.hasEvent('mouseover').should.be.true;
+      });
+    });
+
+    describe('Native events - Single Element', function () {
+      var i, spy1, spy2, spy3, f1, f2, f3;
+
+      window.beforeEach(function () {
+        i = Q('+div');
+        spy1 = sinon.spy();
+        spy2 = sinon.spy();
+        spy3 = sinon.spy();
+        f1 = function () { spy1(); };
+        f2 = function () { spy2(); };
+        f3 = function () { spy3(); };
+
+        Q('body').append(i);
+      });
+
+      window.afterEach(function () {
+        i.remove();
+      });
+
+      it('Should add single listener on single HtmlElement and fire it', function () {
+        i.on('click', spy1);
+        i.fire('click');
+        spy1.called.should.be.true;
+        expect(spy1.args[0][0]).to.be.instanceof(Event);
+        expect(spy1.args[0][0].eventName).to.equal('click');
+        expect(spy1.args[0][0].target).to.equal(i.node);
+      });
+
+      it('Should add multiple listeners (same event) on single HtmlElement and fire it', function () {
+        i.on('click', f1);
+        i.on('click', f2);
+        i.fire('click');
+        spy1.called.should.be.true;
+        spy2.called.should.be.true;
+      });
+
+      it('Should add multiple listeners (multiple events) on single HtmlElement and fire it', function () {
+        i.on('click', f1);
+        i.on('click', f2);
+        i.on('mouseover', f3);
+        i.fire('click');
+        spy1.called.should.be.true;
+        spy2.called.should.be.true;
+        spy3.called.should.be.false;
+        i.fire('mouseover');
+        spy1.calledTwice.should.be.false;
+        spy2.calledTwice.should.be.false;
+        spy3.called.should.be.true;
+      });
+
+      it('Should remove single listener on single HtmlElement (specific call)', function () {
+        i.on('click', spy1);
+        i.off('click', spy1);
+        i.fire('click');
+        spy1.called.should.be.false;
+      });
+
+      it('Should remove single listener on single HtmlElement (event call)', function () {
+        i.on('click', spy1);
+        i.off('click');
+        i.fire('click');
+        spy1.called.should.be.false;
+      });
+
+      it('Should remove single listener on single HtmlElement (all events call)', function () {
+        i.on('click', spy1);
+        i.off();
+        i.fire('click');
+        spy1.called.should.be.false;
+      });
+
+      it('Should remove one among multiple listener (same event) on single HtmlElement and fire it', function () {
+        i.on('click', f1);
+        i.on('click', f2);
+        i.on('mouseover', f3);
+
+        i.off('click', f1);
+        i.fire('click');
+        spy1.called.should.be.false;
+        spy2.called.should.be.true;
+        spy3.called.should.be.false;
+      });
+
+      it('Should remove all for event multiple listener (same event) on single HtmlElement and fire it', function () {
+        i.on('click', f1);
+        i.on('click', f2);
+        i.on('mouseover', f3);
+
+        i.off('click');
+        i.fire('click');
+        spy1.called.should.be.false;
+        spy2.called.should.be.false;
+        spy3.called.should.be.false;
+      });
+
+      it('Should remove all multiple listener (same event) on single HtmlElement and fire it', function () {
+        i.on('click', f1);
+        i.on('click', f2);
+        i.on('mouseover', f3);
+        i.off();
+        i.fire('click');
+        i.fire('mouseover');
+        spy1.called.should.be.false;
+        spy2.called.should.be.false;
+        spy3.called.should.be.false;
+      });
+    });
+
+    describe('Native events - Others tests', function () {
+      it('Should add listener on Collection', function () {
+        let i = new Element('<div id="d1"></div><div id="d2"></div>');
+        let spy = sinon.spy();
+
+        Q('body').append(i);
+        i.on('click', spy);
+        i.fire('click');
+        spy.calledTwice.should.be.true;
+      });
+
+      it('Should remove listener on Collection', function () {
+        let i = new Element('<div id="d1"></div><div id="d2"></div>');
+        let spy = sinon.spy();
+
+        Q('body').append(i);
+        i.on('click', spy);
+        i.off();
+        i.fire('click');
+        spy.called.should.be.false;
+      });
+
+      it('Should add listener at construct on single HtmlElement', function () {
+        let spy = sinon.spy();
+        let i = Q('+div', {
+          events: {
+            click: spy
+          }
+        });
+
+        Q('body').append(i);
+        i.on('click', spy);
+        i.fire('click');
+        spy.called.should.be.true;
+      });
+
+      it('Should add listener at construct on Collection', function () {
+        let spy = sinon.spy();
+        let i = new Element('<div id="d1"></div><div id="d2"></div>', {
+          events: {
+            click: spy
+          }
+        });
+
+        Q('body').append(i);
+        i.on('click', spy);
+        i.fire('click');
+        spy.calledTwice.should.be.true;
+      });
+
+      it('Should fire event on window', function () {
+        let spy1 = sinon.spy();
+        let spy2 = sinon.spy();
+        let i = Q('+div');
+
+        window.addEventListener('click', spy1);
+        i.on('click', spy2);
+        i.fire('click', window);
+        spy1.called.should.be.true;
+        spy2.called.should.be.false;
+      });
+
+      it('Should fire event on another element', function () {
+        let spy1 = sinon.spy();
+        let spy2 = sinon.spy();
+        let i = Q('+div');
+        let j = Q('+div');
+
+        Q('body').append(i).append(j);
+        j.on('click', spy1);
+        i.on('click', spy2);
+        i.fire('click', j);
+        spy1.called.should.be.true;
+        spy2.called.should.be.false;
+      });
+
+      it('Should check registered events/event/callback', function () {
+        let i = Q('+div');
+
+        i.on('click', function f1() {});
+        i.hasEvent().should.be.false; // Not in DOM
+
+        Q(document.body).append(i);
+        i.on('click', function f1() {});
+        i.on('click', function f2() {});
+        i.on('mouseover', function f1() {});
+
+        i.hasEvent().should.be.true;
+        i.hasEvent('click').should.be.true;
+        i.hasEvent('mouseout').should.be.false;
+        i.hasEvent('click', function f1() {}).should.be.true;
+        i.hasEvent('click', function f3() {}).should.be.false;
+      });
+
+      it('Should fetch registered events/event/callback', function () {
+        let i = Q('+div');
+        let f1 = () => {};
+        let f2 = () => {};
+
+        i.on('click', function f1() {});
+        i.hasEvent().should.be.false; // Not in DOM
+
+        Q(document.body).append(i);
+        i.on('click', f1);
+        i.on('click', f2);
+        i.on('mouseover', function f1() {});
+
+        i.getEvent().should.have.all.keys('click', 'mouseover');
+        i.getEvent('click').should.have.all.keys(i._callbackId(f1), i._callbackId(f2));
       });
     });
   });
 
   describe('Fade in and out', function () {
     before(function () {
-      var e = new Element('div', {
+      let e = new Element('div', {
         id: 'fixture-fade',
         style: {
           position: 'fixed',
@@ -516,16 +956,14 @@ describe('HTMLElement Class', function () {
       document.body.appendChild(e.node);
     });
 
-    after(function () {
+    after(function () { //eslint-disable-line
       Q('#fixture-fade').remove();
     });
 
     it('should fade out in 400ms', function (done) {
       Q('#fixture-fade').fadeOut()
-        .then(function (el) {
-          expect(el.node.style.opacity).to.equal('0');
-          done();
-        });
+        .then(function (el) { expect(el.node.style.opacity).to.equal('0'); })
+        .then(done);
     });
     it('should fade in in 400ms', function (done) {
       Q('#fixture-fade').fadeIn()
@@ -533,7 +971,6 @@ describe('HTMLElement Class', function () {
         .then(done);
     });
     it('should fade out in 1500ms', function (done) {
-      this.timeout(5000);
       Q('#fixture-fade').fadeOut({duration: 1500})
         .then(function (el) { expect(el.node.style.opacity).to.equal('0'); })
         .then(done);
