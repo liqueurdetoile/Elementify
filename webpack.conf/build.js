@@ -8,14 +8,12 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 module.exports = merge(base, {
   devtool: false,
   output: {
-    path: path.resolve('./dist'),
-    filename: 'objectarray.min.js',
+    path: path.resolve('./lib'),
+    filename: 'elementify.min.js',
     chunkFilename: 'modules/[name].min.js'
   },
   plugins: [
     new CleanWebpackPlugin(['dist'], {root: path.resolve('./')}),
-    new UglifyJsPlugin({
-      sourceMap: false
-    })
+    new UglifyJsPlugin()
   ]
 });
