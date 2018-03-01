@@ -16,13 +16,21 @@
 *  @example
 *  ready().then(function() { console.log('Can manipulate DOM!') });
 */
-export default function ready() {
-  return new Promise((resolve, reject) => {
-    if (document.readyState === 'interactive' || document.readyState === 'complete') resolve(true);
-    else {
-      document.onreadystatechange = () => {
-        if (document.readyState === 'interactive') resolve(true);
-      };
+export default function ready(callback) {
+  function process(resolve, reject) {
+    if (document.readyState === 'interactive' || document.readyState === 'complete') {
+      if (callback instanceof Function) callback();
+      resolve(true);
+    } else {
+      document.addEventListener('readystatechange', (ev) => {
+        if (document.readyState === 'interactive') {
+          if (callback instanceof Function) callback(ev);
+          resolve(true);
+        }
+      });
     }
-  });
+  }
+
+  if (typeof Promise !== 'undefined') return new Promise(process);
+  return process(()=>{}, ()=>{});
 }

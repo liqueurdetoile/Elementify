@@ -12,17 +12,32 @@
 *  @version 1.0.0
 *  @author Liqueur de Toile <contact@liqueurdetoile.com>
 *
-*  @returns {Promise}
+*  @param {Function}  callback  Callback to be run when event fired
+*  @returns {undefined|Promise}
 *  @example
+*  // With promise
 *  complete().then(function() { console.log('Assets loaded !') });
+*
+*  // With callback
+*  complete(function() { console.log('Assets loaded !') });
+*
 */
-export default function complete() {
-  return new Promise((resolve, reject) => {
-    if (document.readyState === 'complete') resolve(true);
-    else {
-      document.onreadystatechange = () => {
-        if (document.readyState === 'complete') resolve(true);
-      };
+
+export default function complete(callback) {
+  function process(resolve, reject) {
+    if (document.readyState === 'complete') {
+      if (callback instanceof Function) callback();
+      resolve(true);
+    } else {
+      document.addEventListener('readystatechange', (ev) => {
+        if (document.readyState === 'complete') {
+          if (callback instanceof Function) callback(ev);
+          resolve(true);
+        }
+      });
     }
-  });
+  }
+
+  if (typeof Promise !== 'undefined') return new Promise(process);
+  return process(()=>{}, ()=>{});
 }

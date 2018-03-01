@@ -16,28 +16,36 @@
 
 # Elementify
 Elementify is a vanilla JS library designed to be :
-- powerful but lightweight and cross-browser
+- powerful but still lightweight and cross-browser (IE9+)
 - focused on DOM manipulation, events management and data validation
 
 ## Why Elementify ?
 Except data validation in Elementify core, libraries like Jquery do the same things than Elementify, and even more.
 The problem is they are working by enhancing actual DOM elements making less comfortable to work with vanilla
-methods and properties.
+methods and properties of the object or a collection of objects.
+
+On the other hand, there is somme really cools shortcuts and functionnalities that are not available in vanilla or
+in some browsers.
 
 I follow three main goals when building Elementify :
-- Add a functional layer above DOM
+- Add a functional layer above DOM with all great functionnalities we beloved
 - Focus to stay lightweight
-- Have an UMD compliant ibrary
+- Have an UMD compliant library for easing integration in other projects
 
-So that's it.
+So that's it. Elementify will *elementify* the DOM.
 
 ## Features
 
-Elementify is not working by enhancing DOM but adds kinda new layer by introducing new Objects that ghosts actual DOM nodes and elements.
+Elementify is not working by enhancing DOM objects but introduce a kind of new layer with new Objects
+that ghosts actual DOM nodes and elements.
 
-For obvious performance constraint, Elementify only create enhanced objects when required by code. You can easily pass from one layer to another in order to dig the best of the two worlds.
+For obvious performance constraint, Elementify only create enhanced objects when required.
+You can easily pass from one layer to another in order to dig the best of the two worlds.
 
-This table presents the basic functionalities that have been ignores, ghosted, improved, created and to do between vanilla and elementified layer.
+This table presents the basic functionalities that have been ignored,
+ghosted, improved, created and to do between vanilla and elementified layer.
+
+This chart is subject to change at any time.
 
 | Vanilla Object | Elementify Object | Ignored | Ghosted | Improved | created | Todo |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -47,7 +55,7 @@ This table presents the basic functionalities that have been ignores, ghosted, i
 | HTMLFormElement | FormElement | Nearly all | very few | - | Form validation and data serialize, json, formData exports | - |
 | HTMLFormElement Element | InputElement | Nearly all | very few | Value/checked management for radio and checkbox | Validation rules and method | - |
 
-I must say that most of the methods for HtmlElement are inspired by JQuery but with slighly difference in somes cases.
+I must say that most of the methods for HtmlElement have been inspired by JQuery but with slighly difference in many cases.
 
 ## Installation
 ### As a module
@@ -88,7 +96,7 @@ The elementify library will be added to global (window) scope. If you wish to im
 ```javascript
 elementify.load()
 ```
-It will monkey-patch the native Element class to add the constructor for elementify objects.
+It will monkey-patch the native Element class by adding the magic constructor for elementify objects.
 
 ## Usage
 We will assume that the exported modules of elementify are in global running scope.

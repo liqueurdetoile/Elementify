@@ -7,7 +7,8 @@ describe('Ready', function () {
   it('Should run callback at interactive ready state', function (done) {
     let spy = sinon.spy();
 
-    ready().then(spy).then(() => {
+    ready(() => spy());
+    ready(() => {
       spy.called.should.be.true;
       done();
     });
@@ -22,7 +23,8 @@ describe('Complete', function () {
   it('Should run callback at complete ready state', function (done) {
     let spy = sinon.spy();
 
-    complete().then(spy).then(() => {
+    complete(() => spy());
+    complete(() => {
       spy.called.should.be.true;
       done();
     });

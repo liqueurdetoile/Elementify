@@ -1,21 +1,23 @@
 /**
-*  @file Uniqid PHP-Like
+*  @file Hashing text utility function
+*  @author  Liqueur de Toile <contact@liqueurdetoile.com>
+*  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}
+*/
+
+/**
+*  This function returns a unique identifier
+*
+*  @since 1.0.0
+*  @version 1.0.0
+*  @author Liqueur de Toile <contact@liqueurdetoile.com>
+*
+*  @param {string} [prefix] Prefix to prepend
+*  @param {boolean} [moreEntropy] Add more entropy to generator (slower)
+*  @see http://locutus.io/php/uniqid/
+*  @returns {string} Hash
 */
 
 export default function (prefix, moreEntropy) {
-  //  discuss at: http://locutus.io/php/uniqid/
-  // original by: Kevin van Zonneveld (http://kvz.io)
-  //  revised by: Kankrelune (http://www.webfaktory.info/)
-  //      note 1: Uses an internal counter (in locutus global) to avoid collision
-  //   example 1: var $id = uniqid()
-  //   example 1: var $result = $id.length === 13
-  //   returns 1: true
-  //   example 2: var $id = uniqid('foo')
-  //   example 2: var $result = $id.length === (13 + 'foo'.length)
-  //   returns 2: true
-  //   example 3: var $id = uniqid('bar', true)
-  //   example 3: var $result = $id.length === (23 + 'bar'.length)
-  //   returns 3: true
   var retId;
   var _formatSeed = function (seed, reqWidth) {
     seed = parseInt(seed, 10).toString(16); // to hex str

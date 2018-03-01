@@ -961,39 +961,43 @@ describe('HTMLElement Class', function () {
       Q('#fixture-fade').remove();
     });
 
+    it('should return a Promise if available or this (fadeOut)', function () {
+      let p = Q('#fixture-fade').fadeOut();
+
+      if (typeof Promise !== 'undefined') expect(p).to.be.instanceof(Promise);
+      else expect(p).to.eql(Q('#fixture-fade'));
+    });
+
+    it('should return a Promise if available or this (fadeIn)', function () {
+      let p = Q('#fixture-fade').fadeIn();
+
+      if (typeof Promise !== 'undefined') expect(p).to.be.instanceof(Promise);
+      else expect(p).to.eql(Q('#fixture-fade'));
+    });
+
     it('should fade out in 400ms', function (done) {
-      Q('#fixture-fade').fadeOut()
-        .then(function (el) { expect(el.node.style.opacity).to.equal('0'); })
-        .then(done);
+      Q('#fixture-fade').fadeOut({}, el => {
+        expect(el.node.style.opacity).to.equal('0');
+        done();
+      });
     });
     it('should fade in in 400ms', function (done) {
-      Q('#fixture-fade').fadeIn()
-        .then(function (el) { expect(el.node.style.opacity).to.equal('1'); })
-        .then(done);
+      Q('#fixture-fade').fadeIn({}, el => {
+        expect(el.node.style.opacity).to.equal('1');
+        done();
+      });
     });
-    it('should fade out in 1500ms', function (done) {
-      Q('#fixture-fade').fadeOut({duration: 1500})
-        .then(function (el) { expect(el.node.style.opacity).to.equal('0'); })
-        .then(done);
+    it('should fade out in 1000ms', function (done) {
+      Q('#fixture-fade').fadeOut({duration: 1000}, el => {
+        expect(el.node.style.opacity).to.equal('0');
+        done();
+      });
     });
-    it('should fade in in 1500ms', function (done) {
-      Q('#fixture-fade').fadeIn({duration: 1500})
-        .then(function (el) { expect(el.node.style.opacity).to.equal('1'); })
-        .then(done);
-    });
-    it('should run callback', function (done) {
-      Q('#fixture-fade').fadeOut({}, function (el) {
-        el.node.style.backgroundColor = '#060';
-      })
-        .then(function (el) {
-          expect(el.node.style.backgroundColor).to.equal('rgb(0, 102, 0)');
-        })
-        .then(done);
-    });
-    it('should fade in in 400ms', function (done) {
-      Q('#fixture-fade').fadeIn()
-        .then(function (el) { expect(el.node.style.opacity).to.equal('1'); })
-        .then(done);
+    it('should fade in in 1000ms', function (done) {
+      Q('#fixture-fade').fadeIn({duration: 1000}, el => {
+        expect(el.node.style.opacity).to.equal('1');
+        done();
+      });
     });
   });
 });

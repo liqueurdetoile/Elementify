@@ -14,7 +14,10 @@ import InputElement from 'elements/inputelement';
 
 /**
 *  Element is basically a constructor that will take anything
-*  (string, node...) and returns the appropriate enhanced Element object.
+*  (string, node...) and returns the appropriate Elementify object.
+*
+*  If the provided input cannot be elementified, it is returned
+*  unchanged
 *
 *  @since 1.0.0
 *  @version 1.0.0
@@ -47,7 +50,7 @@ class Element {
       return this._nodeToElement(input, options);
     } else if (input instanceof Node && input.nodeType === 9) { // Import DOCUMENT_NODE
       return new DocumentElement(input, options);
-    } else if (input === window) return new WindowElement(options);
+    } else if (input === window) return new WindowElement(options); // Import window
 
     return input;
   }
