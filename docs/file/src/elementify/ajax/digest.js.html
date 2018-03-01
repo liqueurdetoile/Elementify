@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">src/elementify/ajax/digest.js | DotObjectArray | Implements array-like methods for Object with support for dotted notation keys</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<link rel="stylesheet" href="./inject/css/0-styles.css"><script src="./inject/script/0-docs.js"></script><meta name="description" content="Ultra lightweight library for DOM manipulation, event manipulation, form manipulation and custom elements"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="DotObjectArray | Implements array-like methods for Object with support for dotted notation keys"><meta property="twitter:description" content="Ultra lightweight library for DOM manipulation, event manipulation, form manipulation and custom elements"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.png" style="width:34px;"></a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/liqueurdetoile/elementify.git"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#elementify">elementify</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elementify/collection.js~Collection.html">Collection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elementify/element.js~Element.html">Element</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-load">load</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Q">Q</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KeyValueObject">KeyValueObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-NodeMetrics">NodeMetrics</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#elementify-ajax">elementify/ajax</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-basic">basic</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-digest">digest</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-jq">jq</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#elementify-elements">elementify/elements</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elementify/elements/formelement.js~FormElement.html">FormElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elementify/elements/forminput.js~FormInput.html">FormInput</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elementify/elements/formselector.js~FormSelector.html">FormSelector</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elementify/elements/formswitcher.js~FormSwitcher.html">FormSwitcher</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elementify/elements/htmlelement.js~HtmlElement.html">HtmlElement</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#elementify-events">elementify/events</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elementify/events/eventsmanager.js~EventsManager.html">EventsManager</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-complete">complete</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-fullyloaded">fullyloaded</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ready">ready</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#elementify-i18n">elementify/i18n</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__">__</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__spf">__spf</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-loadTranslations">loadTranslations</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setTranslations">setTranslations</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-translate">translate</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#elementify-ui">elementify/ui</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elementify/ui/modal.js~Modal.html">Modal</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elementify/ui/notices.js~Notice.html">Notice</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#elementify-utilities">elementify/utilities</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-cameltodash">cameltodash</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-dashtocamel">dashtocamel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-empty">empty</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-foreach">foreach</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hash">hash</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isset">isset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-serialize">serialize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-uniqid">uniqid</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/elementify/ajax/digest.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+*  @file Ajax digest authentification
+*/
+
+import md5 from &apos;js-md5&apos;;
+
+function xhr() {
+  var x;
+
+  if (window.XMLHttpRequest) {
+    x = new window.XMLHttpRequest();
+  } else if (window.ActiveXObject) {
+    x = new window.ActiveXObject(&apos;Microsoft.XMLHTTP&apos;);
+  }
+
+  return x;
+}
+
+function cnonce() {
+  const characters = &apos;abcdef0123456789&apos;;
+  var token = &apos;&apos;;
+
+  for (let i = 0; i &lt; 16; i++) {token += characters.substr(Math.round(Math.random() * characters.length), 1);}
+
+  return token;
+}
+
+function response(username, password, parts) {
+  let hash1 = md5(username + &apos;:&apos; + parts.realm + &apos;:&apos; + password);
+  let hash2 = md5(parts.method + &apos;:&apos; + parts.url);
+
+  return md5(hash1 + &apos;:&apos; + parts.nonce + &apos;:&apos; + parts.nc + &apos;:&apos; + parts.cnonce + &apos;:&apos; + parts.qop + &apos;:&apos; + hash2);
+}
+
+export default function (username, password, options) {
+
+  options.method = options.method || &apos;POST&apos;;
+
+  return new Promise((resolve, reject) =&gt; {
+    var nc = 1;
+
+    // First request to fetch digest header or get plain request
+    new Promise((resolve, reject) =&gt; {
+      const xhr1 = xhr();
+
+      xhr1.open(options.method, options.url, true);
+      xhr1.setRequestHeader(&apos;X-Requested-With&apos;, &apos;XMLHttpRequest&apos;);
+      if (options.headers) {for (let key in options.headers) xhr1.setRequestHeader(key, options.headers[key]);}
+      if (options.mimeType) xhr1.overrideMimeType(options.mimeType);
+      if (options.responseType) xhr1.responseType = options.responseType;
+
+      xhr1.onreadystatechange = function () {
+        var ret;
+
+        if (this.readyState === 2) {if (xhr1.status === 401) resolve(xhr1.getAllResponseHeaders());}
+        if (this.readyState === 4) {
+          if (xhr1.status &gt;= 200 &amp;&amp; xhr1.status &lt; 400) {
+            if (xhr1.responseText !== &apos;undefined&apos; &amp;&amp; xhr1.responseText.length &gt; 0) {
+              try {
+                ret = JSON.parse(xhr1.responseText);
+                resolve(ret);
+              } catch (e) {
+                resolve(ret);
+              }
+            } else resolve();
+          } else reject(xhr1.status);
+        }
+      };
+
+      xhr1.send(options.data);
+    })
+      .then(headers =&gt; {
+        // Extract components from headers;
+        const xhr2 = xhr();
+        var scheme, auth, part, parts = {};
+        var header;
+
+        if (typeof headers.success !== &apos;undefined&apos;) resolve(headers); // No auth api access return
+
+        nc++; // Increment nounce count
+
+        auth = headers.match(/www-authenticate.+/im);
+
+        if (auth === null) reject(500);
+
+        scheme = &apos;Digest&apos;;
+
+        let re = /([a-z]+)=[&apos;&quot;](\w*)/g;
+
+        while ((part = re.exec(auth[0])) !== null) {
+          parts[part[1]] = part[2];
+        }
+        parts.cnonce = cnonce();
+        parts.method = options.method;
+        parts.nc = (&apos;00000000&apos; + nc).slice(-8);
+        parts.url = options.url;
+
+        header = scheme + &apos; &apos; +
+                 &apos;username=&quot;&apos; + username + &apos;&quot;, &apos; +
+                 &apos;realm=&quot;&apos; + parts.realm + &apos;&quot;, &apos; +
+                 &apos;nonce=&quot;&apos; + parts.nonce + &apos;&quot;, &apos; +
+                 &apos;uri=&quot;&apos; + parts.url + &apos;&quot;, &apos; +
+                 &apos;response=&quot;&apos; + response(username, password, parts) + &apos;&quot;, &apos; +
+                 &apos;opaque=&quot;&apos; + parts.opaque + &apos;&quot;, &apos; +
+                 &apos;qop=&apos; + parts.qop + &apos;, &apos; +
+                 &apos;nc=&apos; + parts.nc + &apos;, &apos; +
+                 &apos;cnonce=&quot;&apos; + parts.cnonce + &apos;&quot;&apos;;
+
+        xhr2.open(parts.method, options.url, true);
+        xhr2.setRequestHeader(&apos;X-Requested-With&apos;, &apos;XMLHttpRequest&apos;);
+        xhr2.setRequestHeader(&apos;Authorization&apos;, header);
+
+        if (options.headers) {for (let key in options.headers) xhr2.setRequestHeader(key, options.headers[key]);}
+        if (options.mimeType) xhr2.overrideMimeType(options.mimeType);
+        if (options.responseType) xhr2.responseType = options.responseType;
+
+        xhr2.onload = () =&gt; {
+          var ret;
+
+          if (xhr2.status &gt;= 200 &amp;&amp; xhr2.status &lt; 400) {
+            nc++;
+            if (xhr2.responseText !== &apos;undefined&apos; &amp;&amp; xhr2.responseText.length &gt; 0) {
+              try {
+                ret = JSON.parse(xhr2.responseText);
+                resolve(ret);
+              } catch (e) {
+                resolve(ret);
+              }
+            } else resolve();
+          } else reject(xhr2.status);
+        };
+
+        xhr2.send(options.data);
+      })
+      [&apos;catch&apos;](code =&gt; { reject(code); });
+
+  });
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

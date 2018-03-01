@@ -11,18 +11,6 @@ module.exports = merge(base, {
     filename: 'elementify.js',
     chunkFilename: 'modules/[name].js'    
   },
-  module: {
-    rules: [
-      {
-        test: /(\.jsx|\.js)$/,
-        loader: 'eslint-loader',
-        exclude: /node_modules/,
-        options: {
-          fix: true,
-        }
-      }
-    ]
-  },
   plugins: [
     new CleanWebpackPlugin(['dev'], {root: path.resolve('./')}),
     new BundleAnalyzerPlugin(),

@@ -1,0 +1,109 @@
+{
+  "coverage": "85.41%",
+  "expectCount": 144,
+  "actualCount": 123,
+  "files": {
+    "src/collection.js": {
+      "expectCount": 9,
+      "actualCount": 8,
+      "undocumentLines": [
+        113
+      ]
+    },
+    "src/element.js": {
+      "expectCount": 4,
+      "actualCount": 4,
+      "undocumentLines": []
+    },
+    "src/elements/documentelement.js": {
+      "expectCount": 4,
+      "actualCount": 0,
+      "undocumentLines": [
+        9,
+        10,
+        13,
+        14
+      ]
+    },
+    "src/elements/eventifiedelement.js": {
+      "expectCount": 10,
+      "actualCount": 7,
+      "undocumentLines": [
+        12,
+        14,
+        15
+      ]
+    },
+    "src/elements/formelement.js": {
+      "expectCount": 15,
+      "actualCount": 15,
+      "undocumentLines": []
+    },
+    "src/elements/htmlelement.js": {
+      "expectCount": 65,
+      "actualCount": 57,
+      "undocumentLines": [
+        1048,
+        1064,
+        1078,
+        1204,
+        1227,
+        1250,
+        1273,
+        1296
+      ]
+    },
+    "src/elements/inputelement.js": {
+      "expectCount": 18,
+      "actualCount": 18,
+      "undocumentLines": []
+    },
+    "src/elements/windowelement.js": {
+      "expectCount": 4,
+      "actualCount": 0,
+      "undocumentLines": [
+        9,
+        10,
+        13,
+        14
+      ]
+    },
+    "src/events/complete.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/events/eventsmanager.js": {
+      "expectCount": 9,
+      "actualCount": 9,
+      "undocumentLines": []
+    },
+    "src/events/ready.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/load.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/query.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/utilities/hash.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        1
+      ]
+    },
+    "src/utilities/uniqid.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    }
+  }
+}

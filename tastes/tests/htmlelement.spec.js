@@ -138,7 +138,7 @@ describe('HTMLElement Class', function () {
     it('should get a single data attribute', function () {
       Q('#fixture').data('fixture', 'fixture');
       Q('#fixture').data('fixture').should.equal('fixture');
-      expect(Q('#fixture').data('foo')).to.equal(undefined);
+      expect(Q('#fixture').data('foo')).to.be.undefined;
     });
     it('should remove a single data attribute', function () {
       Q('#fixture').data('fixture', null);
@@ -251,8 +251,8 @@ describe('HTMLElement Class', function () {
         Q('#li21').parent(3).node.id.should.equal('list');
       });
 
-      it('should return a DocumentFragment', function () {
-        Q('#li21').parent(20).node.nodeType.should.equal(11);;
+      it('should return document', function () {
+        Q('#li21').parent(20).node.nodeType.should.equal(9);;
       });
 
       it('should find the parent with class "list"', function () {
@@ -483,6 +483,7 @@ describe('HTMLElement Class', function () {
       it('should create a clone', function () {
         Q('#fixture').empty().append('div');
         Q('#fixture').child().append('<div class="1"></div><div class="2"></div>');
+
         let clone = Q('#fixture').child().clone();
 
         Q('#fixture').append(clone);

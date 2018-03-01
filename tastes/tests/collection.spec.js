@@ -1,6 +1,12 @@
 import {Q, Collection} from 'index';
 
-describe.only('Collection class', function () {
+/**
+*  @test {Collection}
+*/
+describe('Collection class', function () {
+  /**
+  *  @test {Collection#constructor}
+  */
   describe('constructor', function () {
     it('should return an empty collection', function () {
       let i = new Collection();
@@ -9,6 +15,10 @@ describe.only('Collection class', function () {
       i.length.should.equal(0);
     });
   });
+
+  /**
+  *  @test {Collection#push}
+  */
   describe('push', function () {
     it('should push an HtmlElement', function () {
       let i = new Collection();
@@ -32,9 +42,7 @@ describe.only('Collection class', function () {
       let i = new Collection();
       let e = 'foo';
 
-      i.push(e);
-      console.log(i);
-      // expect(i.push.bind(i, e)).to.throw('Only Element Object can be added to a collection of Elements');
+      expect(i.push.bind(i, e)).to.throw('Only Element Object can be added to a collection of Elements');
     });
   });
 });

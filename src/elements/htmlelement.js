@@ -1,21 +1,18 @@
 /**
-*  @file HTML Element class
+*  @file HtmlElement definition class
 *  @author  Liqueur de Toile <contact@liqueurdetoile.com>
 *  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}
 */
 
-import Element from 'elements/element';
-import Collection from 'elements/collection';
 import ObjectArray from 'dot-object-array';
+import Element from 'element';
+import Collection from 'collection';
+import EventifiedElement from 'elements/eventifiedelement';
 
-import $ from 'elements/query';
-import hash from 'utilities/hash';
-
-const eventsManager = new ObjectArray();
+import Q from 'query';
 
 /**
-*  @classdesc
-*  This a the basic common class for all HTML elements. It will provide all functionnalities to :
+*  This the common class for all other elements. It provides all functionalities to :
 *  - Explore and manipulate the DOM
 *  - Create, edit, delete properties on the object
 *  - Style the object
@@ -23,54 +20,60 @@ const eventsManager = new ObjectArray();
 *  - Get and set position
 *  - Add event with a global events manager
 *
-*  All other classed (Form, FormElement...) are extending this class
+*  __You cannot directly create an instance of the class.__
 *
+*  You must use the {@link Element} constructor or its alias {@link Q}
+*  that will then instantiate the right class given the node type (HTML, Form...).
 *
-*  __You cannot not use directly this class constructor but the Element class constructor that will
-*  call the right class given the node type (HTML, Form...).__
+*  The `options` passed to the Element constructor are then passed to this class constructor.
 *
-*  The <tt>options</tt> passed to the Element constructor are then passed to this class constructor.
-*
-*  @class HtmlElement
 *  @since 1.0.0
 *  @version 1.0.0
 *  @author Liqueur de Toile <contact@liqueurdetoile.com>
 *
-*  @param
-*  {Node}
-*  node
-*  HTML node
-*  @param
-*  {keyValueObject}
-*  [options={}]
-*  Options for the HTMLElement object and/or attributes for
-*  the underlying native HTMLElement Object. Excepting <tt>data</tt>, <tt>events</tt>,
-*  <tt>innerhtml</tt> and <tt>options</tt>, any property of this object will be
-*  added as attribute to the underlying HTML object.
-*     @param
-*     {String|Array}
-*     [options.class]
-*     Class(es) to be set as value for the <tt>class</tt> attribute.
-*
-*     @param
-*     {String|keyValueObject}
-*     [options.style]
-*     Style(s) to be set as value for the <tt>style</tt> attribute.
-*
-*     @param
-*     {keyValueObject}
-*     [options.data]
-*     An object with key/value pairs
-*
-*  @returns {HtmlElement} New HTMLElement object
 */
 
-class HtmlElement {
+export default class HtmlElement extends EventifiedElement {
+  /**
+  *  Constructor for HTMLElement class
+  *
+  *  You can pass any attributes as options. There are a few reserved keywords
+  *  for specific options.
+  *
+  *  @private
+  *  @param {Element} node Element to enhance
+  *  @param {keyValueObject} [options={}]
+  *  Options for the HTMLElement object and/or attributes for
+  *  the underlying native HTMLElement Object. Excepting `data`, `events`,
+  *  `innerhtml` and `options`, any property of this object will be
+  *  added as attribute to the underlying HTML object.
+  *     @property
+  *     {String|Array}
+  *     [options.class]
+  *     Class(es) to be set as value for the `class` attribute.
+  *
+  *     @property
+  *     {String|keyValueObject}
+  *     [options.style]
+  *     Style(s) to be set as value for the `style` attribute.
+  *
+  *     @property
+  *     {keyValueObject}
+  *     [options.data]
+  *     An object with key/value pairs
+  *
+  *     @property {keyValueObject} [options.events]
+  *     Events to add to the element under the format : `{eventName: callback, ...}`
+  *
+  *  @returns {HtmlElement} New HTMLElement object
+  */
   constructor(node, options = {}) {
+
+    super();
+
     /**
     *  The underlying DOM node object
     *
-    *  @alias HtmlElement~element
     *  @type {Node}
     *  @since 1.0.0
     */
@@ -80,7 +83,6 @@ class HtmlElement {
     *  Convenience property to check if the object
     *  is an instance of this class
     *
-    *  @alias HtmlElement~enhanced
     *  @type {Boolean}
     *  @since 1.0.0
     */
@@ -93,7 +95,6 @@ class HtmlElement {
     *  - 1 means it's a node (HTMLElement...)
     *  - More than 1 means it's a Collection (@see elementify.Collection)
     *
-    *  @alias HtmlElement~length
     *  @type {Number}
     *  @since 1.0.0
     */
@@ -101,13 +102,8 @@ class HtmlElement {
 
     /**
     *  The options passed to the constructor
-    *
-    *  @alias HtmlElement~options
     *  @type {ObjectArray}
     *  @since 1.0.0
-    *
-    *  @param {$type} options Description for options
-    *  @returns {type} Return description
     */
     this.options = new ObjectArray(options);
 
@@ -117,19 +113,18 @@ class HtmlElement {
         attr = attr.toLowerCase();
         if (attr !== 'data' && attr !== 'innerhtml' && attr !== 'events' && attr !== 'options') {
           if (attr === 'class' && value instanceof Array) value = value.join(' ');
-          if (attr === 'style' && typeof value !== 'string') value = new ObjectArray(value).styleString();
-          this.element.setAttribute(attr, value);
+          if (attr === 'style' && typeof value !== 'string') value = new ObjectArray(value).stylesToString();
+          this.node.setAttribute(attr, value);
         }
       });
     }
 
-    if (options.innerHTML) this.element.innerHTML = options.innerHTML;
+    if (options.innerHTML) this.node.innerHTML = options.innerHTML;
     if (options.data) this.data(options.data);
     if (options.events) this.registerEvents(options.events);
   }
 
   /**
-  *  @method HtmlElement~forEach
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -157,17 +152,16 @@ class HtmlElement {
   *  - A string + null will delete the attribute
   *  - A keyValueObject of attributes/values for multiple settings
   *
-  *  @method HtmlElement~attr
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
   *
-  *  @param {Void|String|Array|keyValueObject} a Attribute(s)
+  *  @param {Void|String|Array|keyValueObject} [a] Attribute(s)
   *  @param {Void|Null|Number|String} v Value for the attribute
   *  @returns {HtmlElement|Number|String|keyValueObject} Self for chaining for setter or attributes for getter
   */
-  attr(a = null, v) {
-    if (a === null) {
+  attr(a, v) {
+    if (typeof a === 'undefined') {
       let attrs = this.node.attributes;
       let ret = {};
 
@@ -195,54 +189,57 @@ class HtmlElement {
   *
   *  With no arguments, it will return a keyValueObject with all data attributes.
   *
-  *  @method HtmlElement~data
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
   *
-  *  @param {void|String|keyValueObject} a Data attribute name (without the leading <tt>data-</tt> and in camelCase)
+  *  @param {undefined|String|Array|Object|ObjectArray} [a] Data attribute name (without leading `data-`)
   *  @param {Number|String|Object} v Value for the attribute
   *  @returns {HtmlElement|Number|String|Object|keyValueObject}
   *  Self for chaining for setter or data attribute(s) values for getter
   */
-  data(a = null, v) {
-    // Polyfill dataset
-    if (!this.node.dataset) {
-      import(/* webpackChunkName: "element-dataset" */ 'element-dataset');
-    }
+  data(a, v) {
+    const data = new ObjectArray(this.attr());
 
-    if (a === null) {
-      let datas = {};
+    // Load data attributes
+    data.forEach((v, k) => {
+      if (k.indexOf('data-') === -1) data.remove(k);
+      else data.push(k.replace('data-', ''), v).remove(k);
+    });
 
-      a = new ObjectArray(this.node.dataset);
-      a.forEach(function (value, key) { datas[key] = value; });
-      return datas;
-    }
-    if (a instanceof Array) {
+    // Check case
+    if (typeof a === 'undefined') return data.dataset();
+    else if (typeof a === 'string') {
+      // Dashize a for camel-cased key request
+      a = data.dashize(a);
+
+      if (typeof v === 'undefined') return data.pull(a, undefined, false);
+      else if (v === 'null') {
+        this.attr('data-' + a, null);
+      } else {
+        this.attr('data-' + a, v);
+        return this;
+      }
+    } else if (a instanceof Array) {
       let ret = {};
 
-      a.forEach(function (key) {ret[key] = this.data(key);}.bind(this));
+      a.forEach(function (v) { ret[v] = this.data(v); }.bind(this));
       return ret;
-    }
-    if (a instanceof Object) {
+    } else if (a instanceof Object) {
       a = new ObjectArray(a);
-      a.forEach((value, key) => this.data(key, value));
-    } else if (v) this.node.dataset[a] = v;
-    else if (v === null) delete this.node.dataset[a];
-    else return this.node.dataset[a];
-    return this;
+      a.forEach(function (v, k) { this.data(k, v); }.bind(this));
+    } return this;
   }
 
   /**
   *  Matches returns true if the element matches the query selector
   *
-  *  @method HtmlElement~matches
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
   *
-  *  @param {String} Selector Valid DOM query selector
-  *  @returns {Boolean} <tt>True</tt> if Element matches selector
+  *  @param {String} selector Valid DOM query selector
+  *  @returns {Boolean} `true` if Element matches selector
   */
   matches(selector) {
     var matches, i;
@@ -257,17 +254,12 @@ class HtmlElement {
   /**
   *  Element's n-th parent finder
   *
-  *  @method HtmlElement~parent
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
   *
   *  @param {Number|String}  [n=1]   Distance to the current Element if number. Query selector if string.
   *  @returns {HtmlElement|DocumentFragment}  If the parent level is above top level, it will returns a DocumentFragment
-  *  @example
-  * el.parent() //returns the first parent above the HtmlElement
-  * el.parent(1) //returns the first parent above the HtmlElement
-  * el.parent(3) //returns the third parent above the HtmlElement
   */
   parent(n = 1) {
     var parent = new Element(this.node.parentNode);
@@ -283,7 +275,6 @@ class HtmlElement {
   /**
   *  Element's parent finder based on a DOM query selector
   *
-  *  @method HtmlElement~parents
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -309,7 +300,6 @@ class HtmlElement {
   /**
   *  Element's nth child finder
   *
-  *  @method HtmlElement~child
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -329,7 +319,6 @@ class HtmlElement {
   /**
   *  Element's childs finder based on a DOM query selector
   *
-  *  @method HtmlElement~childs
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -338,18 +327,17 @@ class HtmlElement {
   *  @returns {Collection|HtmlElement|DocumentFragment} HtmlElement or DocumentFragment if no child matches the selector
   */
   childs(selector) {
-    return $(selector, this);
+    return Q(selector, this);
   }
 
   /**
   *  Element's previous sibling finder
   *
-  *  @method HtmlElement~previousSibling
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
   *
-  *  @param {$type} [n=1] Distance to current Element
+  *  @param {Qtype} [n=1] Distance to current Element
   *  @returns {HtmlElement|DocumentFragment} If the sibling is unreachable, it will returns a DocumentFragment
   */
   previousSibling(n = 1) {
@@ -370,7 +358,6 @@ class HtmlElement {
   /**
   *  Element's previous siblings finder based on a DOM query selector
   *
-  *  @method HtmlElement~previousSiblings
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -395,12 +382,11 @@ class HtmlElement {
   /**
   *  Element's next sibling finder
   *
-  *  @method HtmlElement~nextSibling
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
   *
-  *  @param {$type} [n=1] Distance to current Element
+  *  @param {Qtype} [n=1] Distance to current Element
   *  @returns {HtmlElement|DocumentFragment} If the sibling is unreachable, it will returns a DocumentFragment
   */
   nextSibling(n = 1) {
@@ -421,7 +407,6 @@ class HtmlElement {
   /**
   *  Element's next siblings finder based on a DOM query selector
   *
-  *  @method HtmlElement~nextSiblings
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -446,7 +431,6 @@ class HtmlElement {
   /**
   *  Append an element to another
   *
-  *  @method HtmlElement~append
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -463,7 +447,6 @@ class HtmlElement {
   /**
   *  Prepend an element to another
   *
-  *  @method HtmlElement~prepend
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -485,14 +468,13 @@ class HtmlElement {
   *  The second parameter can be used to get the parent element for
   *  chaining instead of the element itself.
   *
-  *  @method HtmlElement~before
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
   *
   *  @param {String|Node|HtmlElement} e Element to insert
-  *  @param {Boolean} [returnself=true]  If <tt>true</tt>, it will return the Element.
-  *  If <tt>false</tt>, it will return the parent Element.
+  *  @param {Boolean} [returnself=true]  If `true`, it will return the Element.
+  *  If `false`, it will return the parent Element.
   *  @returns {HtmlElement} Return for chaining
   */
   before(e, returnself = true) {
@@ -509,14 +491,13 @@ class HtmlElement {
   *  The second parameter can be used to get the parent element for
   *  chaining instead of the element itself.
   *
-  *  @method HtmlElement~after
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
   *
   *  @param {String|Node|HtmlElement} e Element to insert
-  *  @param {Boolean} [returnself=true]  If <tt>true</tt>, it will return the Element.
-  *  If <tt>false</tt>, it will return the parent Element.
+  *  @param {Boolean} [returnself=true]  If `true`, it will return the Element.
+  *  If `false`, it will return the parent Element.
   *  @returns {HtmlElement} Return for chaining
   */
   after(e, returnself = true) {
@@ -534,14 +515,13 @@ class HtmlElement {
   *  The second parameter can be used to get the parent element for
   *  chaining instead of the element itself.
   *
-  *  @method HtmlElement~wrap
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
   *
   *  @param {String|Node|HtmlElement} e=null Wrapping Element
-  *  @param {Boolean} [returnself=true] If <tt>true</tt>, it will return the Element.
-  *  If <tt>false</tt>, it will return the parent Element.
+  *  @param {Boolean} [returnself=true] If `true`, it will return the Element.
+  *  If `false`, it will return the parent Element.
   *  @returns {HtmlElement} Return for chaining
   */
   wrap(e = null, returnself = true) {
@@ -554,7 +534,6 @@ class HtmlElement {
   /**
   *  Unwrap an Element (and its siblings) and delete its parentNode
   *
-  *  @method HtmlElement~unwrap
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -574,7 +553,6 @@ class HtmlElement {
   /**
   *  Empty an Element
   *
-  *  @method HtmlElement~empty
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -589,7 +567,6 @@ class HtmlElement {
   /**
   *  Remove an Element
   *
-  *  @method HtmlElement~remove
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -604,7 +581,6 @@ class HtmlElement {
   /**
   *  Get/Set the HTML content of the node
   *
-  *  @method HtmlElement~html
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -625,7 +601,6 @@ class HtmlElement {
   *  This is provided as a kind of polyfill
   *
   *  @type {String}
-  *  @alias HtmlElement~outerHtml
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -645,7 +620,6 @@ class HtmlElement {
   *  Returns a deep clone of the HtmlElement. The clone will
   *  contains the same child nodes.
   *
-  *  @method HtmlElement~clone
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -659,7 +633,6 @@ class HtmlElement {
   /**
   *  Returns a shallow copy of the HtmlElement
   *
-  *  @method HtmlElement~shallow
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -674,7 +647,6 @@ class HtmlElement {
   *  Check if the HtmlElement is present in DOM
   *
   *  @type {Boolean}
-  *  @alias HtmlElement~isInDom
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -686,11 +658,10 @@ class HtmlElement {
 
   /**
   *  Alias for the element property member that
-  *  returns <tt>null</tt> instead of <tt>undefined</tt>
+  *  returns `null` instead of `undefined`
   *
   *  @type {Node}
-  *  @alias HtmlElement~node
-  *  @see HtmlElement~element
+  *  @see {@link HtmlElement#element}
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -702,38 +673,31 @@ class HtmlElement {
   /**
   *  Get the root Node element for the HtmlElement
   *  The result is not enhanced as an HtmlElement
-  *  because it will mostly be a <tt>document</tt> object
+  *  because it will mostly be a `document` object
   *  which is not a Node object.
   *
   *  @type {Document|Node}
-  *  @alias HtmlElement~root
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
   *
   */
   get root() {
-    var parent;
     var root;
 
     if (!this.length) return this.node;
 
-    parent = this.node.parentNode;
-    if (this.node && parent) {
-      while (parent !== null) {
-        root = parent;
-        parent = parent.parentNode;
-      }
-      return root;
-    }
-    return null;
+    root = this.node;
+    while (root.parentNode) root = root.parentNode;
+    return root;
   }
 
   /**
-  *  Get the computed styles
+  *  Get the computed styles of the underlying node.
+  *  __Use with care : It can be painfully slow and must be avoided
+  *  for huge set of automated ops on style__
   *
   *  @type {CSSStyleDeclaration}
-  *  @alias HtmlElement~styles
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -744,62 +708,99 @@ class HtmlElement {
   }
 
   /**
-  *  Get the visibility of an HtmlElement
-  *  If the element is not in DOM, will return <tt>false</tt>
+  *  Get/Set style properties of an HtmlElement based on its
+  *  node `style` attribute.
   *
-  *  @type {Boolean}
-  *  @alias HtmlElement~visible
+  *  Properties name will be camelized when read from style string and
+  *  dashed when set to style string.
+  *
+  *  Many syntaxes are available. See examples.
+  *
+  *  You can remove a style property by setting its value to `null`
+  *
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
   *
-  */
-  get visible() {
-    if (!this.isInDom) return false;
-    return this.styles.display !== 'none';
-  }
-
-  /**
-  *  Get/Set style properties of an HtmlElement.
-  *  They are multiple syntaxes allowed dor convenience.
+  *  @param {String|Array|Object|ObjectArray}  [a]  get/set request on style attribute
   *
-  *  @method HtmlElement~style
-  *  @since 1.0.0
-  *  @version 1.0.0
-  *  @author Liqueur de Toile <contact@liqueurdetoile.com>
+  *  - Empty: style will returns all styles set in the stye attribute
+  *  - String : Name or the style property to get or set if second parameter is provided
+  *  - Array: Array of properties names to get
+  *  - Object|ObjectArray : Properties names and values to set. If second parameter is set
+  *  to true, it will replace all styles properties defined in the style attribute. Otherwise
+  *  it will merge them
   *
-  *  @param {String|Array|ObjectArray} arr Style or array of styles
-  *  @param {String} v Value of the style
-  *  @returns {HtmlElement} Returns self for chaining
+  *  @param {String} [v] Value of the style or enable replace mode
+  *  @returns {HtmlElement|String|Object}
+  *  Returns self for chaining for set cases,
+  *  String or Object {styleKey: styleValue, ...} for get cases
   *  @example
   *  var e = new Element('<div style="color:red;margin:1em"></div>');
   *  e.style('color'); // returns 'red'
   *  e.style('color', 'yellow'); // Set color to yellow and returns e for chaining
   *  e.style(['color', 'margin']); // returns {color:'red', margin: '1em'}
   *  e.style({color: 'yellow', padding: '5px'}); // Set color to yellow, padding to 5px and returns e for chaining
+  *  e.style({paddingLeft: '10px', margin: '5px'}); // Set color to yellow, padding to 5px and returns e for chaining
   */
-  style(arr, v = null) {
-    const _this = this;
+  style(a, v) {
+    let o = new ObjectArray();
 
-    if (typeof arr === 'string') {
-      if (v === null) return this.node.style[arr];
-      this.node.style[arr] = v;
-    } else if (arr instanceof Array) {
-      let ret = new ObjectArray();
-
-      arr.forEach(key => ret.push(key, _this.node.style[key]));
-      return ret;
-    } else {
-      arr = new ObjectArray(arr);
-      arr.forEach(function (val, key) { _this.node.style[key] = val; });
+    // undefined case (getter)
+    if (typeof a === 'undefined') {
+      o.stringToStyles(this.attr('style'));
+      return o.data;
     }
-    return this;
+    // String case (getter or setter)
+    if (typeof a === 'string') {
+      a = o.camelize(a); // camelize property name
+      if (typeof v === 'undefined') return this.node.style[a];
+      this.node.style[a] = v;
+      return this;
+    }
+    // Array case (getter)
+    if (a instanceof Array) {
+      let ret = {};
+
+      o.stringToStyles(this.attr('style'));
+      a.forEach(function (k) {
+        k = o.camelize(k);
+        ret[k] = o.dataset(k);
+      });
+      return ret;
+    }
+    // Object or ArrayObject case (setter)
+    if (a instanceof Object) {
+      if (v) this.attr('style', o.import(a).stylesToString());
+      else this.attr('style', o.stringToStyles(this.attr('style')).import(a).stylesToString());
+      return this;
+    }
+
+    return undefined;
+  }
+
+  /**
+  *  Get the visibility of an HtmlElement. It will only return
+  *  false if the element is out of the DOM or with
+  *  a display style property set to none.
+  *
+  *  __Use with care : It can be painfully slow and must be avoided
+  *  for huge set of automated ops on elements if display property is not set inline__
+  *
+  *  @type {Number}
+  *  @since 1.0.0
+  *  @version 1.0.0
+  *  @author Liqueur de Toile <contact@liqueurdetoile.com>
+  *
+  */
+  get visible() {
+    return (this.isInDom && this.style('display') !== undefined && this.style('display') !== 'none') ||
+      (this.isInDom && this.styles.display !== 'none');
   }
 
   /**
   *  Set the display style property of an HtmlElement
   *
-  *  @method HtmlElement~display
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -815,12 +816,10 @@ class HtmlElement {
   /**
   *  Hide an HtmlElement by setting its display property to 'none'.
   *
-  *  @method HtmlElement~hide
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
   *
-  *  @param {String}  Value for display property
   *  @returns {HtmlElement} Self for chaining
   */
   hide() {
@@ -831,7 +830,6 @@ class HtmlElement {
   *  Show an HtmlElement by setting its display property.
   *  The property value can be override for custom results (e.g. 'flex')
   *
-  *  @method HtmlElement~show
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -847,7 +845,9 @@ class HtmlElement {
   *  Toggle an HtmlElement visibility by setting its display property.
   *  The "show" property value can be override for custom results (e.g. 'flex')
   *
-  *  @method HtmlElement~show
+  *  __Use with care : It can be painfully slow and must be avoided
+  *  for huge set of automated ops on elements if display property is not set inline__
+  *
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -865,42 +865,36 @@ class HtmlElement {
   /**
   *  Check if an HtmLElement have given class(es)
   *
-  *  @method HtmlElement~hasClass
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
   *
-  *  @param {String}  c   Class name
-  *  @param {String}  [...] Additional(s) class(es) name(s)
+  *  @param {String}  cls   Class(es) name(s)
   *  @returns {Boolean} True if class(es) are present
   */
-  hasClass(c) {
-    let args = new ObjectArray(arguments);
-    let classes = this.node.className.split(' ');
+  hasClass(...cls) {
+    let className = this.node.className ? this.node.className.split(' ') : [];
     let ret = true;
 
-    args.forEach(function (cl, index) { if (classes.indexOf(cl) === -1) ret = false; });
+    cls.forEach(function (c) { if (className.indexOf(c) === -1) ret = false; });
     return ret;
   }
 
   /**
   *  Add class(es) to an HtmlElement
   *
-  *  @method HtmlElement~addClass
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
   *
-  *  @param {String}  c   Class name
-  *  @param {String}  [...] Additional(s) class(es) name(s)
+  *  @param {String}  cls   Class(es) name(s)
   *  @returns {HtmlElement} Self for chaining
   */
-  addClass(c) {
-    let args = new ObjectArray(arguments);
-    let classes = this.node.className.split(' ');
+  addClass(...cls) {
+    let className = this.node.className ? this.node.className.split(' ') : [];
 
-    args.foreach((cl, index) => { if (classes.indexOf(cl) === -1) classes.push(cl);});
-    this.node.className = classes.join(' ');
+    cls.forEach(c => { if (className.indexOf(c) === -1) className.push(c);});
+    this.node.className = className.join(' ');
 
     return this;
   }
@@ -908,21 +902,22 @@ class HtmlElement {
   /**
   *  Remove class(es) from an HtmlElement
   *
-  *  @method HtmlElement~removeClass
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
   *
-  *  @param {String}  c   Class name
-  *  @param {String}  [...] Additional(s) class(es) name(s)
+  *  @param {String}  cls   Class(es) name(s)
   *  @returns {HtmlElement} Self for chaining
   */
-  removeClass(c) {
-    let args = new ObjectArray(arguments);
-    let classes = this.node.className.split(' ');
+  removeClass(...cls) {
+    let className = this.node.className ? this.node.className.split(' ') : [];
 
-    args.forEach((cl, index) => { if (classes.indexOf(cl) >= 0) classes.splice(index, 1); });
-    this.node.className = classes.join(' ');
+    cls.forEach((c) => {
+      let i = className.indexOf(c);
+
+      if (i >= 0) className.splice(i, 1);
+    });
+    this.node.className = className.join(' ');
 
     return this;
   }
@@ -930,28 +925,24 @@ class HtmlElement {
   /**
   *  Toggle class(es) from an HtmlElement
   *
-  *  @method HtmlElement~toggleClass
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
   *
-  *  @param {String}  c   Class name
-  *  @param {String}  [...] Additional(s) class(es) name(s)
+  *  @param {String}  cls   Class(es) name(s)
   *  @returns {HtmlElement} Self for chaining
   */
-  toggleClass(c) {
-    let args = new ObjectArray(arguments);
-
-    args.forEach((index, cl) => {
-      if (this.hasClass(cl)) this.removeClass(cl);
-      else this.addClass(cl);
+  toggleClass(...cls) {
+    cls.forEach(c => {
+      if (this.hasClass(c)) this.removeClass(c);
+      else this.addClass(c);
     });
+    return this;
   }
 
   /**
   *  Fade In element given a linear easing
   *
-  *  @method HtmlElement~fadeIn
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -997,7 +988,6 @@ class HtmlElement {
   /**
   *  Fade Out element given a linear easing
   *
-  *  @method HtmlElement~fadeIn
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -1041,215 +1031,270 @@ class HtmlElement {
     return p;
   }
 
-  // Geometrics
-  _positionRefresh() {
-    this._position = this.node.getBoundingClientRect();
-    this._position.scrollX = (window.pageXOffset !== undefined) ?
-      window.pageXOffset :
-      (document.documentElement || document.body.parentNode || document.body).scrollLeft;
-    this._position.scrollY = (window.pageYOffset !== undefined) ?
-      window.pageYOffset :
-      (document.documentElement || document.body.parentNode || document.body).scrollTop;
+  /**
+  *  Refresh position object at first call or after
+  *  a resize / changeOrientation event
+  *
+  *  @private
+  *  @since 1.0.0
+  *  @version 1.0.0
+  *  @author Liqueur de Toile <contact@liqueurdetoile.com>
+  *
+  *  @returns {void}
+  */
+  _metricsUpdate() {
+    let metrics = this.node.getBoundingClientRect();
 
-    if (!this._position.width) this._position.width = this._position.right - this._position.left;
-    if (!this._position.height) this._position.height = this._position.bottom - this._position.top;
+    this._metrics = {};
+    for (let k in metrics) if (typeof metrics[k] === 'number') this._metrics[k] = metrics[k];
+    this._metrics.outerWidth = this._metrics.right - this._metrics.left;
+    this._metrics.outerHeight = this._metrics.bottom - this._metrics.top;
+    this._metrics.width = this.node.clientWidth;
+    this._metrics.height = this.node.clientHeight;
+
+    // Update right property to match right offset
+    this._metrics.right = document.body.clientWidth - this._metrics.right;
+    // Update bottom property to match bottom offset
+    this._metrics.bottom = document.body.clientHeight - this._metrics.bottom;
+
+    // Call scroll update
+    this._scrollUpdate();
   }
 
+  _scrollUpdate() {
+    if (typeof (this._metrics !== 'undefined')) {
+      this._metrics.scrollX =
+        (window.pageXOffset !== undefined) ?
+          window.pageXOffset :
+          (document.documentElement || document.body.parentNode || document.body).scrollLeft;
+
+      this._metrics.scrollY =
+        (window.pageYOffset !== undefined) ?
+          window.pageYOffset :
+          (document.documentElement || document.body.parentNode || document.body).scrollTop;
+    }
+  }
+
+  _parseDims(v) {
+    if (v === null || typeof v === 'undefined') return '';
+    else if (v === parseInt(v, 10)) return v + 'px';
+    else if (typeof v === 'string') return v;
+    throw new TypeError('Invalid value for NodeMetrics');
+  }
+
+  /**
+  *  Get the position property of the element. The calculation only occurs
+  *  at first call or when window is resized, rotated or scrolled.
+  *
+  *  __ Warning : Calculations can be pretty slow on huge amount of elements __
+  *
+  *  A cached version of the result is available in the `_metrics` property of the
+  *  HtmlElement. It will be only be generated after a first call to position or another
+  *  getter/setter. It will then be regenerated after events that affect window size or scroll
+  *
+  *  If the element is not in DOM, all values will return undefined.
+  *
+  *  @type {NodeMetrics}
+  *  @readonly
+  *  @since 1.0.0
+  *  @version 1.0.0
+  *  @author Liqueur de Toile <contact@liqueurdetoile.com>
+  */
   get position() {
     if (!this.isInDom) {
       return {
-        left: null,
-        right: null,
-        width: null,
-        top: null,
-        bottom: null,
-        height: null,
-        scrollX: null,
-        scrollY: null
+        left: undefined,
+        right: undefined,
+        width: undefined,
+        top: undefined,
+        bottom: undefined,
+        height: undefined,
+        scrollX: undefined,
+        scrollY: undefined
       };
     }
 
-    if (!this._position) {
-      this._positionRefresh();
-      window.addEventListener('resize', this._positionRefresh().bind(this));
-      window.addEventListener('orientationchange', this._positionRefresh().bind(this));
+    if (typeof this._metrics === 'undefined') {
+      this._metricsUpdate();
+      window.addEventListener('resize', this._metricsUpdate.bind(this));
+      window.addEventListener('orientationchange', this._metricsUpdate.bind(this));
+      window.addEventListener('scroll', this._scrollUpdate.bind(this));
+      window.addEventListener('touchmove', this._scrollUpdate.bind(this));
     }
 
-    return this._position;
+    return this._metrics;
   }
 
+  /**
+  *  Get scroll X offset of the window in pixels
+  *
+  *  @see {@link position}
+  *  @type {Number|undefined}
+  *  @since 1.0.0
+  *  @version 1.0.0
+  *  @author Liqueur de Toile <contact@liqueurdetoile.com>
+  */
   get scrollX() {
     return this.position.scrollX;
   }
 
+  /**
+  *  Get scroll Y offset of the window in pixels
+  *
+  *  @see {@link position}
+  *  @type {Number|undefined}
+  *  @since 1.0.0
+  *  @version 1.0.0
+  *  @author Liqueur de Toile <contact@liqueurdetoile.com>
+  */
   get scrollY() {
     return this.position.scrollY;
   }
 
+  /**
+  *  Get left offset in pixels (relative to wiewport)
+  *
+  *  @see {@link position}
+  *  @type {Number|undefined}
+  *  @since 1.0.0
+  *  @version 1.0.0
+  *  @author Liqueur de Toile <contact@liqueurdetoile.com>
+  */
   get left() {
     return this.position.left;
   }
 
+  /**
+  *  Set left offset in pixels (relative to wiewport)
+  *
+  *  You can set value by assigning any of :
+  *
+  *  - `null`, `undefined` : Remove value
+  *  - {Number} : Value will be interpreted in pixels
+  *  - {String} : any css acceptable value for the property (e.g '5vi', '1em'...)
+  *
+  *  @see {@link position}
+  *  @since 1.0.0
+  *  @version 1.0.0
+  *  @author Liqueur de Toile <contact@liqueurdetoile.com>
+  */
+  set left(v) {
+    this.node.style.left = this._parseDims(v);
+    return this;
+  }
+
+  /**
+  *  Get/Set right offset in pixels (relative to wiewport)
+  *  You can set value by assigning any of :
+  *
+  *  - `null`, `undefined` : Remove value
+  *  - {Number} : Value will be interpreted in pixels
+  *  - {String} : any css acceptable value for the property (e.g '5vi', '1em'...)
+  *
+  *  @see {@link position}
+  *  @type Number|undefined
+  *  @since 1.0.0
+  *  @version 1.0.0
+  *  @author Liqueur de Toile <contact@liqueurdetoile.com>
+  */
   get right() {
     return this.position.right;
   }
 
+  set right(v) {
+    this.node.style.right = this._parseDims(v);
+    return this;
+  }
+
+  /**
+  *  Get/Set top offset in pixels (relative to wiewport)
+  *  You can set value by assigning any of :
+  *
+  *  - `null`, `undefined` : Remove value
+  *  - {Number} : Value will be interpreted in pixels
+  *  - {String} : any css acceptable value for the property (e.g '5vi', '1em'...)
+  *
+  *  @see {@link position}
+  *  @type Number|undefined
+  *  @since 1.0.0
+  *  @version 1.0.0
+  *  @author Liqueur de Toile <contact@liqueurdetoile.com>
+  */
   get top() {
     return this.position.top;
   }
 
+  set top(v) {
+    this.node.style.top = this._parseDims(v);
+    return this;
+  }
+
+  /**
+  *  Get/Set bottom offset in pixels (relative to wiewport)
+  *  You can set value by assigning any of :
+  *
+  *  - `null`, `undefined` : Remove value
+  *  - {Number} : Value will be interpreted in pixels
+  *  - {String} : any css acceptable value for the property (e.g '5vi', '1em'...)
+  *
+  *  @see {@link position}
+  *  @type Number|undefined
+  *  @since 1.0.0
+  *  @version 1.0.0
+  *  @author Liqueur de Toile <contact@liqueurdetoile.com>
+  */
   get bottom() {
     return this.position.bottom;
   }
 
+  set bottom(v) {
+    this.node.style.bottom = this._parseDims(v);
+    return this;
+  }
+
+  /**
+  *  Get/Set width in pixels
+  *  You can set value by assigning any of :
+  *
+  *  - `null`, `undefined` : Remove value
+  *  - {Number} : Value will be interpreted in pixels
+  *  - {String} : any css acceptable value for the property (e.g '5vi', '1em'...)
+  *
+  *  @see {@link position}
+  *  @type Number|undefined
+  *  @since 1.0.0
+  *  @version 1.0.0
+  *  @author Liqueur de Toile <contact@liqueurdetoile.com>
+  */
   get width() {
     return this.position.width;
   }
 
+  set width(v) {
+    this.node.style.width = this._parseDims(v);
+    return this;
+  }
+
+  /**
+  *  Get/Set height in pixels
+  *  You can set value by assigning any of :
+  *
+  *  - `null`, `undefined` : Remove value
+  *  - {Number} : Value will be interpreted in pixels
+  *  - {String} : any css acceptable value for the property (e.g '5vi', '1em'...)
+  *
+  *  @see {@link position}
+  *  @type Number|undefined
+  *  @since 1.0.0
+  *  @version 1.0.0
+  *  @author Liqueur de Toile <contact@liqueurdetoile.com>
+  */
   get height() {
     return this.position.height;
   }
 
-  set top(v) {
-    this.node.style.top = parseInt(v, 10) + 'px';
-    return this;
-  }
-
-  set bottom(v) {
-    this.node.style.bottom = parseInt(v, 10) + 'px';
-    return this;
-  }
-
-  set left(v) {
-    this.node.style.left = parseInt(v, 10) + 'px';
-    return this;
-  }
-
-  set right(v) {
-    this.node.style.right = parseInt(v, 10) + 'px';
-    return this;
-  }
-
-  set width(v) {
-    this.node.style.width = parseInt(v, 10) + 'px';
-    return this;
-  }
-
   set height(v) {
-    this.node.style.height = parseInt(v, 10) + 'px';
+    this.node.style.height = this._parseDims(v);
     return this;
-  }
-
-  // EVENTS with IE Polyfill
-  on(event, callback, capture = false) {
-    const id = callback.name ? callback.name : hash(callback.toString());
-
-    if (this.elements) {
-      this.elements.forEach(element => element.on(event, callback, capture));
-      return this;
-    }
-
-    if (this.element.addEventListener) {
-      this.element.addEventListener(event, callback, capture);
-    } else if (this.element.attachEvent) {
-      this.element.attachEvent(event, callback);
-    }
-
-    eventsManager.push(`${this.element.id}.${event}.${id}`, {
-      callback: callback,
-      capture: capture
-    });
-
-    return this;
-  }
-
-  off(event = null, callback = null, capture = false) {
-    if (this.elements) {
-      this.elements.forEach(element => element.off(event, callback, capture));
-      return this;
-    }
-
-    if (!event) {
-      let element = this.node.cloneNode(true);
-
-      this.element = element;
-      eventsManager.remove(this.element.id);
-    } else if (!callback) {
-      eventsManager.forEach((action, id) => {
-        if (this.element.removeEventListener) {
-          this.element.removeEventListener(event, action.callback, action.capture);
-        } else if (this.element.detachEvent) {
-          this.element.detachEvent(event, action.callback);
-        }
-      }, `${this.element.id}.${event}`);
-      eventsManager.remove(`${this.element.id}.${event}`);
-    } else {
-      let cbkId = callback.name || hash(callback.toString());
-
-      eventsManager.forEach((action, id) => {
-        if (id === cbkId) {
-          if (this.element.removeEventListener) {
-            this.element.removeEventListener(event, action.callback, capture);
-          } else if (this.element.detachEvent) {
-            this.element.detachEvent(event, action.callback);
-          }
-          eventsManager.remove(`${this.element.id}.${event}.${id}`);
-        }
-      }, `${this.element.id}.${event}`);
-    }
-
-    return this;
-  }
-
-  fire(eventName, element = window) {
-    var event;
-    const htmlEvents = window.htmlEvents || [];
-
-    element = element || this.element;
-    if (document.createEvent) {
-      event = document.createEvent('HTMLEvents');
-      event.initEvent(eventName, true, true);
-    } else if (document.createEventObject) { // IE < 9
-      event = document.createEventObject();
-      event.eventType = eventName;
-    }
-
-    event.eventName = eventName;
-
-    if (element.dispatchEvent) {
-      element.dispatchEvent(event);
-    } else if (element.fireEvent && htmlEvents['on' + eventName]) { // IE < 9
-      element.fireEvent('on' + event.eventType, event); // can trigger only real event (e.g. 'click')
-    } else if (element[eventName]) {
-      element[eventName]();
-    } else if (element['on' + eventName]) {
-      element['on' + eventName]();
-    }
-
-    return this;
-  }
-
-  fireCustomEvent(eventName, properties = {}) {
-    var event;
-
-    if (window.CustomEvent) {
-      event = new CustomEvent(eventName, properties);
-      this.node.dispatchEvent(event);
-    }
-  }
-
-  events(event) {
-    if (event) {
-      if (eventsManager[this.node.id]) return eventsManager[this.node.id][event];
-      return {};
-    }
-    return eventsManager[this.element.id];
-  }
-
-  registerEvents(events) {
-    events = new ObjectArray(events);
-    events.forEach(function (callback, event) { this.on(event, callback); });
   }
 }
-
-export default HtmlElement;

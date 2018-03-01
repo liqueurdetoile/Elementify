@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">tests/inputelement.spec.js | elementify</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<link rel="stylesheet" href="./inject/css/0-styles.css"><script src="./inject/script/0-docs.js"></script><meta name="description" content="Ultra lightweight vanilla JS library for DOM and events manipulation, form manipulation and data validation"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="elementify"><meta property="twitter:description" content="Ultra lightweight vanilla JS library for DOM and events manipulation, form manipulation and data validation"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.png" style="width:34px;"></a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/liqueurdetoile/elementify.git"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collection.js~Collection.html">Collection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/element.js~Element.html">Element</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-load">load</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Q">Q</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ForEachCallback">ForEachCallback</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-InputRuleCallback">InputRuleCallback</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-InputValidationRules">InputValidationRules</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KeyValueObject">KeyValueObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-NodeMetrics">NodeMetrics</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors">CSSSelector</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/DOMRect">DOMRect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/Element">Element</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/API/FormData">FormData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/Node">Node</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://liqueurdetoile.github.io/DotObjectArray/">ObjectArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#elements">elements</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/documentelement.js~DocumentElement.html">DocumentElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/eventifiedelement.js~EventifiedElement.html">EventifiedElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/formelement.js~FormElement.html">FormElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/htmlelement.js~HtmlElement.html">HtmlElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/inputelement.js~InputElement.html">InputElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/windowelement.js~WindowElement.html">WindowElement</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#events">events</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/events/eventsmanager.js~EventsManager.html">EventsManager</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-complete">complete</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ready">ready</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utilities">utilities</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hash">hash</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-uniqid">uniqid</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">tests/inputelement.spec.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Q} from &apos;index&apos;;
+import ObjectArray from &apos;dot-object-array&apos;;
+
+window.Q = Q;
+
+/**
+*  @test {InputElement}
+*/
+
+describe(&apos;InputElement&apos;, function () {
+  /**
+  *  @test {InputElement#constructor}
+  */
+  describe(&apos;Constructor&apos;, function () {
+    it(&apos;should create input text with value&apos;, function () {
+      let i = Q(&apos;+input&apos;, {type: &apos;text&apos;, value: &apos;fixture&apos;});
+
+      i.node.nodeName.should.equal(&apos;INPUT&apos;);
+      i.type.should.equal(&apos;text&apos;);
+      i.value.should.equal(&apos;fixture&apos;);
+    });
+
+    it(&apos;should create input text with required&apos;, function () {
+      let i = Q(&apos;+input&apos;, {type: &apos;text&apos;, required: &apos;required&apos;});
+
+      i.rules.required.should.not.equal(&apos;undefined&apos;);
+      i.validate().should.be.false;
+      i.value = &apos;fixture&apos;;
+      i.validate().should.be.true;
+    });
+  });
+
+  /**
+  *  @test {InputElement}.name
+  */
+  it(&apos;should return name attribute as name&apos;, function () {
+    let i = Q(&apos;+input&apos;, {name: &apos;fixture&apos;, id: &apos;fixture2&apos;});
+
+    i.name.should.equal(&apos;fixture&apos;);
+  });
+
+  it(&apos;should return id attribute as name&apos;, function () {
+    let i = Q(&apos;+input&apos;, {id: &apos;fixture2&apos;});
+
+    i.name.should.equal(&apos;fixture2&apos;);
+  });
+
+  it(&apos;should return randomized uniqid name&apos;, function () {
+    let i = Q(&apos;+input&apos;);
+
+    i.name.length.should.not.equal(0);
+  });
+
+  /**
+  *  @test {InputElement.type}
+  *  @test {InputElement#val}
+  */
+  describe(&apos;Type and values&apos;, function () {
+    let i;
+
+    window.beforeEach(function () {
+      i = Q(&apos;+input&apos;);
+    });
+
+    describe(&apos;Textual input&apos;, function () {
+      it(&apos;should set type, set and retrieve value&apos;, function () {
+        i.type = &apos;email&apos;;
+        i.attr(&apos;type&apos;).should.equal(&apos;email&apos;);
+        i.val(&apos;fixture@fixture.com&apos;);
+        i.val().should.equal(&apos;fixture@fixture.com&apos;);
+      });
+    });
+
+    describe(&apos;Boolean inputs&apos;, function () {
+      it(&apos;should set type, set and retrieve value&apos;, function () {
+        i.type = &apos;checkbox&apos;;
+        i.attr(&apos;type&apos;).should.equal(&apos;checkbox&apos;);
+
+        i.val().should.be.false;
+        i.node.checked = true;
+        i.val().should.be.true;
+        i.node.checked = false;
+        i.val(&apos;test&apos;);
+        expect(i.val()).to.be.undefined;
+        i.node.checked = true;
+        i.val().should.equal(&apos;test&apos;);
+      });
+    });
+
+    describe(&apos;Select input&apos;, function () {
+      it(&apos;should set type, set and retrieve value&apos;, function () {
+        i = Q(&apos;+select&apos;, {
+          options: {
+            f1: &apos;fixture1&apos;,
+            f2: &apos;fixture2&apos;
+          }
+        });
+
+        i.type.should.equal(&apos;select&apos;);
+        i.value.should.equal(&apos;f1&apos;);
+
+        i = Q(&apos;+select&apos;, {
+          value: &apos;f2&apos;,
+          options: {
+            f1: &apos;fixture1&apos;,
+            f2: &apos;fixture2&apos;
+          }
+        });
+        i.value.should.equal(&apos;f2&apos;);
+
+        i = Q(&apos;+select&apos;, {
+          value: &apos;f3&apos;,
+          options: {
+            f1: &apos;fixture1&apos;,
+            f2: &apos;fixture2&apos;
+          }
+        });
+        i.value.should.equal(&apos;f1&apos;);
+      });
+    });
+
+    describe(&apos;Textarea input&apos;, function () {
+      it(&apos;should set type, set and retrieve value&apos;, function () {
+        i.type = &apos;textarea&apos;;
+        i.attr(&apos;type&apos;).should.equal(&apos;textarea&apos;);
+        Q(&apos;body&apos;).append(i);
+
+        i.val().should.equal(&apos;&apos;);
+        i.val(&apos;fixture&apos;);
+        i.val().should.equal(&apos;fixture&apos;);
+        i.val(&apos;fixture2&apos;);
+        i.val().should.equal(&apos;fixture2&apos;);
+
+        i.remove();
+      });
+    });
+  });
+
+  /**
+  *  @test {InputElement#rule}
+  *  @test {InputElement.value}
+  *  @test {InputElement#validate}
+  */
+  describe(&apos;Rule&apos;, function () {
+    let i;
+    const sameas = Q(&apos;+input&apos;, {name: &apos;sameas&apos;, type: &apos;text&apos;, value: &apos;fixture&apos;});
+    const rules = new ObjectArray({
+      required: [
+        {val: &apos;fixture&apos;, res: true},
+        {val: &apos;&apos;, res: false},
+        {val: 0, res: true}
+      ],
+      int: [
+        {val: 10, res: true},
+        {val: -5, res: true},
+        {val: 0, res: true},
+        {val: &apos;&apos;, res: false},
+        {val: &apos;a&apos;, res: false},
+        {val: &apos;1a&apos;, res: false}
+      ],
+      number: [
+        {val: 10, res: true},
+        {val: -5, res: true},
+        {val: 0, res: true},
+        {val: 10.5, res: true},
+        {val: -10.5, res: true},
+        {val: &apos;&apos;, res: false},
+        {val: &apos;a&apos;, res: false},
+        {val: &apos;a.10&apos;, res: false}
+      ],
+      email: [
+        {val: &apos;fixture@fixture.com&apos;, res: true},
+        {val: &apos;&apos;, res: false},
+        {val: 0, res: false},
+        {val: &apos;fixture@&apos;, res: false},
+        {val: &apos;@fixture.com&apos;, res: false},
+        {val: &apos;fixture@fixture&apos;, res: false}
+      ]
+    });
+
+    window.beforeEach(function () {
+      i = Q(&apos;+input&apos;);
+    });
+
+    it(&apos;should apply rule: sameas with empty value&apos;, function () {
+      Q(&apos;body&apos;).append(sameas);
+      i.rule(&apos;sameas&apos;, &apos;@sameas&apos;);
+      i.validate().should.equal(false);
+      sameas.remove();
+    });
+
+    it(&apos;should apply rule: sameas with same values&apos;, function () {
+      Q(&apos;body&apos;).append(sameas);
+      i.rule(&apos;sameas&apos;, &apos;@sameas&apos;);
+      i.value = &apos;fixture&apos;;
+      i.validate().should.equal(true);
+      sameas.remove();
+    });
+
+    it(&apos;should apply rule: sameas with different values&apos;, function () {
+      Q(&apos;body&apos;).append(sameas);
+      i.rule(&apos;sameas&apos;, &apos;@sameas&apos;);
+      i.value = &apos;fixture3&apos;;
+      i.validate().should.equal(false);
+      sameas.remove();
+    });
+
+    rules.forEach(function (cases, rule) {
+      cases.forEach(function (c) {
+        it(&apos;should apply rule : &apos; + rule + &apos; with case : &apos; + JSON.stringify(c), function () {
+          i.rule(rule);
+          i.value = c.val;
+          i.validate().should.equal(c.res);
+        });
+      });
+    });
+
+    it(&apos;should apply custom rule&apos;, function () {
+      i.rule(&apos;custom&apos;, /fix/);
+      i.validate().should.be.false;
+      i.value = &apos;fixture&apos;;
+      i.validate().should.be.true;
+    });
+
+    it(&apos;should not evaluate string as rule&apos;, function () {
+      expect(i.rule.bind(i, &apos;pattern&apos;, &apos;notARegexp&apos;))
+        .to.not.throw(&apos;Custom rule value must be a regular expression or callback&apos;);
+      i.rules.should.be.empty;
+    });
+
+    it(&apos;should evaluate string as rule&apos;, function () {
+      expect(i.rule.bind(i, &apos;pattern&apos;, &apos;notARegexp&apos;, null, true))
+        .to.not.throw(&apos;Custom rule value must be a regular expression or callback&apos;);
+      i.rules.should.not.be.empty;
+    });
+
+    it(&apos;should apply callback&apos;, function () {
+      var i = Q(&apos;+&lt;input type=&quot;text&quot;&gt;&apos;);
+
+      i.rule(&apos;myRule&apos;, function () {
+        return this.value &gt; 5;
+      }, &apos;value must be over 5&apos;);
+
+      i.value = 3;
+      i.validate().should.be.false;
+      i.errors.should.eql({
+        myRule: &apos;value must be over 5&apos;
+      });
+      i.value = 6;
+      i.validate().should.be.true;
+    });
+  });
+
+  /**
+  *  @test {InputElement#rules}
+  *  @test {InputElement#errors}
+  */
+  describe(&apos;Rules&apos;, function () {
+    it(&apos;should apply rules&apos;, function () {
+      let i = Q(&apos;+input&apos;, {
+        required: &apos;required&apos;
+      });
+
+      i.rule(&apos;fixture&apos;, /1/, &apos;this must be a one&apos;);
+      i.rules.should.not.be.empty;
+      i.validate();
+      i.errors.should.eql({
+        required: &apos;FIELD_REQUIRED&apos;,
+        fixture: &apos;this must be a one&apos;
+      });
+      i.value = &apos;a&apos;;
+      i.val(&apos;a&apos;);
+      i.validate();
+      i.errors.should.eql({
+        fixture: &apos;this must be a one&apos;
+      });
+      i.value = 1;
+      i.validate();
+      i.errors.should.be.empty;
+    });
+  });
+
+  /**
+  *  @test {label}
+  */
+  describe(&apos;Label method&apos;, function () {
+    it(&apos;should output a label&apos;, function () {
+      let i = Q(&apos;+input&apos;, {
+        name: &apos;fixture&apos;
+      });
+
+      i.label(&apos;label&apos;).outerHTML.should.equal(&apos;&lt;label for=&quot;fixture&quot;&gt;label&lt;/label&gt;&apos;);
+    });
+  });
+
+  /**
+  *  @test {tooltip}
+  */
+  describe(&apos;Tooltip method&apos;, function () {
+    it(&apos;should output a tooltip&apos;, function () {
+      let i = Q(&apos;+input&apos;, {
+        name: &apos;fixture&apos;
+      });
+
+      i.tooltip(&apos;tooltip&apos;).outerHTML.should.equal(&apos;&lt;span data-type=&quot;tooltip&quot; data-for=&quot;fixture&quot;&gt;tooltip&lt;/span&gt;&apos;);
+    });
+  });
+});
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

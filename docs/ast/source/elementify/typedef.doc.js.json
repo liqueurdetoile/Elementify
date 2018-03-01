@@ -1,0 +1,258 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 1802,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 51,
+      "column": 0
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 1802,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 51,
+        "column": 0
+      }
+    },
+    "sourceType": "module",
+    "body": [],
+    "directives": [],
+    "leadingComments": null,
+    "innerComments": [
+      {
+        "type": "CommentBlock",
+        "value": "*\n*  @file Docs file for typedef\n*  @author  Liqueur de Toile <contact@liqueurdetoile.com>\n*  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}\n",
+        "start": 0,
+        "end": 170,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 5,
+            "column": 2
+          }
+        }
+      },
+      {
+        "type": "CommentBlock",
+        "value": "*\n*  Any vanilla object that is on the form of a paired key/value structure :\n*  \n*  @typedef {Object} KeyValueObject\n*  @example\n*  {\n*   key1: value1,\n*   key2: value2,\n*   [...],\n*   keyN: valueN\n*  }\n",
+        "start": 172,
+        "end": 380,
+        "loc": {
+          "start": {
+            "line": 7,
+            "column": 0
+          },
+          "end": {
+            "line": 18,
+            "column": 2
+          }
+        }
+      },
+      {
+        "type": "CommentBlock",
+        "value": "*\n*  A read-only object that parses position and size informations about an HtmlElement.\n*  The position is relative to viewport. If you want absolute positionning on a page,\n*  you must also use scrollX and scrollY values\n*  \n*  @typedef {Object} NodeMetrics\n*  @type Object|DOMRect\n*\n*  @property {Number} left  Left offset from viewport in pixels\n*  @property {Number} top  Top offset from viewport in pixels\n*  @property {Number} right  Right offset from viewport in pixels\n*  @property {Number} bottom  Bottom offset from viewport in pixels\n*  @property {Number} width  Width in pixels\n*  @property {Number} height  Height in pixels\n*  @property {Number} outerWidth  Outer width in pixels\n*  @property {Number} outerHeight  Outer height in pixels\n*  @property {Number} scrollX Offset of the viewport from left in pixels\n*  @property {Number} scrollY Offset of the viewport from top in pixels\n",
+        "start": 382,
+        "end": 1283,
+        "loc": {
+          "start": {
+            "line": 20,
+            "column": 0
+          },
+          "end": {
+            "line": 38,
+            "column": 2
+          }
+        }
+      },
+      {
+        "type": "CommentBlock",
+        "value": "*\n* This callback is used in forEach callback on a Collection or an HtmlElement.\n\n* @callback ForEachCallback\n* @param {Object|Number|String|Array|HtmlElement} value Value at the <tt>index</tt> offset\n* @param {Number|String} index Index of the Element.\n*  It will be a number for a [Collection]{@link elementify.Collection}\n*  or [HtmlElement]{@link HtmlElement}\n*  and the key for an [ObjectArray]{@link ObjectArray}\n* @param {Number} offset  Offset of the current value in an [ObjectArray]{@link ObjectArray}\n",
+        "start": 1285,
+        "end": 1801,
+        "loc": {
+          "start": {
+            "line": 40,
+            "column": 0
+          },
+          "end": {
+            "line": 50,
+            "column": 2
+          }
+        }
+      }
+    ]
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  @file Docs file for typedef\n*  @author  Liqueur de Toile <contact@liqueurdetoile.com>\n*  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}\n",
+      "start": 0,
+      "end": 170,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  Any vanilla object that is on the form of a paired key/value structure :\n*  \n*  @typedef {Object} KeyValueObject\n*  @example\n*  {\n*   key1: value1,\n*   key2: value2,\n*   [...],\n*   keyN: valueN\n*  }\n",
+      "start": 172,
+      "end": 380,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 0
+        },
+        "end": {
+          "line": 18,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  A read-only object that parses position and size informations about an HtmlElement.\n*  The position is relative to viewport. If you want absolute positionning on a page,\n*  you must also use scrollX and scrollY values\n*  \n*  @typedef {Object} NodeMetrics\n*  @type Object|DOMRect\n*\n*  @property {Number} left  Left offset from viewport in pixels\n*  @property {Number} top  Top offset from viewport in pixels\n*  @property {Number} right  Right offset from viewport in pixels\n*  @property {Number} bottom  Bottom offset from viewport in pixels\n*  @property {Number} width  Width in pixels\n*  @property {Number} height  Height in pixels\n*  @property {Number} outerWidth  Outer width in pixels\n*  @property {Number} outerHeight  Outer height in pixels\n*  @property {Number} scrollX Offset of the viewport from left in pixels\n*  @property {Number} scrollY Offset of the viewport from top in pixels\n",
+      "start": 382,
+      "end": 1283,
+      "loc": {
+        "start": {
+          "line": 20,
+          "column": 0
+        },
+        "end": {
+          "line": 38,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n* This callback is used in forEach callback on a Collection or an HtmlElement.\n\n* @callback ForEachCallback\n* @param {Object|Number|String|Array|HtmlElement} value Value at the <tt>index</tt> offset\n* @param {Number|String} index Index of the Element.\n*  It will be a number for a [Collection]{@link elementify.Collection}\n*  or [HtmlElement]{@link HtmlElement}\n*  and the key for an [ObjectArray]{@link ObjectArray}\n* @param {Number} offset  Offset of the current value in an [ObjectArray]{@link ObjectArray}\n",
+      "start": 1285,
+      "end": 1801,
+      "loc": {
+        "start": {
+          "line": 40,
+          "column": 0
+        },
+        "end": {
+          "line": 50,
+          "column": 2
+        }
+      }
+    }
+  ],
+  "tokens": [
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  @file Docs file for typedef\n*  @author  Liqueur de Toile <contact@liqueurdetoile.com>\n*  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}\n",
+      "start": 0,
+      "end": 170,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  Any vanilla object that is on the form of a paired key/value structure :\n*  \n*  @typedef {Object} KeyValueObject\n*  @example\n*  {\n*   key1: value1,\n*   key2: value2,\n*   [...],\n*   keyN: valueN\n*  }\n",
+      "start": 172,
+      "end": 380,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 0
+        },
+        "end": {
+          "line": 18,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  A read-only object that parses position and size informations about an HtmlElement.\n*  The position is relative to viewport. If you want absolute positionning on a page,\n*  you must also use scrollX and scrollY values\n*  \n*  @typedef {Object} NodeMetrics\n*  @type Object|DOMRect\n*\n*  @property {Number} left  Left offset from viewport in pixels\n*  @property {Number} top  Top offset from viewport in pixels\n*  @property {Number} right  Right offset from viewport in pixels\n*  @property {Number} bottom  Bottom offset from viewport in pixels\n*  @property {Number} width  Width in pixels\n*  @property {Number} height  Height in pixels\n*  @property {Number} outerWidth  Outer width in pixels\n*  @property {Number} outerHeight  Outer height in pixels\n*  @property {Number} scrollX Offset of the viewport from left in pixels\n*  @property {Number} scrollY Offset of the viewport from top in pixels\n",
+      "start": 382,
+      "end": 1283,
+      "loc": {
+        "start": {
+          "line": 20,
+          "column": 0
+        },
+        "end": {
+          "line": 38,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n* This callback is used in forEach callback on a Collection or an HtmlElement.\n\n* @callback ForEachCallback\n* @param {Object|Number|String|Array|HtmlElement} value Value at the <tt>index</tt> offset\n* @param {Number|String} index Index of the Element.\n*  It will be a number for a [Collection]{@link elementify.Collection}\n*  or [HtmlElement]{@link HtmlElement}\n*  and the key for an [ObjectArray]{@link ObjectArray}\n* @param {Number} offset  Offset of the current value in an [ObjectArray]{@link ObjectArray}\n",
+      "start": 1285,
+      "end": 1801,
+      "loc": {
+        "start": {
+          "line": 40,
+          "column": 0
+        },
+        "end": {
+          "line": 50,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "eof",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1802,
+      "end": 1802,
+      "loc": {
+        "start": {
+          "line": 51,
+          "column": 0
+        },
+        "end": {
+          "line": 51,
+          "column": 0
+        }
+      }
+    }
+  ]
+}

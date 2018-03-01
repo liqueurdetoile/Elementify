@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">tests/formelement.spec.js | elementify</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<link rel="stylesheet" href="./inject/css/0-styles.css"><script src="./inject/script/0-docs.js"></script><meta name="description" content="Ultra lightweight vanilla JS library for DOM and events manipulation, form manipulation and data validation"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="elementify"><meta property="twitter:description" content="Ultra lightweight vanilla JS library for DOM and events manipulation, form manipulation and data validation"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.png" style="width:34px;"></a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/liqueurdetoile/elementify.git"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collection.js~Collection.html">Collection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/element.js~Element.html">Element</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-load">load</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Q">Q</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ForEachCallback">ForEachCallback</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-InputRuleCallback">InputRuleCallback</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-InputValidationRules">InputValidationRules</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KeyValueObject">KeyValueObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-NodeMetrics">NodeMetrics</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors">CSSSelector</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/DOMRect">DOMRect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/Element">Element</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/API/FormData">FormData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/Node">Node</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://liqueurdetoile.github.io/DotObjectArray/">ObjectArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#elements">elements</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/documentelement.js~DocumentElement.html">DocumentElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/eventifiedelement.js~EventifiedElement.html">EventifiedElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/formelement.js~FormElement.html">FormElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/htmlelement.js~HtmlElement.html">HtmlElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/inputelement.js~InputElement.html">InputElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/windowelement.js~WindowElement.html">WindowElement</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#events">events</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/events/eventsmanager.js~EventsManager.html">EventsManager</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-complete">complete</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ready">ready</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utilities">utilities</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hash">hash</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-uniqid">uniqid</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">tests/formelement.spec.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Q, Element} from &apos;index&apos;;
+import ObjectArray from &apos;dot-object-array&apos;;
+
+/**
+*  @test {FormElement}
+*/
+describe(&apos;FormElement&apos;, function () {
+  /**
+  *  @test {FormElement#constructor}
+  */
+  describe(&apos;Constructor&apos;, function () {
+    it(&apos;should return and empty FormElement&apos;, function () {
+      let f = new Element(&apos;form&apos;);
+
+      f.node.nodeName.should.equal(&apos;FORM&apos;);
+      f.node.method.should.equal(&apos;get&apos;);
+    });
+
+    it(&apos;should return a FormElement with Element method attribute set to post&apos;, function () {
+      let f = new Element(&apos;form&apos;, {method: &apos;post&apos;});
+
+      f.node.nodeName.should.equal(&apos;FORM&apos;);
+      f.node.method.should.equal(&apos;post&apos;);
+    });
+  });
+
+  /**
+  *  @test {FormElement#field}
+  *  @test {FormElement#fields}
+  */
+  describe(&apos;Fields access&apos;, function () {
+    it(&apos;should find a field, even if the name is already used elsewhere&apos;, function () {
+      let f = new Element(&apos;form&apos;);
+      let fake = Q(&apos;+&lt;input type=&quot;text&quot; name=&quot;fixture1&quot; value=&quot;fixtureFake&quot;&gt;&apos;);
+
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;fixture1&quot; value=&quot;fixture1&quot;&gt;&apos;);
+      Q(&apos;body&apos;).append(f).append(fake);
+
+      f.field(&apos;fixture1&apos;).length.should.equal(1);
+      f.field(&apos;fixture1&apos;).value.should.equal(&apos;fixture1&apos;);
+
+      f.remove();
+      fake.remove();
+    });
+
+    it(&apos;should return a collection of fields of the form&apos;, function () {
+      let f = new Element(&apos;form&apos;);
+      let fake = Q(&apos;+&lt;input type=&quot;text&quot; name=&quot;fixture1&quot; value=&quot;fixtureFake&quot;&gt;&apos;);
+
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;fixture1&quot; value=&quot;fixture1&quot;&gt;&apos;);
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;fixture2&quot; value=&quot;fixture2&quot;&gt;&apos;);
+      Q(&apos;body&apos;).append(f).append(fake);
+
+      f.fields.length.should.equal(2);
+      f.fields.elements[0].value.should.equal(&apos;fixture1&apos;);
+      f.fields.elements[1].value.should.equal(&apos;fixture2&apos;);
+
+      f.remove();
+      fake.remove();
+    });
+
+    it(&apos;should return a collection of fields and ignore fields with class form-ignore&apos;, function () {
+      let f = new Element(&apos;form&apos;);
+
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;fixture1&quot; value=&quot;fixture1&quot;&gt;&apos;);
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;fixture2&quot; value=&quot;fixture2&quot;&gt;&apos;);
+      f.append(&apos;&lt;input type=&quot;text&quot; class=&quot;form-ignore&quot; name=&quot;fixture3&quot; value=&quot;fixture3&quot;&gt;&apos;);
+      Q(&apos;body&apos;).append(f);
+
+      f.fields.length.should.equal(2);
+      f.fields.elements[0].value.should.equal(&apos;fixture1&apos;);
+      f.fields.elements[1].value.should.equal(&apos;fixture2&apos;);
+
+      f.remove();
+    });
+  });
+
+  /**
+  *  @test {FormElement#dirty}
+  */
+  describe(&apos;Dirty&apos;, function () {
+    it(&apos;should return false if no field changed&apos;, function () {
+      let f = new Element(&apos;form&apos;);
+
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;fixture1&quot; value=&quot;fixture1&quot;&gt;&apos;);
+      f.dirty.should.be.false;
+    });
+    it(&apos;should return true if field changed&apos;, function () {
+      let f = new Element(&apos;form&apos;);
+
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;fixture1&quot; value=&quot;fixture1&quot;&gt;&apos;);
+      f.field(&apos;fixture1&apos;).value = &apos;fixtureX&apos;;
+      f.dirty.should.be.true;
+    });
+  });
+
+  /**
+  *  @test {FormElement#validate}
+  *  @test {FormElement.errors}
+  */
+  describe(&apos;Validate&apos;, function () {
+    it(&apos;should validate&apos;, function () {
+      let f = new Element(&apos;form&apos;);
+      let i = new Element(&apos;input&apos;, {required: &apos;required&apos;});
+
+      f.append(i);
+      f.validate().should.be.false;
+      i.hasClass(&apos;field-not-validate&apos;).should.be.true;
+      i.hasClass(&apos;field-validate&apos;).should.be.false;
+      f._errors.length().should.equal(1);
+      i.value = &apos;a&apos;;
+      f.validate().should.be.true;
+      i.hasClass(&apos;field-not-validate&apos;).should.be.false;
+      i.hasClass(&apos;field-validate&apos;).should.be.true;
+    });
+  });
+
+  /**
+  *  @test {FormElement.data}
+  *  @test {FormElement.urlEncode}
+  *  @test {FormElement.formUrlEncode}
+  *  @test {FormElement.formData}
+  *  @test {FormElement.json}
+  */
+  describe(&apos;Data export and import&apos;, function () {
+    it(&apos;should export data to ObjectArray&apos;, function () {
+      let f = new Element(&apos;form&apos;);
+
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;f1&quot; value=&quot;fixture1&quot;&gt;&apos;);
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;f2&quot; value=&quot;fixture2&quot;&gt;&apos;);
+      f.data.should.be.instanceof(ObjectArray);
+      f.data.data.should.eql({f1: &apos;fixture1&apos;, f2: &apos;fixture2&apos;});
+    });
+
+    it(&apos;should export data to ObjectArray with dotted keys&apos;, function () {
+      let f = new Element(&apos;form&apos;);
+
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;fixture.f1&quot; value=&quot;fixture1&quot;&gt;&apos;);
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;fixture.f2&quot; value=&quot;fixture2&quot;&gt;&apos;);
+      f.data.should.be.instanceof(ObjectArray);
+      f.data.data.should.eql({fixture: {f1: &apos;fixture1&apos;, f2: &apos;fixture2&apos;}});
+    });
+
+    it(&apos;should export data to JSON&apos;, function () {
+      let f = new Element(&apos;form&apos;);
+
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;f1&quot; value=&quot;fixture1&quot;&gt;&apos;);
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;f2&quot; value=&quot;fixture2&quot;&gt;&apos;);
+      f.json.should.equal(&apos;{&quot;f1&quot;:&quot;fixture1&quot;,&quot;f2&quot;:&quot;fixture2&quot;}&apos;);
+    });
+
+    it(&apos;should export data to JSON with dotted keys&apos;, function () {
+      let f = new Element(&apos;form&apos;);
+
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;fixture.f1&quot; value=&quot;fixture1&quot;&gt;&apos;);
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;fixture.f2&quot; value=&quot;fixture2&quot;&gt;&apos;);
+      f.json.should.equal(&apos;{&quot;fixture&quot;:{&quot;f1&quot;:&quot;fixture1&quot;,&quot;f2&quot;:&quot;fixture2&quot;}}&apos;);
+    });
+
+    it(&apos;should export data to urlEncode string&apos;, function () {
+      let f = new Element(&apos;form&apos;);
+
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;f1&quot; value=&quot;fixture1&quot;&gt;&apos;);
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;f2&quot; value=&quot;fixture2 space&quot;&gt;&apos;);
+      f.urlEncode.should.equal(&apos;f1=fixture1&amp;f2=fixture2%20space&apos;);
+    });
+
+    it(&apos;should export data to formUrlEncode string&apos;, function () {
+      let f = new Element(&apos;form&apos;);
+
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;f1&quot; value=&quot;fixture1&quot;&gt;&apos;);
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;f2&quot; value=&quot;fixture2 space&quot;&gt;&apos;);
+      f.formUrlEncode.should.equal(&apos;f1=fixture1&amp;f2=fixture2+space&apos;);
+    });
+
+    it(&apos;should import data into fields from JSON&apos;, function () {
+      let js = &apos;{&quot;fixvoid&quot;: true, &quot;f1&quot;:&quot;fixture1&quot;, &quot;f2&quot;:&quot;fixture2&quot;}&apos;;
+      let f = new Element(&apos;form&apos;);
+
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;f1&quot;&gt;&apos;);
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;f2&quot;&gt;&apos;);
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;f3&quot;&gt;&apos;);
+      f.json = js;
+      f.field(&apos;f1&apos;).value.should.equal(&apos;fixture1&apos;);
+      f.field(&apos;f2&apos;).value.should.equal(&apos;fixture2&apos;);
+      f.field(&apos;f3&apos;).value.should.equal(&apos;&apos;);
+    });
+
+    it(&apos;should import dotted keys data into fields from JSON&apos;, function () {
+      let js = &apos;{&quot;fixvoid&quot;: true,&quot;fixture&quot;:{&quot;f1&quot;:&quot;fixture1&quot;,&quot;f2&quot;:&quot;fixture2&quot;}}&apos;;
+      let f = new Element(&apos;form&apos;);
+
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;fixture.f1&quot;&gt;&apos;);
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;fixture.f2&quot;&gt;&apos;);
+      f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;fixture.f3&quot;&gt;&apos;);
+      f.json = js;
+      f.field(&apos;fixture.f1&apos;).value.should.equal(&apos;fixture1&apos;);
+      f.field(&apos;fixture.f2&apos;).value.should.equal(&apos;fixture2&apos;);
+      f.field(&apos;fixture.f3&apos;).value.should.equal(&apos;&apos;);
+    });
+
+    it(&apos;should throw an exception while import data into fields from JSON&apos;, function () {
+      let js = &apos;&quot;fixvoid&quot;: true,&quot;fixture&quot;:{&quot;f1&quot;:&quot;fixture1&quot;,&quot;f2&quot;:&quot;fixture2&quot;}}&apos;;
+      let f = new Element(&apos;form&apos;);
+
+      expect((function test() { f.json = js; })).to.throw(TypeError);
+    });
+  });
+});
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

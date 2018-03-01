@@ -1,0 +1,690 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 3099,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 99,
+      "column": 0
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 3099,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 99,
+        "column": 0
+      }
+    },
+    "sourceType": "module",
+    "body": [],
+    "directives": [],
+    "leadingComments": null,
+    "innerComments": [
+      {
+        "type": "CommentBlock",
+        "value": "*\n*  @file Docs file for typedef\n*  @author  Liqueur de Toile <contact@liqueurdetoile.com>\n*  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}\n",
+        "start": 0,
+        "end": 170,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 5,
+            "column": 2
+          }
+        }
+      },
+      {
+        "type": "CommentBlock",
+        "value": "*\n*  Any vanilla object that is on the form of a paired key/value structure :\n*\n*  @typedef {Object} KeyValueObject\n*  @example\n*  {\n*   key1: value1,\n*   key2: value2,\n*   [...],\n*   keyN: valueN\n*  }\n",
+        "start": 172,
+        "end": 378,
+        "loc": {
+          "start": {
+            "line": 7,
+            "column": 0
+          },
+          "end": {
+            "line": 18,
+            "column": 2
+          }
+        }
+      },
+      {
+        "type": "CommentBlock",
+        "value": "*\n*  A read-only object that parses position and size informations about an HtmlElement.\n*  The position is relative to viewport. If you want absolute positionning on a page,\n*  you must also use scrollX and scrollY values\n*\n*  @typedef {Object|DOMRect} NodeMetrics\n*\n*  @property {Number} left  Left offset from viewport in pixels\n*  @property {Number} top  Top offset from viewport in pixels\n*  @property {Number} right  Right offset from viewport in pixels\n*  @property {Number} bottom  Bottom offset from viewport in pixels\n*  @property {Number} width  Width in pixels\n*  @property {Number} height  Height in pixels\n*  @property {Number} outerWidth  Outer width in pixels\n*  @property {Number} outerHeight  Outer height in pixels\n*  @property {Number} scrollX Offset of the viewport from left in pixels\n*  @property {Number} scrollY Offset of the viewport from top in pixels\n",
+        "start": 380,
+        "end": 1263,
+        "loc": {
+          "start": {
+            "line": 20,
+            "column": 0
+          },
+          "end": {
+            "line": 37,
+            "column": 2
+          }
+        }
+      },
+      {
+        "type": "CommentBlock",
+        "value": "*\n*  Object used to store the validation rules on an InputElement.\n*  \n*  @typedef {Object} InputValidationRules\n*  @property  {RegExp|CSSSelector}  pattern Pattern used for regexp or CSS Selector with `sameas`\n*  @property  {string}  message   Message stored with the rule (usually an error Key for i18n to user)\n",
+        "start": 1265,
+        "end": 1583,
+        "loc": {
+          "start": {
+            "line": 39,
+            "column": 0
+          },
+          "end": {
+            "line": 45,
+            "column": 2
+          }
+        }
+      },
+      {
+        "type": "CommentBlock",
+        "value": "*\n*  This callback is used in forEach callback iteration on a Collection.\n*\n*  The callback is provided with two parameters :\n*  - element {{@link HtmlElement}} Current element in the iteration\n*  - index {Number}  Index of the current iterated element\n*\n*  @typedef {Function} ForEachCallback\n",
+        "start": 1585,
+        "end": 1883,
+        "loc": {
+          "start": {
+            "line": 47,
+            "column": 0
+          },
+          "end": {
+            "line": 55,
+            "column": 2
+          }
+        }
+      },
+      {
+        "type": "CommentBlock",
+        "value": "*\n*  This callback is used in rule validation for InputElement.\n*\n*  The callback is provided with the InputElement context. You can then call\n*  `this.value` to fetch InputElement value.\n*  It __must__ return `true` if validates or `false` otherwise.\n*\n*  @typedef {Function} InputRuleCallback\n*  @example\n*  var i = new Element('<input type=\"text\">');\n*\n*  i.rule('myRule', function() {\n*     return this.value > 5;\n*  }, 'value must be over 5');\n*  \n*  i.value = 3;\n*  i.validate(); // returns false\n*  console.log(i.errors); // outputs {myRule: 'value must be over 5'}\n* \n",
+        "start": 1885,
+        "end": 2465,
+        "loc": {
+          "start": {
+            "line": 57,
+            "column": 0
+          },
+          "end": {
+            "line": 76,
+            "column": 2
+          }
+        }
+      },
+      {
+        "type": "CommentBlock",
+        "value": "*\n*  @external {DOMRect} https://developer.mozilla.org/fr/docs/Web/API/DOMRect\n",
+        "start": 2467,
+        "end": 2550,
+        "loc": {
+          "start": {
+            "line": 78,
+            "column": 0
+          },
+          "end": {
+            "line": 80,
+            "column": 2
+          }
+        }
+      },
+      {
+        "type": "CommentBlock",
+        "value": "*\n*  @external {Node} https://developer.mozilla.org/fr/docs/Web/API/Node\n",
+        "start": 2551,
+        "end": 2628,
+        "loc": {
+          "start": {
+            "line": 81,
+            "column": 0
+          },
+          "end": {
+            "line": 83,
+            "column": 2
+          }
+        }
+      },
+      {
+        "type": "CommentBlock",
+        "value": "*\n*  @external {Element} https://developer.mozilla.org/fr/docs/Web/API/Element\n",
+        "start": 2629,
+        "end": 2712,
+        "loc": {
+          "start": {
+            "line": 84,
+            "column": 0
+          },
+          "end": {
+            "line": 86,
+            "column": 2
+          }
+        }
+      },
+      {
+        "type": "CommentBlock",
+        "value": "*\n*  @external {ObjectArray} https://liqueurdetoile.github.io/DotObjectArray/\n",
+        "start": 2713,
+        "end": 2795,
+        "loc": {
+          "start": {
+            "line": 87,
+            "column": 0
+          },
+          "end": {
+            "line": 89,
+            "column": 2
+          }
+        }
+      },
+      {
+        "type": "CommentBlock",
+        "value": "*\n*  @external {FormData} https://developer.mozilla.org/en-US/docs/Web/API/FormData\n",
+        "start": 2796,
+        "end": 2884,
+        "loc": {
+          "start": {
+            "line": 90,
+            "column": 0
+          },
+          "end": {
+            "line": 92,
+            "column": 2
+          }
+        }
+      },
+      {
+        "type": "CommentBlock",
+        "value": "*\n*  @external {RegExp} https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp\n",
+        "start": 2885,
+        "end": 3001,
+        "loc": {
+          "start": {
+            "line": 93,
+            "column": 0
+          },
+          "end": {
+            "line": 95,
+            "column": 2
+          }
+        }
+      },
+      {
+        "type": "CommentBlock",
+        "value": "*\n*  @external {CSSSelector} https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors\n",
+        "start": 3002,
+        "end": 3098,
+        "loc": {
+          "start": {
+            "line": 96,
+            "column": 0
+          },
+          "end": {
+            "line": 98,
+            "column": 2
+          }
+        }
+      }
+    ]
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  @file Docs file for typedef\n*  @author  Liqueur de Toile <contact@liqueurdetoile.com>\n*  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}\n",
+      "start": 0,
+      "end": 170,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  Any vanilla object that is on the form of a paired key/value structure :\n*\n*  @typedef {Object} KeyValueObject\n*  @example\n*  {\n*   key1: value1,\n*   key2: value2,\n*   [...],\n*   keyN: valueN\n*  }\n",
+      "start": 172,
+      "end": 378,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 0
+        },
+        "end": {
+          "line": 18,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  A read-only object that parses position and size informations about an HtmlElement.\n*  The position is relative to viewport. If you want absolute positionning on a page,\n*  you must also use scrollX and scrollY values\n*\n*  @typedef {Object|DOMRect} NodeMetrics\n*\n*  @property {Number} left  Left offset from viewport in pixels\n*  @property {Number} top  Top offset from viewport in pixels\n*  @property {Number} right  Right offset from viewport in pixels\n*  @property {Number} bottom  Bottom offset from viewport in pixels\n*  @property {Number} width  Width in pixels\n*  @property {Number} height  Height in pixels\n*  @property {Number} outerWidth  Outer width in pixels\n*  @property {Number} outerHeight  Outer height in pixels\n*  @property {Number} scrollX Offset of the viewport from left in pixels\n*  @property {Number} scrollY Offset of the viewport from top in pixels\n",
+      "start": 380,
+      "end": 1263,
+      "loc": {
+        "start": {
+          "line": 20,
+          "column": 0
+        },
+        "end": {
+          "line": 37,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  Object used to store the validation rules on an InputElement.\n*  \n*  @typedef {Object} InputValidationRules\n*  @property  {RegExp|CSSSelector}  pattern Pattern used for regexp or CSS Selector with `sameas`\n*  @property  {string}  message   Message stored with the rule (usually an error Key for i18n to user)\n",
+      "start": 1265,
+      "end": 1583,
+      "loc": {
+        "start": {
+          "line": 39,
+          "column": 0
+        },
+        "end": {
+          "line": 45,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  This callback is used in forEach callback iteration on a Collection.\n*\n*  The callback is provided with two parameters :\n*  - element {{@link HtmlElement}} Current element in the iteration\n*  - index {Number}  Index of the current iterated element\n*\n*  @typedef {Function} ForEachCallback\n",
+      "start": 1585,
+      "end": 1883,
+      "loc": {
+        "start": {
+          "line": 47,
+          "column": 0
+        },
+        "end": {
+          "line": 55,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  This callback is used in rule validation for InputElement.\n*\n*  The callback is provided with the InputElement context. You can then call\n*  `this.value` to fetch InputElement value.\n*  It __must__ return `true` if validates or `false` otherwise.\n*\n*  @typedef {Function} InputRuleCallback\n*  @example\n*  var i = new Element('<input type=\"text\">');\n*\n*  i.rule('myRule', function() {\n*     return this.value > 5;\n*  }, 'value must be over 5');\n*  \n*  i.value = 3;\n*  i.validate(); // returns false\n*  console.log(i.errors); // outputs {myRule: 'value must be over 5'}\n* \n",
+      "start": 1885,
+      "end": 2465,
+      "loc": {
+        "start": {
+          "line": 57,
+          "column": 0
+        },
+        "end": {
+          "line": 76,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  @external {DOMRect} https://developer.mozilla.org/fr/docs/Web/API/DOMRect\n",
+      "start": 2467,
+      "end": 2550,
+      "loc": {
+        "start": {
+          "line": 78,
+          "column": 0
+        },
+        "end": {
+          "line": 80,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  @external {Node} https://developer.mozilla.org/fr/docs/Web/API/Node\n",
+      "start": 2551,
+      "end": 2628,
+      "loc": {
+        "start": {
+          "line": 81,
+          "column": 0
+        },
+        "end": {
+          "line": 83,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  @external {Element} https://developer.mozilla.org/fr/docs/Web/API/Element\n",
+      "start": 2629,
+      "end": 2712,
+      "loc": {
+        "start": {
+          "line": 84,
+          "column": 0
+        },
+        "end": {
+          "line": 86,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  @external {ObjectArray} https://liqueurdetoile.github.io/DotObjectArray/\n",
+      "start": 2713,
+      "end": 2795,
+      "loc": {
+        "start": {
+          "line": 87,
+          "column": 0
+        },
+        "end": {
+          "line": 89,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  @external {FormData} https://developer.mozilla.org/en-US/docs/Web/API/FormData\n",
+      "start": 2796,
+      "end": 2884,
+      "loc": {
+        "start": {
+          "line": 90,
+          "column": 0
+        },
+        "end": {
+          "line": 92,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  @external {RegExp} https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp\n",
+      "start": 2885,
+      "end": 3001,
+      "loc": {
+        "start": {
+          "line": 93,
+          "column": 0
+        },
+        "end": {
+          "line": 95,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  @external {CSSSelector} https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors\n",
+      "start": 3002,
+      "end": 3098,
+      "loc": {
+        "start": {
+          "line": 96,
+          "column": 0
+        },
+        "end": {
+          "line": 98,
+          "column": 2
+        }
+      }
+    }
+  ],
+  "tokens": [
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  @file Docs file for typedef\n*  @author  Liqueur de Toile <contact@liqueurdetoile.com>\n*  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}\n",
+      "start": 0,
+      "end": 170,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  Any vanilla object that is on the form of a paired key/value structure :\n*\n*  @typedef {Object} KeyValueObject\n*  @example\n*  {\n*   key1: value1,\n*   key2: value2,\n*   [...],\n*   keyN: valueN\n*  }\n",
+      "start": 172,
+      "end": 378,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 0
+        },
+        "end": {
+          "line": 18,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  A read-only object that parses position and size informations about an HtmlElement.\n*  The position is relative to viewport. If you want absolute positionning on a page,\n*  you must also use scrollX and scrollY values\n*\n*  @typedef {Object|DOMRect} NodeMetrics\n*\n*  @property {Number} left  Left offset from viewport in pixels\n*  @property {Number} top  Top offset from viewport in pixels\n*  @property {Number} right  Right offset from viewport in pixels\n*  @property {Number} bottom  Bottom offset from viewport in pixels\n*  @property {Number} width  Width in pixels\n*  @property {Number} height  Height in pixels\n*  @property {Number} outerWidth  Outer width in pixels\n*  @property {Number} outerHeight  Outer height in pixels\n*  @property {Number} scrollX Offset of the viewport from left in pixels\n*  @property {Number} scrollY Offset of the viewport from top in pixels\n",
+      "start": 380,
+      "end": 1263,
+      "loc": {
+        "start": {
+          "line": 20,
+          "column": 0
+        },
+        "end": {
+          "line": 37,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  Object used to store the validation rules on an InputElement.\n*  \n*  @typedef {Object} InputValidationRules\n*  @property  {RegExp|CSSSelector}  pattern Pattern used for regexp or CSS Selector with `sameas`\n*  @property  {string}  message   Message stored with the rule (usually an error Key for i18n to user)\n",
+      "start": 1265,
+      "end": 1583,
+      "loc": {
+        "start": {
+          "line": 39,
+          "column": 0
+        },
+        "end": {
+          "line": 45,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  This callback is used in forEach callback iteration on a Collection.\n*\n*  The callback is provided with two parameters :\n*  - element {{@link HtmlElement}} Current element in the iteration\n*  - index {Number}  Index of the current iterated element\n*\n*  @typedef {Function} ForEachCallback\n",
+      "start": 1585,
+      "end": 1883,
+      "loc": {
+        "start": {
+          "line": 47,
+          "column": 0
+        },
+        "end": {
+          "line": 55,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  This callback is used in rule validation for InputElement.\n*\n*  The callback is provided with the InputElement context. You can then call\n*  `this.value` to fetch InputElement value.\n*  It __must__ return `true` if validates or `false` otherwise.\n*\n*  @typedef {Function} InputRuleCallback\n*  @example\n*  var i = new Element('<input type=\"text\">');\n*\n*  i.rule('myRule', function() {\n*     return this.value > 5;\n*  }, 'value must be over 5');\n*  \n*  i.value = 3;\n*  i.validate(); // returns false\n*  console.log(i.errors); // outputs {myRule: 'value must be over 5'}\n* \n",
+      "start": 1885,
+      "end": 2465,
+      "loc": {
+        "start": {
+          "line": 57,
+          "column": 0
+        },
+        "end": {
+          "line": 76,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  @external {DOMRect} https://developer.mozilla.org/fr/docs/Web/API/DOMRect\n",
+      "start": 2467,
+      "end": 2550,
+      "loc": {
+        "start": {
+          "line": 78,
+          "column": 0
+        },
+        "end": {
+          "line": 80,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  @external {Node} https://developer.mozilla.org/fr/docs/Web/API/Node\n",
+      "start": 2551,
+      "end": 2628,
+      "loc": {
+        "start": {
+          "line": 81,
+          "column": 0
+        },
+        "end": {
+          "line": 83,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  @external {Element} https://developer.mozilla.org/fr/docs/Web/API/Element\n",
+      "start": 2629,
+      "end": 2712,
+      "loc": {
+        "start": {
+          "line": 84,
+          "column": 0
+        },
+        "end": {
+          "line": 86,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  @external {ObjectArray} https://liqueurdetoile.github.io/DotObjectArray/\n",
+      "start": 2713,
+      "end": 2795,
+      "loc": {
+        "start": {
+          "line": 87,
+          "column": 0
+        },
+        "end": {
+          "line": 89,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  @external {FormData} https://developer.mozilla.org/en-US/docs/Web/API/FormData\n",
+      "start": 2796,
+      "end": 2884,
+      "loc": {
+        "start": {
+          "line": 90,
+          "column": 0
+        },
+        "end": {
+          "line": 92,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  @external {RegExp} https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp\n",
+      "start": 2885,
+      "end": 3001,
+      "loc": {
+        "start": {
+          "line": 93,
+          "column": 0
+        },
+        "end": {
+          "line": 95,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  @external {CSSSelector} https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors\n",
+      "start": 3002,
+      "end": 3098,
+      "loc": {
+        "start": {
+          "line": 96,
+          "column": 0
+        },
+        "end": {
+          "line": 98,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "eof",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 3099,
+      "end": 3099,
+      "loc": {
+        "start": {
+          "line": 99,
+          "column": 0
+        },
+        "end": {
+          "line": 99,
+          "column": 0
+        }
+      }
+    }
+  ]
+}

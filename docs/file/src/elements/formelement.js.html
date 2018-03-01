@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/elements/formelement.js | elementify</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<link rel="stylesheet" href="./inject/css/0-styles.css"><script src="./inject/script/0-docs.js"></script><meta name="description" content="Ultra lightweight vanilla JS library for DOM and events manipulation, form manipulation and data validation"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="elementify"><meta property="twitter:description" content="Ultra lightweight vanilla JS library for DOM and events manipulation, form manipulation and data validation"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.png" style="width:34px;"></a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/liqueurdetoile/elementify.git"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collection.js~Collection.html">Collection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/element.js~Element.html">Element</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-load">load</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Q">Q</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ForEachCallback">ForEachCallback</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-InputRuleCallback">InputRuleCallback</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-InputValidationRules">InputValidationRules</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KeyValueObject">KeyValueObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-NodeMetrics">NodeMetrics</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors">CSSSelector</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/DOMRect">DOMRect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/Element">Element</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/API/FormData">FormData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/Node">Node</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://liqueurdetoile.github.io/DotObjectArray/">ObjectArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#elements">elements</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/documentelement.js~DocumentElement.html">DocumentElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/eventifiedelement.js~EventifiedElement.html">EventifiedElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/formelement.js~FormElement.html">FormElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/htmlelement.js~HtmlElement.html">HtmlElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/inputelement.js~InputElement.html">InputElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/windowelement.js~WindowElement.html">WindowElement</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#events">events</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/events/eventsmanager.js~EventsManager.html">EventsManager</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-complete">complete</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ready">ready</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utilities">utilities</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hash">hash</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-uniqid">uniqid</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/elements/formelement.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+*  @file FormElement definition class
+*  @author  Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
+*  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}
+*/
+
+import ObjectArray from &apos;dot-object-array&apos;;
+import HtmlElement from &apos;elements/htmlelement&apos;;
+import Q from &apos;query&apos;;
+
+/**
+*  A FormElement instance node may contains only `&lt;form&gt;` Element.
+*
+*  Its main purpose is to provide an easy way to validate a whole form and prepare
+*  data for submission
+*
+*  @version 1.0.0
+*  @since 1.0.0
+*  @author Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
+*  @todo
+*
+*  - Add support for binary data
+*/
+
+export default class FormElement extends HtmlElement {
+  /**
+  *  The form constructor
+  *
+  *  @version 1.0.0
+  *  @since 1.0.0
+  *  @author Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
+  *
+  *  @private
+  *  @param {Element} node Form Element
+  *  @param {KeyValueObject} [options = {}]
+  *  @returns {FormElement}
+  *  @see https://developer.mozilla.org/fr/docs/Web/HTML/Element/Form
+  */
+  constructor(node, options = {}) {
+    super(node, options);
+
+    /**
+    *  Errors after validation
+    *
+    *  @type {ObjectArray}
+    *  @since 1.0.0
+    */
+    this._errors = new ObjectArray();
+  }
+
+  /**
+  *  Returns a field by its name
+  *
+  *  @version 1.0.0
+  *  @since 1.0.0
+  *  @author Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
+  *
+  *  @param {string} f  Field name
+  *  @returns {InputElement}
+  */
+  field(f) {
+    return Q(&apos;@&apos; + f, this.node);
+  }
+
+  /**
+  *  Returns a Collection of all fields. The collection is
+  *  dynamic and regenerated by querying.
+  *  To ignore an input Element, just add class &apos;form-ignore&apos; to it.
+  *
+  *  @type {Collection}
+  *  @version 1.0.0
+  *  @since 1.0.0
+  *  @author Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
+  */
+  get fields() {
+    return Q(&apos;input:not(.form-ignore), select:not(.form-ignore), &apos; +
+      &apos;textarea:not(.form-ignore), button:not(.form-ignore)&apos;, this.element);
+  }
+
+  /**
+  *  Dirty state of the form. Set by fetching all dirty
+  *  properties of the form&apos;s fields.
+  *
+  *  @version 1.0.0
+  *  @since 1.0.0
+  *  @author Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
+  *
+  *  @type {boolean}
+  */
+  get dirty() {
+    var dirty = false;
+
+    this.fields.forEach(function (field) { if (field.dirty) dirty = true; });
+    return dirty;
+  }
+
+  /**
+  *  Validate the form by validating each field rule.
+  *  The class `field-validate` is added to validated fields Element
+  *  otherwise class `field-not-validate` is added to the Element
+  *
+  *  @version 1.0.0
+  *  @since 1.0.0
+  *  @author Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
+  *
+  *  @see {@link InputElement}
+  *  @returns {Boolean} `true`if validation is OK, `false` otherwise
+  */
+  validate() {
+    this._errors.empty();
+
+    this.fields.forEach(function (field) {
+      if (!field.validate()) {
+        field.addClass(&apos;field-not-validate&apos;).removeClass(&apos;field-validate&apos;);
+        this._errors.push(field.name, field.errors);
+      } else field.removeClass(&apos;field-not-validate&apos;).addClass(&apos;field-validate&apos;);
+    }.bind(this));
+
+    return this._errors.length() === 0;
+  }
+
+  /**
+  *  Fetch validation errors
+  *
+  *  @type {Object}
+  *  @version 1.0.0
+  *  @since 1.0.0
+  *  @author Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
+  */
+  get errors() {
+    return this._errors.data;
+  }
+
+  /**
+  *  Form data as an {@link ObjectArray} object
+  *
+  *  @type {ObjectArray}
+  *  @since 1.0.0
+  *  @version 1.0.0
+  *  @author Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
+  */
+  get data() {
+    let data = new ObjectArray();
+
+    this.fields.forEach(function (field) {
+      if (typeof field.value !== undefined) data.push(field.name, field.value);
+    });
+    return data;
+  }
+
+  /**
+  *  Import data into form fields
+  *  from a {@link KeyValueObject} or an {@link ObjectArray} object
+  *
+  *  @type {keyValueObject|ObjectArray}
+  *  @since 1.0.0
+  *  @version 1.0.0
+  *  @author Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
+  */
+  set data(o) {
+    let data = new ObjectArray(o).flatten(true);
+
+    data.forEach(function (v, f) {
+      this.field(f).value = v;
+    }.bind(this));
+  }
+
+  /**
+  *  Data of the form serialized in urlEncode standard. This
+  *  string is suitable for a query part or an URI.
+  *
+  *  @type {string}
+  *  @since 1.0.0
+  *  @version 1.0.0
+  *  @author Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
+  */
+  get urlEncode() {
+    return this.data.urlEncode();
+  }
+
+  /**
+  *  Data of the form serialized in urlEncode standard. This
+  *  string is suitable for a form-url-encoded data submission
+  *
+  *  @type {string}
+  *  @since 1.0.0
+  *  @version 1.0.0
+  *  @author Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
+  */
+  get formUrlEncode() {
+    return this.data.formUrlEncode();
+  }
+
+  /**
+  *  Form data as a {@link FormData} object
+  *
+  *  @type {FormData}
+  *  @since 1.0.0
+  *  @version 1.0.0
+  *  @author Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
+  */
+  get formData() {
+    var fd = new FormData();
+
+    this.data.forEach(function (v, k) { fd.append(k, v); });
+    return fd;
+  }
+
+  /**
+  *  Data of the form returned as a JSON string
+  *
+  *  @type {string}
+  *  @since 1.0.0
+  *  @version 1.0.0
+  *  @author Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
+  */
+  get json() {
+    return JSON.stringify(this.data.data);
+  }
+
+  /**
+  *  Import data into form fields from JSON
+  *
+  *  @type {string}
+  *  @since 1.0.0
+  *  @version 1.0.0
+  *  @author Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
+  *  @throws {TypeError}
+  */
+  set json(j) {
+    try {
+      this.data = JSON.parse(j);
+    } catch (e) {
+      throw new TypeError(&apos;Argument is not a valid JSON string&apos;);
+    }
+  }
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

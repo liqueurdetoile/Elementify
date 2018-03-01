@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/elements/formselector.js | DotObjectArray | Implements array-like methods for Object with support for dotted notation keys</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<link rel="stylesheet" href="./inject/css/0-styles.css"><script src="./inject/script/0-docs.js"></script><meta name="description" content="Ultra lightweight library for DOM manipulation, event manipulation, form manipulation and custom elements"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="DotObjectArray | Implements array-like methods for Object with support for dotted notation keys"><meta property="twitter:description" content="Ultra lightweight library for DOM manipulation, event manipulation, form manipulation and custom elements"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.png" style="width:34px;"></a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/liqueurdetoile/elementify.git"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collection.js~Collection.html">Collection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/element.js~Element.html">Element</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-load">load</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Q">Q</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ForEachCallback">ForEachCallback</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KeyValueObject">KeyValueObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-NodeMetrics">NodeMetrics</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/Element">Element</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/API/FormData">FormData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/Node">Node</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://liqueurdetoile.github.io/DotObjectArray/">ObjectArray</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#ajax">ajax</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-basic">basic</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-digest">digest</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-jq">jq</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#elements">elements</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/formelement.js~FormElement.html">FormElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/forminput.js~FormInput.html">FormInput</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/formselector.js~FormSelector.html">FormSelector</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/formswitcher.js~FormSwitcher.html">FormSwitcher</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/htmlelement.js~HtmlElement.html">HtmlElement</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#events">events</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/events/eventsmanager.js~EventsManager.html">EventsManager</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-complete">complete</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-fullyloaded">fullyloaded</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ready">ready</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#i18n">i18n</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__">__</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-__spf">__spf</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-loadTranslations">loadTranslations</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setTranslations">setTranslations</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-translate">translate</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#ui">ui</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/ui/modal.js~Modal.html">Modal</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/ui/notices.js~Notice.html">Notice</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utilities">utilities</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-cameltodash">cameltodash</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-dashtocamel">dashtocamel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-empty">empty</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-foreach">foreach</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hash">hash</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isset">isset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-serialize">serialize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-uniqid">uniqid</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/elements/formselector.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+*  @file FormSelector definition class
+*  @author  Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
+*  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}
+*/
+
+import Element from &apos;element&apos;;
+import FormInput from &apos;elements/forminput&apos;;
+import isset from &apos;utilities/isset&apos;;
+import foreach from &apos;utilities/foreach&apos;;
+
+export default class FormSelector extends FormInput {
+  constructor(node, options) {
+    var _this, opts;
+
+    super(node, options);
+    this.dirty = false;
+    _this = this;
+
+    // Mapping, add wrapping and dropdown
+    opts = options;
+    delete opts.id;
+    delete opts.name;
+    if (options.value) opts.value = options.options[options.value];
+    opts.type = &apos;text&apos;;
+    opts.class = &apos;form-ignore&apos;;
+    this.input = new Element(&apos;input&apos;, opts);
+
+    this.container = new Element(&apos;div&apos;, {
+      class: &apos;selector-container&apos;
+    });
+
+    this.dropdown = new Element(&apos;div&apos;, {
+      class: &apos;selector-dropdown&apos;
+    });
+
+    this.container
+      .append(this.element)
+      .append(this.input)
+      .append(this.dropdown);
+    this.input.wrap(&apos;&lt;span class=&quot;selector-input&quot;&gt;&lt;/span&gt;&apos;);
+
+    this.element = this.container.element;
+
+    this.container.on(&apos;click&apos;, function (ev) {
+      _this.dropdown.show();
+      _this.input.element.focus();
+    });
+
+    this.dropdown.on(&apos;pointerdown&apos;, function (ev) {
+      _this.selectValue.call(_this, ev);
+    });
+
+    this.input.on(&apos;blur&apos;, function (ev) {
+      if (_this.dropdown.nav) ev.preventDefault();
+      if (_this.input.value === &apos;&apos;) {
+        _this.element.firstChild.value = &apos;&apos;;
+        _this.fire(&apos;change&apos;, _this.element.firstChild);
+      } else {
+        for (let i = 0; i &lt; _this.dropdown.element.childNodes.length; i++) {
+          let item = _this.dropdown.element.childNodes.item(i);
+
+          if (item.getAttribute(&apos;value&apos;) === _this.value) _this.input.value = item.innerHTML;
+        }
+      }
+      _this.dropdown.hide();
+    });
+
+    this.input.on(&apos;input&apos;, function (ev) { /* IE HACK */
+      if (_this.input.element === document.activeElement) _this.filter.call(_this, ev);
+    });
+    this.input.on(&apos;keydown&apos;, function (ev) { _this.nav.call(_this, ev); });
+
+    if (isset(options.options)) this.options(options.options, false);
+    if (isset(options.value)) this.value = options.value;
+  }
+
+  options(options, changeEvent = true) {
+    this.dropdown.empty();
+    foreach(options, (value, label) =&gt; {
+      this.dropdown.append(new Element(&apos;div&apos;, {
+        class: &apos;selector-dropdown-option&apos;,
+        value: value,
+        innerHTML: label
+      }));
+    });
+    if (changeEvent) this.fire(&apos;change&apos;, this.element.firstChild);
+  }
+
+  get value() {
+    return this.element.firstChild.value;
+  }
+
+  set value(val) {
+    const items = this.dropdown.element.childNodes;
+
+    this.unfilter();
+    if (val === &apos;&apos;) {
+      this.element.firstChild.value = &apos;&apos;;
+      this.input.element.value = &apos;&apos;;
+      return true;
+    }
+    // Check if value exists and set it
+    for (let i = 0; i &lt; items.length; i++) {
+      let item = this.dropdown.element.childNodes.item(i);
+
+      if (item.getAttribute(&apos;value&apos;) === val) {
+        this.element.firstChild.value = val;
+        this.fire(&apos;change&apos;, this.element.firstChild);
+        this.input.element.value = item.innerHTML;
+        this.dirty = true;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  selectValue(e) {
+    if (isset(e.target.getAttribute(&apos;value&apos;))) {
+      this.value = e.target.getAttribute(&apos;value&apos;);
+    }
+  }
+
+  get availableDropdownItems() {
+    const items = this.dropdown.element.childNodes;
+    const visibleItems = [];
+
+    for (let i = 0; i &lt; items.length; i++) {
+      if (items.item(i).style.display !== &apos;none&apos;) visibleItems.push(new Element(items.item(i)));
+    }
+
+    return visibleItems;
+  }
+
+  filter(e) {
+    const glob = this.input.value;
+    const visibleItems = this.availableDropdownItems;
+
+    if (isset(this.dropdown.nav)) {
+      visibleItems[this.dropdown.nav].removeClass(&apos;selected&apos;);
+      delete this.dropdown.nav;
+    }
+
+    this.dropdown.show();
+    for (let i = 0; i &lt; this.dropdown.element.childNodes.length; i++) {
+      let item = this.dropdown.element.childNodes.item(i);
+
+      if (glob === &apos;&apos;) item.style.display = &apos;block&apos;;
+      else if (item.innerHTML.toLowerCase().indexOf(glob.toLowerCase()) &gt;= 0) item.style.display = &apos;block&apos;;
+      else item.style.display = &apos;none&apos;;
+    }
+  }
+
+  unfilter() {
+    for (let i = 0; i &lt; this.dropdown.element.childNodes.length; i++) {
+      let item = this.dropdown.element.childNodes.item(i);
+
+      item.style.display = &apos;block&apos;;
+    }
+  }
+
+  get placeholder() {
+    return this.input.element.getAttribute(&apos;placeholder&apos;);
+  }
+
+  set placeholder(val) {
+    this.input.element.setAttribute(&apos;placeholder&apos;, val);
+    return this;
+  }
+
+  nav(e) {
+    const visibleItems = this.availableDropdownItems;
+
+    if (visibleItems.length) {
+      switch (e.keyCode) {
+        case 40: // Arrow down
+          e.preventDefault();
+          if (!this.dropdown.visible) {
+            this.dropdown.show();
+          }
+          if (!isset(this.dropdown.nav)) {
+            this.dropdown.nav = 0;
+            visibleItems[this.dropdown.nav].addClass(&apos;selected&apos;);
+          } else {
+            if (this.dropdown.nav &gt;= 1) {
+              this.dropdown.element.scrollTop += visibleItems[this.dropdown.nav].element.offsetHeight;
+            }
+            if (this.dropdown.nav &lt;= (visibleItems.length - 2)) {
+              visibleItems[this.dropdown.nav].removeClass(&apos;selected&apos;);
+              this.dropdown.nav++;
+              visibleItems[this.dropdown.nav].addClass(&apos;selected&apos;);
+            }
+          }
+          break;
+        case 38: // Arrow up
+          e.preventDefault();
+          if (this.dropdown.visible &amp;&amp; this.dropdown.nav === 0) {
+            delete this.dropdown.nav;
+            this.dropdown.hide();
+          } else if (this.dropdown.nav &gt;= 0) {
+            if (this.dropdown.nav &lt;= (visibleItems.length - 2)) {
+              this.dropdown.element.scrollTop -= visibleItems[this.dropdown.nav].element.offsetHeight;
+            }
+            visibleItems[this.dropdown.nav].removeClass(&apos;selected&apos;);
+            this.dropdown.nav--;
+            visibleItems[this.dropdown.nav].addClass(&apos;selected&apos;);
+          }
+          break;
+        case 13: // Enter
+        case 32: // Space
+          if (this.dropdown.visible) e.preventDefault();
+          if (visibleItems[this.dropdown.nav]) {
+            this.value = visibleItems[this.dropdown.nav].element.getAttribute(&apos;value&apos;);
+            this.input.element.blur();
+          }
+          break;
+        case 27: // Echap
+          e.preventDefault();
+          delete this.dropdown.nav;
+          this.input.element.blur();
+          break;
+      }
+    }
+  }
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

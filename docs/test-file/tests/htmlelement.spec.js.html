@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">tests/htmlelement.spec.js | elementify</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<link rel="stylesheet" href="./inject/css/0-styles.css"><script src="./inject/script/0-docs.js"></script><meta name="description" content="Ultra lightweight vanilla JS library for DOM and events manipulation, form manipulation and data validation"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="elementify"><meta property="twitter:description" content="Ultra lightweight vanilla JS library for DOM and events manipulation, form manipulation and data validation"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.png" style="width:34px;"></a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/liqueurdetoile/elementify.git"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/collection.js~Collection.html">Collection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/element.js~Element.html">Element</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-load">load</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Q">Q</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ForEachCallback">ForEachCallback</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-InputRuleCallback">InputRuleCallback</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-InputValidationRules">InputValidationRules</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KeyValueObject">KeyValueObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-NodeMetrics">NodeMetrics</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors">CSSSelector</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/DOMRect">DOMRect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/Element">Element</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/API/FormData">FormData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/Node">Node</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://liqueurdetoile.github.io/DotObjectArray/">ObjectArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#elements">elements</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/documentelement.js~DocumentElement.html">DocumentElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/eventifiedelement.js~EventifiedElement.html">EventifiedElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/formelement.js~FormElement.html">FormElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/htmlelement.js~HtmlElement.html">HtmlElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/inputelement.js~InputElement.html">InputElement</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/elements/windowelement.js~WindowElement.html">WindowElement</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#events">events</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/events/eventsmanager.js~EventsManager.html">EventsManager</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-complete">complete</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ready">ready</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#utilities">utilities</a><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hash">hash</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-uniqid">uniqid</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">tests/htmlelement.spec.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {Element} from &apos;index&apos;;
+import {Q} from &apos;index&apos;;
+
+describe(&apos;HTMLElement Class&apos;, function () {
+  window.beforeEach(function () { // eslint-disable-line
+    let e = new Element(&apos;div&apos;, {
+      class: &apos;fixture&apos;,
+      id: &apos;fixture&apos;,
+      innerHTML: &apos;fixture&apos;
+    });
+
+    document.body.appendChild(e.node);
+  });
+
+  window.afterEach(function () { // eslint-disable-line
+    Q(&apos;#fixture&apos;).remove();
+  });
+
+  describe(&apos;Constructor&apos;, function () {
+    it(&apos;should add attributes&apos;, function () {
+      let stringdiv = new Element(&apos;div&apos;, {
+        class: &apos;class1&apos;,
+        style: &apos;text-align:left; display:none&apos;
+      });
+      let arraydiv = new Element(&apos;div&apos;, {
+        class: [&apos;class1&apos;, &apos;class2&apos;],
+        style: {
+          display: &apos;none&apos;,
+          padding: &apos;20px&apos;,
+          marginLeft: &apos;10em&apos;
+        }
+      });
+
+      stringdiv.node.className.should.equal(&apos;class1&apos;);
+      stringdiv.style(&apos;text-align&apos;).should.equal(&apos;left&apos;);
+      stringdiv.style(&apos;display&apos;).should.equal(&apos;none&apos;);
+      arraydiv.node.className.should.equal(&apos;class1 class2&apos;);
+      arraydiv.style([&apos;display&apos;, &apos;padding&apos;, &apos;marginLeft&apos;]).should.eql({
+        display: &apos;none&apos;,
+        padding: &apos;20px&apos;,
+        marginLeft: &apos;10em&apos;
+      });
+      arraydiv.style(&apos;display&apos;).should.equal(&apos;none&apos;);
+      arraydiv.style(&apos;padding&apos;).should.equal(&apos;20px&apos;);
+      arraydiv.style(&apos;margin-left&apos;).should.equal(&apos;10em&apos;);
+    });
+  });
+
+  describe(&apos;forEach&apos;, function () {
+    it(&apos;should runs callback&apos;, function () {
+      Q(&apos;#fixture&apos;).forEach(function (el, i) {
+        el.node.id.should.equal(&apos;fixture&apos;);
+        i.should.equal(0);
+      });
+    });
+  });
+
+  describe(&apos;Attributes and Data Attributes&apos;, function () {
+    it(&apos;should set a single attribute&apos;, function () {
+      Q(&apos;#fixture&apos;).attr(&apos;fixture&apos;, &apos;fixture&apos;);
+      Q(&apos;#fixture&apos;).node.getAttribute(&apos;fixture&apos;).should.equal(&apos;fixture&apos;);
+    });
+    it(&apos;should get a single attribute&apos;, function () {
+      Q(&apos;#fixture&apos;).attr(&apos;fixture&apos;, &apos;fixture&apos;);
+      Q(&apos;#fixture&apos;).attr(&apos;fixture&apos;).should.equal(&apos;fixture&apos;);
+    });
+    it(&apos;should remove a single attribute&apos;, function () {
+      Q(&apos;#fixture&apos;).attr(&apos;fixture&apos;, null);
+      expect(Q(&apos;#fixture&apos;).node.getAttribute(&apos;fixture&apos;)).to.equal(null);
+    });
+    it(&apos;should create multiple attributes&apos;, function () {
+      Q(&apos;#fixture&apos;).attr({
+        fixture1: &apos;fixture1&apos;,
+        fixture2: &apos;fixture2&apos;,
+        fixture3: &apos;fixture3&apos;
+      });
+      Q(&apos;#fixture&apos;).node.getAttribute(&apos;fixture1&apos;).should.equal(&apos;fixture1&apos;);
+      Q(&apos;#fixture&apos;).node.getAttribute(&apos;fixture2&apos;).should.equal(&apos;fixture2&apos;);
+      Q(&apos;#fixture&apos;).node.getAttribute(&apos;fixture2&apos;).should.equal(&apos;fixture2&apos;);
+    });
+    it(&apos;should get multiple attributes&apos;, function () {
+      Q(&apos;#fixture&apos;).attr({
+        fixture1: &apos;fixture1&apos;,
+        fixture2: &apos;fixture2&apos;,
+        fixture3: &apos;fixture3&apos;
+      });
+      let r = Q(&apos;#fixture&apos;).attr([&apos;fixture1&apos;, &apos;fixture2&apos;, &apos;fixture3&apos;]);
+
+      expect(r).to.eql({
+        fixture1: &apos;fixture1&apos;,
+        fixture2: &apos;fixture2&apos;,
+        fixture3: &apos;fixture3&apos;
+      });
+    });
+    it(&apos;should edit multiple attributes&apos;, function () {
+      Q(&apos;#fixture&apos;).attr({
+        fixture1: &apos;fixture1&apos;,
+        fixture2: &apos;fixture2&apos;,
+        fixture3: &apos;fixture3&apos;
+      });
+      Q(&apos;#fixture&apos;).attr({
+        fixture1: &apos;fixture1m&apos;,
+        fixture2: &apos;fixture2m&apos;,
+        fixture3: &apos;fixture3m&apos;
+      });
+      Q(&apos;#fixture&apos;).node.getAttribute(&apos;fixture1&apos;).should.equal(&apos;fixture1m&apos;);
+      Q(&apos;#fixture&apos;).node.getAttribute(&apos;fixture2&apos;).should.equal(&apos;fixture2m&apos;);
+      Q(&apos;#fixture&apos;).node.getAttribute(&apos;fixture2&apos;).should.equal(&apos;fixture2m&apos;);
+    });
+    it(&apos;should remove multiple attributes&apos;, function () {
+      Q(&apos;#fixture&apos;).attr({
+        fixture1: &apos;fixture1&apos;,
+        fixture2: &apos;fixture2&apos;,
+        fixture3: &apos;fixture3&apos;
+      });
+      Q(&apos;#fixture&apos;).attr({
+        fixture1: null,
+        fixture2: null,
+        fixture3: null
+      });
+      expect(Q(&apos;#fixture&apos;).node.getAttribute(&apos;fixture1&apos;)).to.equal(null);
+      expect(Q(&apos;#fixture&apos;).node.getAttribute(&apos;fixture2&apos;)).to.equal(null);
+      expect(Q(&apos;#fixture&apos;).node.getAttribute(&apos;fixture3&apos;)).to.equal(null);
+    });
+    it(&apos;should get all attributes&apos;, function () {
+      let r = Q(&apos;#fixture&apos;).attr();
+
+      r.should.eql({
+        class: &apos;fixture&apos;,
+        id: &apos;fixture&apos;
+      });
+    });
+
+    it(&apos;should set a single data attribute&apos;, function () {
+      Q(&apos;#fixture&apos;).data(&apos;fixture&apos;, &apos;fixture&apos;);
+      Q(&apos;#fixture&apos;).node.getAttribute(&apos;data-fixture&apos;).should.equal(&apos;fixture&apos;);
+    });
+    it(&apos;should get a single data attribute&apos;, function () {
+      Q(&apos;#fixture&apos;).data(&apos;fixture&apos;, &apos;fixture&apos;);
+      Q(&apos;#fixture&apos;).data(&apos;fixture&apos;).should.equal(&apos;fixture&apos;);
+      expect(Q(&apos;#fixture&apos;).data(&apos;foo&apos;)).to.be.undefined;
+    });
+    it(&apos;should remove a single data attribute&apos;, function () {
+      Q(&apos;#fixture&apos;).data(&apos;fixture&apos;, null);
+      expect(Q(&apos;#fixture&apos;).node.getAttribute(&apos;data-fixture&apos;)).to.equal(null);
+    });
+    it(&apos;should set multiple data attributes&apos;, function () {
+      Q(&apos;#fixture&apos;).data({
+        fixture1: &apos;fixture1&apos;,
+        fixture2: &apos;fixture2&apos;,
+        fixture3: &apos;fixture3&apos;
+      });
+      Q(&apos;#fixture&apos;).node.getAttribute(&apos;data-fixture1&apos;).should.equal(&apos;fixture1&apos;);
+      Q(&apos;#fixture&apos;).node.getAttribute(&apos;data-fixture2&apos;).should.equal(&apos;fixture2&apos;);
+      Q(&apos;#fixture&apos;).node.getAttribute(&apos;data-fixture2&apos;).should.equal(&apos;fixture2&apos;);
+    });
+    it(&apos;should get multiple data attributes&apos;, function () {
+      Q(&apos;#fixture&apos;).data({
+        fixture1: &apos;fixture1&apos;,
+        fixture2: &apos;fixture2&apos;,
+        fixture3: &apos;fixture3&apos;
+      });
+      let r = Q(&apos;#fixture&apos;).data([&apos;fixture1&apos;, &apos;fixture2&apos;, &apos;fixture3&apos;]);
+
+      expect(r).to.eql({
+        fixture1: &apos;fixture1&apos;,
+        fixture2: &apos;fixture2&apos;,
+        fixture3: &apos;fixture3&apos;
+      });
+    });
+    it(&apos;should edit multiple data attributes&apos;, function () {
+      Q(&apos;#fixture&apos;).data({
+        fixture1: &apos;fixture1&apos;,
+        fixture2: &apos;fixture2&apos;,
+        fixture3: &apos;fixture3&apos;
+      });
+      Q(&apos;#fixture&apos;).data({
+        fixture1: &apos;fixture1m&apos;,
+        fixture2: &apos;fixture2m&apos;,
+        fixture3: &apos;fixture3m&apos;
+      });
+      Q(&apos;#fixture&apos;).node.getAttribute(&apos;data-fixture1&apos;).should.equal(&apos;fixture1m&apos;);
+      Q(&apos;#fixture&apos;).node.getAttribute(&apos;data-fixture2&apos;).should.equal(&apos;fixture2m&apos;);
+      Q(&apos;#fixture&apos;).node.getAttribute(&apos;data-fixture2&apos;).should.equal(&apos;fixture2m&apos;);
+    });
+    it(&apos;should remove multiple data attributes&apos;, function () {
+      Q(&apos;#fixture&apos;).data({
+        fixture1: &apos;fixture1&apos;,
+        fixture2: &apos;fixture2&apos;,
+        fixture3: &apos;fixture3&apos;
+      });
+      Q(&apos;#fixture&apos;).data({
+        fixture1: null,
+        fixture2: null,
+        fixture3: null
+      });
+      expect(Q(&apos;#fixture&apos;).node.getAttribute(&apos;data-fixture1&apos;)).to.equal(null);
+      expect(Q(&apos;#fixture&apos;).node.getAttribute(&apos;data-fixture2&apos;)).to.equal(null);
+      expect(Q(&apos;#fixture&apos;).node.getAttribute(&apos;data-fixture3&apos;)).to.equal(null);
+    });
+    it(&apos;should get all data attributes&apos;, function () {
+      Q(&apos;#fixture&apos;).data({
+        id: &apos;id&apos;,
+        id2: &apos;id2&apos;
+      });
+      let r = Q(&apos;#fixture&apos;).data();
+
+      r.should.eql({
+        id: &apos;id&apos;,
+        id2: &apos;id2&apos;
+      });
+      Q(&apos;#fixture&apos;).data({
+        id: null,
+        id2: null
+      });
+    });
+  });
+
+  describe(&apos;Tree traversing&apos;, function () {
+    window.beforeEach(function () { // eslint-disable-line
+      let ul = new Element(
+        &apos;&lt;ul id=&quot;list&quot; class=&quot;list&quot;&gt;&apos; +
+        &apos;&lt;li id=&quot;li11&quot;&gt;&lt;/li&gt;&apos; +
+        &apos;&lt;li id=&quot;li12&quot;&gt;&apos; +
+          &apos;&lt;ul id=&quot;sublist&quot;&gt;&apos; +
+            &apos;&lt;li id=&quot;li21&quot;&gt;&lt;/li&gt;&apos; +
+            &apos;&lt;li id=&quot;li22&quot; class=&quot;lisubsub&quot;&gt;&lt;/li&gt;&apos; +
+            &apos;&lt;li id=&quot;li23&quot; class=&quot;li23 lisubsub&quot;&gt;&lt;/li&gt;&apos; +
+          &apos;&lt;/ul&gt;&apos; +
+        &apos;&lt;/li&gt;&apos; +
+       &apos;&lt;/ul&gt;&apos;);
+
+      document.body.appendChild(ul.node);
+    });
+
+    window.afterEach(function () { // eslint-disable-line
+      Q(&apos;#list&apos;).remove();
+    });
+
+    describe(&apos;Element.parent and Element.parents&apos;, function () {
+      it(&apos;should find the first parent&apos;, function () {
+        Q(&apos;#li21&apos;).parent().node.id.should.equal(&apos;sublist&apos;);
+        Q(&apos;#li21&apos;).parent(1).node.id.should.equal(&apos;sublist&apos;);
+      });
+
+      it(&apos;should find the grand parent&apos;, function () {
+        Q(&apos;#li21&apos;).parent(2).node.id.should.equal(&apos;li12&apos;);
+      });
+
+      it(&apos;should find the grand grand parent&apos;, function () {
+        Q(&apos;#li21&apos;).parent(3).node.id.should.equal(&apos;list&apos;);
+      });
+
+      it(&apos;should return document&apos;, function () {
+        Q(&apos;#li21&apos;).parent(20).node.nodeType.should.equal(9);;
+      });
+
+      it(&apos;should find the parent with class &quot;list&quot;&apos;, function () {
+        Q(&apos;#li21&apos;).parents(&apos;.list&apos;).node.id.should.equal(&apos;list&apos;);
+        Q(&apos;#li21&apos;).parent(&apos;.list&apos;).node.id.should.equal(&apos;list&apos;);
+      });
+    });
+
+    describe(&apos;Element.child and Element.childs&apos;, function () {
+      it(&apos;should find the first child&apos;, function () {
+        Q(&apos;#list&apos;).child().node.id.should.equal(&apos;li11&apos;);
+        Q(&apos;#list&apos;).child(1).node.id.should.equal(&apos;li11&apos;);
+      });
+
+      it(&apos;should find the second child&apos;, function () {
+        Q(&apos;#list&apos;).child(2).node.id.should.equal(&apos;li12&apos;);
+      });
+
+      it(&apos;should return a DocumentFragment&apos;, function () {
+        Q(&apos;#list&apos;).child(3).node.nodeType.should.equal(11);;
+      });
+
+      it(&apos;should find the child with class &quot;li23&quot;&apos;, function () {
+        Q(&apos;#list&apos;).childs(&apos;.li23&apos;).node.id.should.equal(&apos;li23&apos;);
+        Q(&apos;#list&apos;).child(&apos;.li23&apos;).node.id.should.equal(&apos;li23&apos;);
+      });
+
+      it(&apos;should find the childs with class &quot;lisubsub&quot;&apos;, function () {
+        let r = Q(&apos;#list&apos;).child(&apos;.lisubsub&apos;);
+
+        r.length.should.equal(2);
+        r.elements[0].node.id.should.equal(&apos;li22&apos;);
+        r.elements[1].node.id.should.equal(&apos;li23&apos;);
+      });
+    });
+
+    describe(&apos;Element.previousSibling and Element.previousSiblings&apos;, function () {
+      it(&apos;should find the previous sibling&apos;, function () {
+        Q(&apos;#li23&apos;).previousSibling().node.id.should.equal(&apos;li22&apos;);
+        Q(&apos;#li23&apos;).previousSibling(1).node.id.should.equal(&apos;li22&apos;);
+      });
+
+      it(&apos;should find the second previous sibling&apos;, function () {
+        Q(&apos;#li23&apos;).previousSibling(2).node.id.should.equal(&apos;li21&apos;);
+      });
+
+      it(&apos;should return a DocumentFragment&apos;, function () {
+        Q(&apos;#li23&apos;).previousSibling(3).node.nodeType.should.equal(11);;
+      });
+
+      it(&apos;should find the previous sibling with class &quot;lisubsub&quot;&apos;, function () {
+        Q(&apos;#li23&apos;).previousSibling(&apos;.lisubsub&apos;).node.id.should.equal(&apos;li22&apos;);
+        Q(&apos;#li23&apos;).previousSiblings(&apos;.lisubsub&apos;).node.id.should.equal(&apos;li22&apos;);
+      });
+    });
+
+    describe(&apos;Element.nextSibling and Element.nextSiblings&apos;, function () {
+      it(&apos;should find the next sibling&apos;, function () {
+        Q(&apos;#li21&apos;).nextSibling().node.id.should.equal(&apos;li22&apos;);
+        Q(&apos;#li21&apos;).nextSibling(1).node.id.should.equal(&apos;li22&apos;);
+      });
+
+      it(&apos;should find the second next sibling&apos;, function () {
+        Q(&apos;#li21&apos;).nextSibling(2).node.id.should.equal(&apos;li23&apos;);
+      });
+
+      it(&apos;should return a DocumentFragment&apos;, function () {
+        Q(&apos;#li21&apos;).nextSibling(3).node.nodeType.should.equal(11);;
+      });
+
+      it(&apos;should find the next sibling with class &quot;lisubsub&quot;&apos;, function () {
+        Q(&apos;#li21&apos;).nextSibling(&apos;.lisubsub&apos;).node.id.should.equal(&apos;li22&apos;);
+        Q(&apos;#li21&apos;).nextSiblings(&apos;.lisubsub&apos;).node.id.should.equal(&apos;li22&apos;);
+      });
+    });
+  });
+
+  describe(&apos;DOM manipulations&apos;, function () {
+    describe(&apos;Append&apos;, function () {
+      it(&apos;should append tag to existing dom element&apos;, function () {
+        Q(&apos;#fixture&apos;).append(&apos;span&apos;);
+        Q(&apos;#fixture&apos;).child().node.nodeName.should.equal(&apos;SPAN&apos;);
+        Q(&apos;#fixture&apos;).empty();
+      });
+      it(&apos;should append string as node to existing dom element&apos;, function () {
+        Q(&apos;#fixture&apos;).append(&apos;&lt;span id=&quot;span&quot;&gt;&lt;/span&gt;&apos;);
+        Q(&apos;#fixture&apos;).child().node.id.should.equal(&apos;span&apos;);
+        Q(&apos;#fixture&apos;).empty();
+      });
+      it(&apos;should append node to existing dom element&apos;, function () {
+        Q(&apos;#fixture&apos;).append(document.createElement(&apos;span&apos;));
+        Q(&apos;#fixture&apos;).child().node.nodeName.should.equal(&apos;SPAN&apos;);
+        Q(&apos;#fixture&apos;).empty();
+      });
+      it(&apos;should append element to existing dom element&apos;, function () {
+        Q(&apos;#fixture&apos;).append(new Element(&apos;span&apos;));
+        Q(&apos;#fixture&apos;).child().node.nodeName.should.equal(&apos;SPAN&apos;);
+        Q(&apos;#fixture&apos;).empty();
+      });
+      it(&apos;should append tag to documentFragment&apos;, function () {
+        let f = new Element();
+
+        f.append(&apos;span&apos;);
+        f.child().node.nodeName.should.equal(&apos;SPAN&apos;);
+      });
+    });
+
+    describe(&apos;Prepend&apos;, function () {
+      it(&apos;should prepend tag to existing dom element&apos;, function () {
+        Q(&apos;#fixture&apos;).prepend(&apos;span&apos;);
+        Q(&apos;#fixture&apos;).child().node.nodeName.should.equal(&apos;SPAN&apos;);
+        Q(&apos;#fixture&apos;).empty();
+      });
+
+      it(&apos;should prepend tag to existing dom element&apos;, function () {
+        Q(&apos;#fixture&apos;).append(&apos;div&apos;);
+        Q(&apos;#fixture&apos;).prepend(&apos;span&apos;);
+        Q(&apos;#fixture&apos;).child().node.nodeName.should.equal(&apos;SPAN&apos;);
+        Q(&apos;#fixture&apos;).empty();
+      });
+    });
+
+    describe(&apos;Before&apos;, function () {
+      it(&apos;should insert before&apos;, function () {
+        Q(&apos;#fixture&apos;).prepend(&apos;span&apos;);
+        Q(&apos;#fixture&apos;).child().before(&apos;div&apos;);
+        Q(&apos;#fixture&apos;).child().node.nodeName.should.equal(&apos;DIV&apos;);
+        Q(&apos;#fixture&apos;).empty();
+      });
+    });
+
+    describe(&apos;After&apos;, function () {
+      it(&apos;should insert after&apos;, function () {
+        Q(&apos;#fixture&apos;).append(&apos;span&apos;);
+        Q(&apos;#fixture&apos;).child().after(&apos;div&apos;);
+        Q(&apos;#fixture&apos;).child().node.nodeName.should.equal(&apos;SPAN&apos;);
+        Q(&apos;#fixture&apos;).child(2).node.nodeName.should.equal(&apos;DIV&apos;);
+        Q(&apos;#fixture&apos;).empty();
+      });
+    });
+
+    describe(&apos;Wrap&apos;, function () {
+      it(&apos;should wrap element and return wrapped element&apos;, function () {
+        Q(&apos;#fixture&apos;).append(&apos;span&apos;);
+        let test = Q(&apos;#fixture&apos;).child().wrap(&apos;div&apos;);
+
+        Q(&apos;#fixture&apos;).child().node.nodeName.should.equal(&apos;DIV&apos;);
+        Q(&apos;#fixture&apos;).child().child().node.nodeName.should.equal(&apos;SPAN&apos;);
+        test.node.nodeName.should.equal(&apos;SPAN&apos;);
+        Q(&apos;#fixture&apos;).empty();
+      });
+
+      it(&apos;should wrap element and return wrapping element&apos;, function () {
+        Q(&apos;#fixture&apos;).append(&apos;span&apos;);
+        let test = Q(&apos;#fixture&apos;).child().wrap(&apos;div&apos;, false);
+
+        Q(&apos;#fixture&apos;).child().node.nodeName.should.equal(&apos;DIV&apos;);
+        Q(&apos;#fixture&apos;).child().child().node.nodeName.should.equal(&apos;SPAN&apos;);
+        test.node.nodeName.should.equal(&apos;DIV&apos;);
+        Q(&apos;#fixture&apos;).empty();
+      });
+    });
+
+    describe(&apos;Unwrap&apos;, function () {
+      it(&apos;should unwrap element&apos;, function () {
+        Q(&apos;#fixture&apos;).append(&apos;span&apos;);
+        let span = Q(&apos;#fixture&apos;).child();
+
+        Q(&apos;#fixture&apos;).child().wrap(&apos;div&apos;);
+        span.unwrap();
+        Q(&apos;#fixture&apos;).child().node.nodeName.should.equal(&apos;SPAN&apos;);
+        Q(&apos;#fixture&apos;).empty();
+      });
+    });
+
+    describe(&apos;Empty&apos;, function () {
+      it(&apos;shoud empty element text node&apos;, function () {
+        Q(&apos;#fixture&apos;).html(&apos;test&apos;);
+        Q(&apos;#fixture&apos;).node.innerHTML.should.equal(&apos;test&apos;);
+        Q(&apos;#fixture&apos;).empty();
+        Q(&apos;#fixture&apos;).node.innerHTML.should.equal(&apos;&apos;);
+      });
+
+      it(&apos;shoud empty element nodes&apos;, function () {
+        Q(&apos;#fixture&apos;).append(&apos;div&apos;);
+        Q(&apos;#fixture&apos;).append(&apos;div&apos;);
+        Q(&apos;#fixture&apos;).append(&apos;div&apos;);
+        Q(&apos;#fixture&apos;).childs(&apos;div&apos;).length.should.equal(3);
+        Q(&apos;#fixture&apos;).empty();
+        Q(&apos;#fixture&apos;).node.innerHTML.should.equal(&apos;&apos;);
+      });
+    });
+
+    describe(&apos;Remove&apos;, function () {
+      it(&apos;should remove element from DOM&apos;, function () {
+        Q(&apos;#fixture&apos;).after(&apos;div&apos;);
+        let div = Q(&apos;#fixture&apos;).nextSibling();
+
+        div.isInDom.should.equal(true);
+        div.remove();
+        div.isInDom.should.equal(false);
+      });
+    });
+  });
+
+  describe(&apos;Content, cloning and informations&apos;, function () {
+    describe(&apos;html&apos;, function () {
+      it(&apos;should get the html content&apos;, function () {
+        Q(&apos;#fixture&apos;).html().should.equal(&apos;fixture&apos;);
+      });
+      it(&apos;should set the html content&apos;, function () {
+        Q(&apos;#fixture&apos;).after(&apos;div&apos;);
+        let div = Q(&apos;#fixture&apos;).nextSibling();
+
+        div.html(&apos;test&apos;);
+        div.node.innerHTML.should.equal(&apos;test&apos;);
+        div.remove();
+      });
+    });
+
+    describe(&apos;outerHTML&apos;, function () {
+      it(&apos;should get the outerHTML content&apos;, function () {
+        Q(&apos;#fixture&apos;).outerHTML.should.equal(&apos;&lt;div class=&quot;fixture&quot; id=&quot;fixture&quot;&gt;fixture&lt;/div&gt;&apos;);
+      });
+    });
+
+    describe(&apos;clone&apos;, function () {
+      it(&apos;should create a clone&apos;, function () {
+        Q(&apos;#fixture&apos;).empty().append(&apos;div&apos;);
+        Q(&apos;#fixture&apos;).child().append(&apos;&lt;div class=&quot;1&quot;&gt;&lt;/div&gt;&lt;div class=&quot;2&quot;&gt;&lt;/div&gt;&apos;);
+
+        let clone = Q(&apos;#fixture&apos;).child().clone();
+
+        Q(&apos;#fixture&apos;).append(clone);
+        Q(&apos;#fixture&apos;).child(1).html().should.equal(Q(&apos;#fixture&apos;).child(2).html());
+        clone.child().removeClass(&apos;1&apos;);
+        Q(&apos;#fixture&apos;).child(1).html().should.not.equal(Q(&apos;#fixture&apos;).child(2).html());
+      });
+    });
+
+    describe(&apos;shallow&apos;, function () {
+      it(&apos;should create a shallow copy&apos;, function () {
+        Q(&apos;#fixture&apos;).empty().append(&apos;div&apos;);
+        Q(&apos;#fixture&apos;).child().append(&apos;&lt;div class=&quot;1&quot;&gt;&lt;/div&gt;&lt;div class=&quot;2&quot;&gt;&lt;/div&gt;&apos;);
+        let clone = Q(&apos;#fixture&apos;).child().shallow();
+
+        Q(&apos;#fixture&apos;).append(clone);
+        Q(&apos;#fixture&apos;).child(2).html().should.equal(&apos;&apos;);
+      });
+    });
+
+    describe(&apos;isInDom&apos;, function () {
+      it(&apos;should be true if is in dom&apos;, function () {
+        let div = new Element(&apos;div&apos;);
+
+        div.isInDom.should.equal(false);
+        Q(&apos;#fixture&apos;).append(div);
+        div.isInDom.should.equal(true);
+        Q(&apos;#fixture&apos;).empty();
+      });
+    });
+
+    describe(&apos;root&apos;, function () {
+      it(&apos;should return the root object container of the element&apos;, function () {
+        let div = new Element(&apos;div&apos;);
+
+        expect(div.root).to.equal(div.node);
+        document.body.appendChild(div.node);
+        expect(div.root).to.equal(document);
+        div.remove();
+      });
+    });
+  });
+
+  describe(&apos;Styles and display functions&apos;, function () {
+    describe(&apos;Styles&apos;, function () {
+      it(&apos;should return node style properties&apos;, function () {
+        Q(&apos;#fixture&apos;).styles.should.eql(getComputedStyle(document.getElementById(&apos;fixture&apos;)));
+      });
+    });
+    describe(&apos;Style&apos;, function () {
+      it(&apos;should return the initial style properties values&apos;, function () {
+        let div = Q(&apos;+div&apos;, {
+          style: {
+            color: &apos;red&apos;,
+            margin: &apos;1em&apos;
+          }
+        });
+
+        expect(div.style()).to.eql({color: &apos;red&apos;, margin: &apos;1em&apos;});
+        expect(div.style(&apos;color&apos;)).to.equal(&apos;red&apos;);
+        expect(div.style(&apos;unknown&apos;)).to.equal(undefined);
+        expect(div.style([&apos;color&apos;, &apos;margin&apos;])).to.eql({color: &apos;red&apos;, margin: &apos;1em&apos;});
+      });
+
+      it(&apos;should set style properties&apos;, function () {
+        let div = Q(&apos;+div&apos;);
+
+        div.style(&apos;background-color&apos;, &apos;red&apos;);
+        div.node.style.backgroundColor.should.equal(&apos;red&apos;);
+        div.style({backgroundColor: &apos;yellow&apos;, margin: &apos;1em&apos;});
+        div.node.style.backgroundColor.should.equal(&apos;yellow&apos;);
+        div.node.style.margin.should.equal(&apos;1em&apos;);
+        div.style({align: &apos;left&apos;}, true).style().should.eql({align: &apos;left&apos;});
+        expect(div.style(56)).to.equal(undefined);
+      });
+    });
+    describe(&apos;Visible, display, hide, show, toggle&apos;, function () {
+      it(&apos;should return false for an element not in DOM&apos;, function () {
+        let div = Q(&apos;+div&apos;);
+
+        expect(div.visible).to.equal(false);
+      });
+      it(&apos;should return true/false for an element in DOM&apos;, function () {
+        let div = Q(&apos;+div&apos;, {id: &apos;visible-fixture&apos;});
+
+        document.body.appendChild(div.node);
+        expect(div.visible).to.equal(true);
+        div.display(&apos;none&apos;);
+        expect(div.visible).to.equal(false);
+        div.show();
+        expect(div.visible).to.equal(true);
+        div.hide();
+        expect(div.visible).to.equal(false);
+        div.toggle();
+        expect(div.visible).to.equal(true);
+        div.toggle();
+        expect(div.visible).to.equal(false);
+        div.remove();
+      });
+    });
+    describe(&apos;Classes&apos;, function () {
+      it(&apos;should check class&apos;, function () {
+        let div = Q(&apos;+div&apos;, {class: &apos;one two&apos;});
+
+        div.hasClass(&apos;one&apos;).should.equal(true);
+        div.hasClass(&apos;one two&apos;).should.equal(false);
+        div.hasClass(&apos;one&apos;, &apos;two&apos;).should.equal(true);
+        div.hasClass(&apos;three&apos;).should.equal(false);
+        div.hasClass(&apos;one three&apos;).should.equal(false);
+        div.hasClass(&apos;one&apos;, &apos;three&apos;).should.equal(false);
+        div.hasClass(&apos;one&apos;, &apos;two&apos;, &apos;three&apos;).should.equal(false);
+      });
+
+      it(&apos;should add class&apos;, function () {
+        let div = Q(&apos;+div&apos;);
+
+        div.addClass(&apos;one&apos;).hasClass(&apos;one&apos;).should.equal(true);
+        div.addClass(&apos;one&apos;, &apos;two&apos;).hasClass(&apos;one&apos;, &apos;two&apos;).should.equal(true);
+      });
+
+      it(&apos;should remove class&apos;, function () {
+        let div = Q(&apos;+div&apos;, { class: [&apos;one&apos;, &apos;two&apos;, &apos;three&apos;]});
+
+        div.removeClass(&apos;one&apos;).hasClass(&apos;one&apos;).should.equal(false);
+        div.removeClass(&apos;four&apos;).should.eql(div);
+        div.removeClass(&apos;three&apos;, &apos;two&apos;).node.className.should.equal(&apos;&apos;);
+      });
+
+      it(&apos;should toggle class&apos;, function () {
+        let div = Q(&apos;+div&apos;);
+
+        div.toggleClass(&apos;one&apos;).hasClass(&apos;one&apos;).should.equal(true);
+        div.toggleClass(&apos;one&apos;).hasClass(&apos;one&apos;).should.equal(false);
+        div.toggleClass(&apos;one&apos;, &apos;two&apos;).hasClass(&apos;one&apos;, &apos;two&apos;).should.equal(true);
+        div.toggleClass(&apos;one&apos;, &apos;two&apos;).hasClass(&apos;one&apos;, &apos;two&apos;).should.equal(false);
+        div.toggleClass(&apos;one&apos;, &apos;two&apos;).hasClass(&apos;one&apos;, &apos;two&apos;).should.equal(true);
+        div.toggleClass(&apos;one&apos;).hasClass(&apos;two&apos;).should.equal(true);
+        div.toggleClass(&apos;one&apos;).hasClass(&apos;one&apos;, &apos;two&apos;).should.equal(true);
+      });
+    });
+  });
+
+  describe(&apos;NodeMetrics&apos;, function () {
+    describe(&apos;Position&apos;, function () {
+      it(&apos;should return NodeMetrics object&apos;, function () {
+        let i = Q(&apos;+div&apos;, {
+          id: &apos;pFixture&apos;,
+          style: {
+            position: &apos;absolute&apos;,
+            top: &apos;50px&apos;,
+            left: &apos;50px&apos;,
+            width: &apos;100px&apos;,
+            height: &apos;100px&apos;,
+            border: &apos;1px solid #000&apos;
+          }
+        });
+
+        expect(i.position).to.be.an(&apos;object&apos;)
+          .to.have.all.keys(&apos;left&apos;, &apos;right&apos;, &apos;width&apos;, &apos;height&apos;, &apos;top&apos;, &apos;bottom&apos;, &apos;scrollX&apos;, &apos;scrollY&apos;);
+        i.position.should.eql({
+          left: undefined,
+          right: undefined,
+          width: undefined,
+          top: undefined,
+          bottom: undefined,
+          height: undefined,
+          scrollX: undefined,
+          scrollY: undefined
+        });
+        Q(&apos;=body&apos;).append(i);
+        i.position.should.contain({
+          left: 50,
+          top: 50,
+          width: 100,
+          height: 100
+        });
+      });
+
+      it(&apos;should set object position&apos;, function () {
+        Q(&apos;#pFixture&apos;).left = null;
+        Q(&apos;#pFixture&apos;).right = 50;
+        Q(&apos;#pFixture&apos;).position.should.contain({
+          right: 50,
+          top: 50,
+          width: 100,
+          height: 100
+        });
+      });
+    });
+  });
+
+  describe(&apos;Events&apos;, function () {
+    describe(&apos;Update events manager&apos;, function () {
+      var i, spy1, spy2, spy3;
+
+      window.beforeEach(function () {
+        i = Q(&apos;+div&apos;);
+        spy1 = () =&gt; {this.name = &apos;spy1&apos;;};
+        spy2 = () =&gt; {this.name = &apos;spy2&apos;;};
+        spy3 = () =&gt; {this.name = &apos;spy3&apos;;};
+
+        Q(&apos;body&apos;).append(i);
+        i.on(&apos;click&apos;, spy1);
+        i.on(&apos;click&apos;, spy2);
+        i.on(&apos;mouseover&apos;, spy3);
+      });
+
+      window.afterEach(function () {
+        i.remove();
+      });
+
+      it(&apos;should remove all listeners when element removed from DOM&apos;, function () {
+        i.remove();
+        i.hasEvent().should.be.false;
+      });
+
+      it(&apos;should remove all listeners when calling off()&apos;, function () {
+        i.off();
+        i.hasEvent().should.be.false;
+      });
+
+      it(&apos;should remove all clicks events when calling off(\&apos;click\&apos;)&apos;, function () {
+        i.off(&apos;click&apos;);
+        i.hasEvent(&apos;click&apos;).should.be.false;
+        i.hasEvent(&apos;mouseover&apos;).should.be.true;
+      });
+
+      it(&apos;should remove only one click event when calling off(\&apos;click\&apos;, spy1)&apos;, function () {
+        i.off(&apos;click&apos;, spy1);
+        i.hasEvent(&apos;click&apos;, spy1).should.be.false;
+        i.hasEvent(&apos;click&apos;, spy2).should.be.true;
+        i.hasEvent(&apos;mouseover&apos;).should.be.true;
+      });
+    });
+
+    describe(&apos;Native events - Single Element&apos;, function () {
+      var i, spy1, spy2, spy3, f1, f2, f3;
+
+      window.beforeEach(function () {
+        i = Q(&apos;+div&apos;);
+        spy1 = sinon.spy();
+        spy2 = sinon.spy();
+        spy3 = sinon.spy();
+        f1 = function () { spy1(); };
+        f2 = function () { spy2(); };
+        f3 = function () { spy3(); };
+
+        Q(&apos;body&apos;).append(i);
+      });
+
+      window.afterEach(function () {
+        i.remove();
+      });
+
+      it(&apos;Should add single listener on single HtmlElement and fire it&apos;, function () {
+        i.on(&apos;click&apos;, spy1);
+        i.fire(&apos;click&apos;);
+        spy1.called.should.be.true;
+        expect(spy1.args[0][0]).to.be.instanceof(Event);
+        expect(spy1.args[0][0].eventName).to.equal(&apos;click&apos;);
+        expect(spy1.args[0][0].target).to.equal(i.node);
+      });
+
+      it(&apos;Should add multiple listeners (same event) on single HtmlElement and fire it&apos;, function () {
+        i.on(&apos;click&apos;, f1);
+        i.on(&apos;click&apos;, f2);
+        i.fire(&apos;click&apos;);
+        spy1.called.should.be.true;
+        spy2.called.should.be.true;
+      });
+
+      it(&apos;Should add multiple listeners (multiple events) on single HtmlElement and fire it&apos;, function () {
+        i.on(&apos;click&apos;, f1);
+        i.on(&apos;click&apos;, f2);
+        i.on(&apos;mouseover&apos;, f3);
+        i.fire(&apos;click&apos;);
+        spy1.called.should.be.true;
+        spy2.called.should.be.true;
+        spy3.called.should.be.false;
+        i.fire(&apos;mouseover&apos;);
+        spy1.calledTwice.should.be.false;
+        spy2.calledTwice.should.be.false;
+        spy3.called.should.be.true;
+      });
+
+      it(&apos;Should remove single listener on single HtmlElement (specific call)&apos;, function () {
+        i.on(&apos;click&apos;, spy1);
+        i.off(&apos;click&apos;, spy1);
+        i.fire(&apos;click&apos;);
+        spy1.called.should.be.false;
+      });
+
+      it(&apos;Should remove single listener on single HtmlElement (event call)&apos;, function () {
+        i.on(&apos;click&apos;, spy1);
+        i.off(&apos;click&apos;);
+        i.fire(&apos;click&apos;);
+        spy1.called.should.be.false;
+      });
+
+      it(&apos;Should remove single listener on single HtmlElement (all events call)&apos;, function () {
+        i.on(&apos;click&apos;, spy1);
+        i.off();
+        i.fire(&apos;click&apos;);
+        spy1.called.should.be.false;
+      });
+
+      it(&apos;Should remove one among multiple listener (same event) on single HtmlElement and fire it&apos;, function () {
+        i.on(&apos;click&apos;, f1);
+        i.on(&apos;click&apos;, f2);
+        i.on(&apos;mouseover&apos;, f3);
+
+        i.off(&apos;click&apos;, f1);
+        i.fire(&apos;click&apos;);
+        spy1.called.should.be.false;
+        spy2.called.should.be.true;
+        spy3.called.should.be.false;
+      });
+
+      it(&apos;Should remove all for event multiple listener (same event) on single HtmlElement and fire it&apos;, function () {
+        i.on(&apos;click&apos;, f1);
+        i.on(&apos;click&apos;, f2);
+        i.on(&apos;mouseover&apos;, f3);
+
+        i.off(&apos;click&apos;);
+        i.fire(&apos;click&apos;);
+        spy1.called.should.be.false;
+        spy2.called.should.be.false;
+        spy3.called.should.be.false;
+      });
+
+      it(&apos;Should remove all multiple listener (same event) on single HtmlElement and fire it&apos;, function () {
+        i.on(&apos;click&apos;, f1);
+        i.on(&apos;click&apos;, f2);
+        i.on(&apos;mouseover&apos;, f3);
+        i.off();
+        i.fire(&apos;click&apos;);
+        i.fire(&apos;mouseover&apos;);
+        spy1.called.should.be.false;
+        spy2.called.should.be.false;
+        spy3.called.should.be.false;
+      });
+    });
+
+    describe(&apos;Native events - Others tests&apos;, function () {
+      it(&apos;Should add listener on Collection&apos;, function () {
+        let i = new Element(&apos;&lt;div id=&quot;d1&quot;&gt;&lt;/div&gt;&lt;div id=&quot;d2&quot;&gt;&lt;/div&gt;&apos;);
+        let spy = sinon.spy();
+
+        Q(&apos;body&apos;).append(i);
+        i.on(&apos;click&apos;, spy);
+        i.fire(&apos;click&apos;);
+        spy.calledTwice.should.be.true;
+      });
+
+      it(&apos;Should remove listener on Collection&apos;, function () {
+        let i = new Element(&apos;&lt;div id=&quot;d1&quot;&gt;&lt;/div&gt;&lt;div id=&quot;d2&quot;&gt;&lt;/div&gt;&apos;);
+        let spy = sinon.spy();
+
+        Q(&apos;body&apos;).append(i);
+        i.on(&apos;click&apos;, spy);
+        i.off();
+        i.fire(&apos;click&apos;);
+        spy.called.should.be.false;
+      });
+
+      it(&apos;Should add listener at construct on single HtmlElement&apos;, function () {
+        let spy = sinon.spy();
+        let i = Q(&apos;+div&apos;, {
+          events: {
+            click: spy
+          }
+        });
+
+        Q(&apos;body&apos;).append(i);
+        i.on(&apos;click&apos;, spy);
+        i.fire(&apos;click&apos;);
+        spy.called.should.be.true;
+      });
+
+      it(&apos;Should add listener at construct on Collection&apos;, function () {
+        let spy = sinon.spy();
+        let i = new Element(&apos;&lt;div id=&quot;d1&quot;&gt;&lt;/div&gt;&lt;div id=&quot;d2&quot;&gt;&lt;/div&gt;&apos;, {
+          events: {
+            click: spy
+          }
+        });
+
+        Q(&apos;body&apos;).append(i);
+        i.on(&apos;click&apos;, spy);
+        i.fire(&apos;click&apos;);
+        spy.calledTwice.should.be.true;
+      });
+
+      it(&apos;Should fire event on window&apos;, function () {
+        let spy1 = sinon.spy();
+        let spy2 = sinon.spy();
+        let i = Q(&apos;+div&apos;);
+
+        window.addEventListener(&apos;click&apos;, spy1);
+        i.on(&apos;click&apos;, spy2);
+        i.fire(&apos;click&apos;, window);
+        spy1.called.should.be.true;
+        spy2.called.should.be.false;
+      });
+
+      it(&apos;Should fire event on another element&apos;, function () {
+        let spy1 = sinon.spy();
+        let spy2 = sinon.spy();
+        let i = Q(&apos;+div&apos;);
+        let j = Q(&apos;+div&apos;);
+
+        Q(&apos;body&apos;).append(i).append(j);
+        j.on(&apos;click&apos;, spy1);
+        i.on(&apos;click&apos;, spy2);
+        i.fire(&apos;click&apos;, j);
+        spy1.called.should.be.true;
+        spy2.called.should.be.false;
+      });
+
+      it(&apos;Should check registered events/event/callback&apos;, function () {
+        let i = Q(&apos;+div&apos;);
+
+        i.on(&apos;click&apos;, function f1() {});
+        i.hasEvent().should.be.false; // Not in DOM
+
+        Q(document.body).append(i);
+        i.on(&apos;click&apos;, function f1() {});
+        i.on(&apos;click&apos;, function f2() {});
+        i.on(&apos;mouseover&apos;, function f1() {});
+
+        i.hasEvent().should.be.true;
+        i.hasEvent(&apos;click&apos;).should.be.true;
+        i.hasEvent(&apos;mouseout&apos;).should.be.false;
+        i.hasEvent(&apos;click&apos;, function f1() {}).should.be.true;
+        i.hasEvent(&apos;click&apos;, function f3() {}).should.be.false;
+      });
+
+      it(&apos;Should fetch registered events/event/callback&apos;, function () {
+        let i = Q(&apos;+div&apos;);
+        let f1 = () =&gt; {};
+        let f2 = () =&gt; {};
+
+        i.on(&apos;click&apos;, function f1() {});
+        i.hasEvent().should.be.false; // Not in DOM
+
+        Q(document.body).append(i);
+        i.on(&apos;click&apos;, f1);
+        i.on(&apos;click&apos;, f2);
+        i.on(&apos;mouseover&apos;, function f1() {});
+
+        i.getEvent().should.have.all.keys(&apos;click&apos;, &apos;mouseover&apos;);
+        i.getEvent(&apos;click&apos;).should.have.all.keys(i._callbackId(f1), i._callbackId(f2));
+      });
+    });
+  });
+
+  describe(&apos;Fade in and out&apos;, function () {
+    before(function () {
+      let e = new Element(&apos;div&apos;, {
+        id: &apos;fixture-fade&apos;,
+        style: {
+          position: &apos;fixed&apos;,
+          top: 0,
+          left: 0,
+          width: &apos;50px&apos;,
+          height: &apos;50px&apos;,
+          &apos;background-color&apos;: &apos;#000&apos;
+        }
+      });
+
+      document.body.appendChild(e.node);
+    });
+
+    after(function () { //eslint-disable-line
+      Q(&apos;#fixture-fade&apos;).remove();
+    });
+
+    it(&apos;should fade out in 400ms&apos;, function (done) {
+      Q(&apos;#fixture-fade&apos;).fadeOut()
+        .then(function (el) { expect(el.node.style.opacity).to.equal(&apos;0&apos;); })
+        .then(done);
+    });
+    it(&apos;should fade in in 400ms&apos;, function (done) {
+      Q(&apos;#fixture-fade&apos;).fadeIn()
+        .then(function (el) { expect(el.node.style.opacity).to.equal(&apos;1&apos;); })
+        .then(done);
+    });
+    it(&apos;should fade out in 1500ms&apos;, function (done) {
+      Q(&apos;#fixture-fade&apos;).fadeOut({duration: 1500})
+        .then(function (el) { expect(el.node.style.opacity).to.equal(&apos;0&apos;); })
+        .then(done);
+    });
+    it(&apos;should fade in in 1500ms&apos;, function (done) {
+      Q(&apos;#fixture-fade&apos;).fadeIn({duration: 1500})
+        .then(function (el) { expect(el.node.style.opacity).to.equal(&apos;1&apos;); })
+        .then(done);
+    });
+    it(&apos;should run callback&apos;, function (done) {
+      Q(&apos;#fixture-fade&apos;).fadeOut({}, function (el) {
+        el.node.style.backgroundColor = &apos;#060&apos;;
+      })
+        .then(function (el) {
+          expect(el.node.style.backgroundColor).to.equal(&apos;rgb(0, 102, 0)&apos;);
+        })
+        .then(done);
+    });
+    it(&apos;should fade in in 400ms&apos;, function (done) {
+      Q(&apos;#fixture-fade&apos;).fadeIn()
+        .then(function (el) { expect(el.node.style.opacity).to.equal(&apos;1&apos;); })
+        .then(done);
+    });
+  });
+});
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
