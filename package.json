@@ -4,7 +4,7 @@
   "description": "Ultra lightweight vanilla JS library for DOM and events manipulation, form manipulation and data validation",
   "main": "dist/elementify.min.js",
   "scripts": {
-    "build": "webpack --config webpack.conf/build.js",
+    "build": "webpack -p --config webpack.conf/build.js",
     "docs": "./node_modules/.bin/esdoc",
     "test": "./node_modules/.bin/karma start --single-run --browsers ChromeHeadless && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "test:dry": "./node_modules/.bin/karma start --single-run --browsers ChromeHeadless",

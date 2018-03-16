@@ -10,5 +10,6 @@ import Collection from 'collection';
 import Q from 'query';
 import ready from 'events/ready';
 import complete from 'events/complete';
+import ObjectArray from 'dot-object-array';
 
-export {load, Collection, Element, Q, ready, complete};
+export {load, Collection, Element, Q, ready, complete, ObjectArray};

@@ -14,6 +14,10 @@ module.exports = merge(base, {
   },
   plugins: [
     new CleanWebpackPlugin(['dist'], {root: path.resolve('./')}),
-    new UglifyJsPlugin()
+    new UglifyJsPlugin({
+      sourceMap: false,
+      output: {comments: false}
+    }),
+    new webpack.optimize.ModuleConcatenationPlugin()
   ]
 });
