@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/events/complete.js | elementify</title>
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">tests/hash.spec.js | elementify</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -60,50 +60,19 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">src/events/complete.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
-*  @file Complete event for elementify
-*  @author  Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
-*  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}
-*/
+<div class="content" data-ice="content"><h1 data-ice="title">tests/hash.spec.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import hash from &apos;utilities/hash&apos;;
 
-/**
-*  Returns a promise fullfilled when document is at complete state
-*  meaning all assets have been loaded
-*
-*  @since 1.0.0
-*  @version 1.0.0
-*  @author Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
-*
-*  @param {Function}  callback  Callback to be run when event fired
-*  @returns {undefined|Promise}
-*  @example
-*  // With promise
-*  complete().then(function() { console.log(&apos;Assets loaded !&apos;) });
-*
-*  // With callback
-*  complete(function() { console.log(&apos;Assets loaded !&apos;) });
-*
-*/
+describe(&apos;Hash utility function&apos;, function () {
+  it(&apos;should return 0 if no text as input&apos;, function () {
+    hash().should.equal(0);
+    hash(&apos;&apos;).should.equal(0);
+  });
 
-export default function complete(callback) {
-  function process(resolve, reject) {
-    if (document.readyState === &apos;complete&apos;) {
-      if (callback instanceof Function) callback();
-      resolve(true);
-    } else {
-      document.addEventListener(&apos;readystatechange&apos;, (ev) =&gt; {
-        if (document.readyState === &apos;complete&apos;) {
-          if (callback instanceof Function) callback(ev);
-          resolve(true);
-        }
-      });
-    }
-  }
-
-  if (typeof Promise !== &apos;undefined&apos;) return new Promise(process);
-  return process(()=&gt;{}, ()=&gt;{});
-}
+  it(&apos;should return hashed string&apos;, function () {
+    hash(&apos;a&apos;).should.equal(&apos;khj&apos;);
+  });
+});
 </code></pre>
 
 </div>

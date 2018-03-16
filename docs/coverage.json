@@ -1,7 +1,7 @@
 {
-  "coverage": "85.41%",
+  "coverage": "86.11%",
   "expectCount": 144,
-  "actualCount": 123,
+  "actualCount": 124,
   "files": {
     "src/collection.js": {
       "expectCount": 9,
@@ -43,14 +43,14 @@
       "expectCount": 65,
       "actualCount": 57,
       "undocumentLines": [
-        1048,
-        1064,
-        1078,
-        1204,
-        1227,
-        1250,
-        1273,
-        1296
+        1054,
+        1070,
+        1084,
+        1210,
+        1233,
+        1256,
+        1279,
+        1302
       ]
     },
     "src/elements/inputelement.js": {
@@ -95,10 +95,8 @@
     },
     "src/utilities/hash.js": {
       "expectCount": 1,
-      "actualCount": 0,
-      "undocumentLines": [
-        1
-      ]
+      "actualCount": 1,
+      "undocumentLines": []
     },
     "src/utilities/uniqid.js": {
       "expectCount": 1,

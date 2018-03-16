@@ -184,7 +184,7 @@ describe(&apos;InputElement&apos;, function () {
 
     describe(&apos;Textarea input&apos;, function () {
       it(&apos;should set type, set and retrieve value&apos;, function () {
-        i.type = &apos;textarea&apos;;
+        i = Q(&apos;+textarea&apos;);
         i.attr(&apos;type&apos;).should.equal(&apos;textarea&apos;);
         Q(&apos;body&apos;).append(i);
 
@@ -365,7 +365,7 @@ describe(&apos;InputElement&apos;, function () {
         name: &apos;fixture&apos;
       });
 
-      i.tooltip(&apos;tooltip&apos;).outerHTML.should.equal(&apos;&lt;span data-type=&quot;tooltip&quot; data-for=&quot;fixture&quot;&gt;tooltip&lt;/span&gt;&apos;);
+      i.tooltip(&apos;tooltip&apos;).outerHTML.should.equal(&apos;&lt;span data-for=&quot;fixture&quot; data-type=&quot;tooltip&quot;&gt;tooltip&lt;/span&gt;&apos;);
     });
   });
 });

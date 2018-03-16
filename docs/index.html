@@ -76,7 +76,7 @@
 <p></p>
 <h1 id="elementify">Elementify</h1><p>Elementify is a vanilla JS library designed to be :</p>
 <ul>
-<li>powerful but lightweight and cross-browser</li>
+<li>powerful but still lightweight and cross-browser (IE9+)</li>
 <li>focused on DOM manipulation, events management and data validation</li>
 </ul>
 <h2 id="why-elementify--">Why Elementify ?</h2><p>Except data validation in Elementify core, libraries like Jquery do the same things than Elementify, and even more.
@@ -157,7 +157,7 @@ ghosted, improved, created and to do between vanilla and elementified layer.</p>
 </tr>
 </tbody>
 </table>
-<p>I must say that most of the methods for HtmlElement are inspired by JQuery but with slighly difference in somes cases.</p>
+<p>I must say that most of the methods for HtmlElement have been inspired by JQuery but with slighly difference in many cases.</p>
 <h2 id="installation">Installation</h2><h3 id="as-a-module">As a module</h3><pre><code><code class="source-code prettyprint">npm install elementify</code>
 </code></pre><p>or</p>
 <pre><code><code class="source-code prettyprint">yarn add elementify</code>
@@ -178,7 +178,7 @@ import {Collection, Element, Q, ready, complete} from &apos;elementify&apos;;</c
 <p>The elementify library will be added to global (window) scope. If you wish to import its exported modules in global scope, simply call</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">elementify.load()</code>
 </code></pre>
-<p>It will monkey-patch the native Element class to add the constructor for elementify objects.</p>
+<p>It will monkey-patch the native Element class by adding the magic constructor for elementify objects.</p>
 <h2 id="usage">Usage</h2><p>We will assume that the exported modules of elementify are in global running scope.</p>
 <h3 id="create-elements">Create elements</h3><pre><code class="lang-javascript"><code class="source-code prettyprint">/**
 *  All following asserts will lead to the same HtmlElement with a node

@@ -133,13 +133,13 @@ window.esdocSearchIndex = [
   ],
   [
     "complete src/events/complete.js~complete,complete",
-    "test-file/tests/events.spec.js.html#lineNumber21",
+    "test-file/tests/events.spec.js.html#lineNumber22",
     "Complete",
     "test"
   ],
   [
     "",
-    "test-file/tests/events.spec.js.html#lineNumber22",
+    "test-file/tests/events.spec.js.html#lineNumber23",
     "Complete Should run callback at complete ready state",
     "test"
   ],
@@ -163,6 +163,12 @@ window.esdocSearchIndex = [
   ],
   [
     "",
+    "test-file/tests/element.spec.js.html#lineNumber44",
+    "Element Class  ",
+    "test"
+  ],
+  [
+    "",
     "test-file/tests/element.spec.js.html#lineNumber78",
     "Element Class  ",
     "test"
@@ -170,6 +176,12 @@ window.esdocSearchIndex = [
   [
     "",
     "test-file/tests/element.spec.js.html#lineNumber30",
+    "Element Class  ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/tests/element.spec.js.html#lineNumber85",
     "Element Class  ",
     "test"
   ],
@@ -187,7 +199,7 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/tests/element.spec.js.html#lineNumber85",
+    "test-file/tests/element.spec.js.html#lineNumber23",
     "Element Class  ",
     "test"
   ],
@@ -199,25 +211,13 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/tests/element.spec.js.html#lineNumber44",
-    "Element Class  ",
-    "test"
-  ],
-  [
-    "",
-    "test-file/tests/element.spec.js.html#lineNumber23",
-    "Element Class  ",
-    "test"
-  ],
-  [
-    "",
-    "test-file/tests/element.spec.js.html#lineNumber112",
+    "test-file/tests/element.spec.js.html#lineNumber58",
     "Element Class  should returns same Collection when Collection given in arguments",
     "test"
   ],
   [
     "",
-    "test-file/tests/element.spec.js.html#lineNumber58",
+    "test-file/tests/element.spec.js.html#lineNumber112",
     "Element Class  should returns same Collection when Collection given in arguments",
     "test"
   ],
@@ -901,38 +901,38 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/tests/htmlelement.spec.js.html#lineNumber979",
-    "HTMLElement Class Fade in and out should fade in in 1500ms",
-    "test"
-  ],
-  [
-    "",
-    "test-file/tests/htmlelement.spec.js.html#lineNumber993",
-    "HTMLElement Class Fade in and out should fade in in 400ms",
-    "test"
-  ],
-  [
-    "",
-    "test-file/tests/htmlelement.spec.js.html#lineNumber969",
-    "HTMLElement Class Fade in and out should fade in in 400ms",
-    "test"
-  ],
-  [
-    "",
-    "test-file/tests/htmlelement.spec.js.html#lineNumber974",
-    "HTMLElement Class Fade in and out should fade out in 1500ms",
-    "test"
-  ],
-  [
-    "",
-    "test-file/tests/htmlelement.spec.js.html#lineNumber964",
-    "HTMLElement Class Fade in and out should fade out in 400ms",
+    "test-file/tests/htmlelement.spec.js.html#lineNumber996",
+    "HTMLElement Class Fade in and out should fade in in 1000ms",
     "test"
   ],
   [
     "",
     "test-file/tests/htmlelement.spec.js.html#lineNumber984",
-    "HTMLElement Class Fade in and out should run callback",
+    "HTMLElement Class Fade in and out should fade in in 400ms",
+    "test"
+  ],
+  [
+    "",
+    "test-file/tests/htmlelement.spec.js.html#lineNumber990",
+    "HTMLElement Class Fade in and out should fade out in 1000ms",
+    "test"
+  ],
+  [
+    "",
+    "test-file/tests/htmlelement.spec.js.html#lineNumber978",
+    "HTMLElement Class Fade in and out should fade out in 400ms",
+    "test"
+  ],
+  [
+    "",
+    "test-file/tests/htmlelement.spec.js.html#lineNumber971",
+    "HTMLElement Class Fade in and out should return a Promise if available or this (fadeIn)",
+    "test"
+  ],
+  [
+    "",
+    "test-file/tests/htmlelement.spec.js.html#lineNumber964",
+    "HTMLElement Class Fade in and out should return a Promise if available or this (fadeOut)",
     "test"
   ],
   [
@@ -1191,6 +1191,24 @@ window.esdocSearchIndex = [
     "",
     "test-file/tests/htmlelement.spec.js.html#lineNumber50",
     "HTMLElement Class forEach should runs callback",
+    "test"
+  ],
+  [
+    "",
+    "test-file/tests/hash.spec.js.html#lineNumber3",
+    "Hash utility function",
+    "test"
+  ],
+  [
+    "",
+    "test-file/tests/hash.spec.js.html#lineNumber4",
+    "Hash utility function should return 0 if no text as input",
+    "test"
+  ],
+  [
+    "",
+    "test-file/tests/hash.spec.js.html#lineNumber9",
+    "Hash utility function should return hashed string",
     "test"
   ],
   [
@@ -1921,13 +1939,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/elements/formelement.js~formelement#data",
-    "class/src/elements/formelement.js~FormElement.html#instance-set-data",
+    "class/src/elements/formelement.js~FormElement.html#instance-get-data",
     "src/elements/formelement.js~FormElement#data",
     "member"
   ],
   [
     "src/elements/formelement.js~formelement#data",
-    "class/src/elements/formelement.js~FormElement.html#instance-get-data",
+    "class/src/elements/formelement.js~FormElement.html#instance-set-data",
     "src/elements/formelement.js~FormElement#data",
     "member"
   ],
@@ -1969,13 +1987,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/elements/formelement.js~formelement#json",
-    "class/src/elements/formelement.js~FormElement.html#instance-set-json",
+    "class/src/elements/formelement.js~FormElement.html#instance-get-json",
     "src/elements/formelement.js~FormElement#json",
     "member"
   ],
   [
     "src/elements/formelement.js~formelement#json",
-    "class/src/elements/formelement.js~FormElement.html#instance-get-json",
+    "class/src/elements/formelement.js~FormElement.html#instance-set-json",
     "src/elements/formelement.js~FormElement#json",
     "member"
   ],
@@ -2173,13 +2191,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/elements/htmlelement.js~htmlelement#left",
-    "class/src/elements/htmlelement.js~HtmlElement.html#instance-set-left",
+    "class/src/elements/htmlelement.js~HtmlElement.html#instance-get-left",
     "src/elements/htmlelement.js~HtmlElement#left",
     "member"
   ],
   [
     "src/elements/htmlelement.js~htmlelement#left",
-    "class/src/elements/htmlelement.js~HtmlElement.html#instance-get-left",
+    "class/src/elements/htmlelement.js~HtmlElement.html#instance-set-left",
     "src/elements/htmlelement.js~HtmlElement#left",
     "member"
   ],
@@ -2341,13 +2359,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/elements/htmlelement.js~htmlelement#top",
-    "class/src/elements/htmlelement.js~HtmlElement.html#instance-set-top",
+    "class/src/elements/htmlelement.js~HtmlElement.html#instance-get-top",
     "src/elements/htmlelement.js~HtmlElement#top",
     "member"
   ],
   [
     "src/elements/htmlelement.js~htmlelement#top",
-    "class/src/elements/htmlelement.js~HtmlElement.html#instance-get-top",
+    "class/src/elements/htmlelement.js~HtmlElement.html#instance-set-top",
     "src/elements/htmlelement.js~HtmlElement#top",
     "member"
   ],
@@ -2437,13 +2455,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/elements/inputelement.js~inputelement#rules",
-    "class/src/elements/inputelement.js~InputElement.html#instance-get-rules",
+    "class/src/elements/inputelement.js~InputElement.html#instance-set-rules",
     "src/elements/inputelement.js~InputElement#rules",
     "member"
   ],
   [
     "src/elements/inputelement.js~inputelement#rules",
-    "class/src/elements/inputelement.js~InputElement.html#instance-set-rules",
+    "class/src/elements/inputelement.js~InputElement.html#instance-get-rules",
     "src/elements/inputelement.js~InputElement#rules",
     "member"
   ],
@@ -2455,13 +2473,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/elements/inputelement.js~inputelement#type",
-    "class/src/elements/inputelement.js~InputElement.html#instance-set-type",
+    "class/src/elements/inputelement.js~InputElement.html#instance-get-type",
     "src/elements/inputelement.js~InputElement#type",
     "member"
   ],
   [
     "src/elements/inputelement.js~inputelement#type",
-    "class/src/elements/inputelement.js~InputElement.html#instance-get-type",
+    "class/src/elements/inputelement.js~InputElement.html#instance-set-type",
     "src/elements/inputelement.js~InputElement#type",
     "member"
   ],
@@ -2709,6 +2727,12 @@ window.esdocSearchIndex = [
     "tests/formelement.spec.js",
     "test-file/tests/formelement.spec.js.html",
     "tests/formelement.spec.js",
+    "testFile"
+  ],
+  [
+    "tests/hash.spec.js",
+    "test-file/tests/hash.spec.js.html",
+    "tests/hash.spec.js",
     "testFile"
   ],
   [

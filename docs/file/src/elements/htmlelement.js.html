@@ -252,6 +252,8 @@ export default class HtmlElement extends EventifiedElement {
   *
   *  With no arguments, it will return a keyValueObject with all data attributes.
   *
+  *  Data items name will be automatically converted from dash to camel-case if needed.
+  *
   *  @since 1.0.0
   *  @version 1.0.0
   *  @author Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
@@ -661,7 +663,6 @@ export default class HtmlElement extends EventifiedElement {
 
   /**
   *  Get the outerHTML string of the underlying node
-  *  This is provided as a kind of polyfill
   *
   *  @type {String}
   *  @since 1.0.0
@@ -1014,16 +1015,12 @@ export default class HtmlElement extends EventifiedElement {
   *  @param {String}  [options.display=&apos;block&apos;] Value for the display CSS property
   *  @param {Number}  [options.duration=400]  Duration of the animation in milliseconds
   *  @param {Callback}  callback  Animation callback
-  *  @returns {Promise} Animation promise
+  *  @returns {this | Promise} Chainable or animation promise if available
   */
   fadeIn(options = {}, callback = null) {
     var p, _this = this;
 
-    this.element.style.opacity = 0;
-    this.show(options.display);
-    options.duration = options.duration || 400;
-
-    p = new Promise((resolve, reject) =&gt; {
+    function animationPromise(resolve, reject) {
       var start = null;
 
       function animate(timestamp) {
@@ -1036,16 +1033,22 @@ export default class HtmlElement extends EventifiedElement {
         if (opacity &lt; 1) window.requestAnimationFrame(animate);
         else {
           _this.element.style.opacity = 1;
+          if (callback instanceof Function) callback(_this);
           resolve(_this);
         }
       }
 
       window.requestAnimationFrame(animate);
-    });
+    }
 
-    if (callback instanceof Function) p.then(el =&gt; callback(el));
+    this.element.style.opacity = 0;
+    this.show(options.display);
+    options.duration = options.duration || 400;
 
-    return p;
+    if (typeof Promise !== &apos;undefined&apos;) p = new Promise(animationPromise);
+    else animationPromise(() =&gt; {});
+
+    return p ? p : this;
   }
 
   /**
@@ -1060,15 +1063,12 @@ export default class HtmlElement extends EventifiedElement {
   *  at the end of the animation
   *  @param {Number}  [options.duration=400]  Duration of the animation in milliseconds
   *  @param {Callback}  callback  Animation callback
-  *  @returns {Promise} Animation promise
+  *  @returns {this | Promise} Chainable or animation promise if available
   */
   fadeOut(options = {}, callback = null) {
     var p, _this = this;
 
-    this.element.style.opacity = 1;
-    options.display = options.display || &apos;none&apos;;
-    options.duration = options.duration || 400;
-    p = new Promise((resolve, reject) =&gt; {
+    function animationPromise(resolve, reject) {
       var start = null;
 
       function animate(timestamp) {
@@ -1082,16 +1082,22 @@ export default class HtmlElement extends EventifiedElement {
         else {
           _this.element.style.opacity = 0;
           _this.display(options.display);
+          if (callback instanceof Function) callback(_this);
           resolve(_this);
         }
       }
 
       window.requestAnimationFrame(animate);
-    });
+    }
 
-    if (callback instanceof Function) p.then(el =&gt; callback(el));
+    this.element.style.opacity = 0;
+    this.show(options.display);
+    options.duration = options.duration || 400;
 
-    return p;
+    if (typeof Promise !== &apos;undefined&apos;) p = new Promise(animationPromise);
+    else animationPromise(() =&gt; {});
+
+    return p ? p : this;
   }
 
   /**

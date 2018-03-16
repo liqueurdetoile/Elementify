@@ -1024,39 +1024,43 @@ describe(&apos;HTMLElement Class&apos;, function () {
       Q(&apos;#fixture-fade&apos;).remove();
     });
 
+    it(&apos;should return a Promise if available or this (fadeOut)&apos;, function () {
+      let p = Q(&apos;#fixture-fade&apos;).fadeOut();
+
+      if (typeof Promise !== &apos;undefined&apos;) expect(p).to.be.instanceof(Promise);
+      else expect(p).to.eql(Q(&apos;#fixture-fade&apos;));
+    });
+
+    it(&apos;should return a Promise if available or this (fadeIn)&apos;, function () {
+      let p = Q(&apos;#fixture-fade&apos;).fadeIn();
+
+      if (typeof Promise !== &apos;undefined&apos;) expect(p).to.be.instanceof(Promise);
+      else expect(p).to.eql(Q(&apos;#fixture-fade&apos;));
+    });
+
     it(&apos;should fade out in 400ms&apos;, function (done) {
-      Q(&apos;#fixture-fade&apos;).fadeOut()
-        .then(function (el) { expect(el.node.style.opacity).to.equal(&apos;0&apos;); })
-        .then(done);
+      Q(&apos;#fixture-fade&apos;).fadeOut({}, el =&gt; {
+        expect(el.node.style.opacity).to.equal(&apos;0&apos;);
+        done();
+      });
     });
     it(&apos;should fade in in 400ms&apos;, function (done) {
-      Q(&apos;#fixture-fade&apos;).fadeIn()
-        .then(function (el) { expect(el.node.style.opacity).to.equal(&apos;1&apos;); })
-        .then(done);
+      Q(&apos;#fixture-fade&apos;).fadeIn({}, el =&gt; {
+        expect(el.node.style.opacity).to.equal(&apos;1&apos;);
+        done();
+      });
     });
-    it(&apos;should fade out in 1500ms&apos;, function (done) {
-      Q(&apos;#fixture-fade&apos;).fadeOut({duration: 1500})
-        .then(function (el) { expect(el.node.style.opacity).to.equal(&apos;0&apos;); })
-        .then(done);
+    it(&apos;should fade out in 1000ms&apos;, function (done) {
+      Q(&apos;#fixture-fade&apos;).fadeOut({duration: 1000}, el =&gt; {
+        expect(el.node.style.opacity).to.equal(&apos;0&apos;);
+        done();
+      });
     });
-    it(&apos;should fade in in 1500ms&apos;, function (done) {
-      Q(&apos;#fixture-fade&apos;).fadeIn({duration: 1500})
-        .then(function (el) { expect(el.node.style.opacity).to.equal(&apos;1&apos;); })
-        .then(done);
-    });
-    it(&apos;should run callback&apos;, function (done) {
-      Q(&apos;#fixture-fade&apos;).fadeOut({}, function (el) {
-        el.node.style.backgroundColor = &apos;#060&apos;;
-      })
-        .then(function (el) {
-          expect(el.node.style.backgroundColor).to.equal(&apos;rgb(0, 102, 0)&apos;);
-        })
-        .then(done);
-    });
-    it(&apos;should fade in in 400ms&apos;, function (done) {
-      Q(&apos;#fixture-fade&apos;).fadeIn()
-        .then(function (el) { expect(el.node.style.opacity).to.equal(&apos;1&apos;); })
-        .then(done);
+    it(&apos;should fade in in 1000ms&apos;, function (done) {
+      Q(&apos;#fixture-fade&apos;).fadeIn({duration: 1000}, el =&gt; {
+        expect(el.node.style.opacity).to.equal(&apos;1&apos;);
+        done();
+      });
     });
   });
 });

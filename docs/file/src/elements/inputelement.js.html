@@ -465,7 +465,7 @@ export default class InputElement extends HtmlElement {
   *  @returns {HtmlElement} Tooltip
   */
   tooltip(t, o) {
-    return Q(`+&lt;span data-type=&quot;tooltip&quot; data-for=&quot;${this.name}&quot;&gt;${t}&lt;/span&gt;`, o);
+    return Q(`+&lt;span data-for=&quot;${this.name}&quot; data-type=&quot;tooltip&quot;&gt;${t}&lt;/span&gt;`, o);
   }
 }
 </code></pre>
