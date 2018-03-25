@@ -1,6 +1,7 @@
 [![NPM](https://nodei.co/npm/elementify.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/elementify/)
 
 [![GitHub release](https://img.shields.io/github/release/liqueurdetoile/elementify.svg)](https://www.npmjs.com/package/elementify)
+[![Gzip size](http://img.badgesize.io/https://cdn.jsdelivr.net/npm/elementify@latest?compression=gzip&style=flat-square)](https://cdn.jsdelivr.net/npm/elementify@latest)
 [![Build Status](https://travis-ci.org/liqueurdetoile/Elementify.svg?branch=master)](https://travis-ci.org/liqueurdetoile/Elementify)
 [![Coverage Status](https://coveralls.io/repos/github/liqueurdetoile/Elementify/badge.svg?branch=master)](https://coveralls.io/github/liqueurdetoile/Elementify?branch=master)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
