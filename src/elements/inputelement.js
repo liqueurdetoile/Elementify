@@ -46,8 +46,6 @@ export default class InputElement extends HtmlElement {
   *  @see https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement
   */
   constructor(node, options = {}) {
-    options.type = options.type || 'text';
-
     super(node, options);
 
     /**
