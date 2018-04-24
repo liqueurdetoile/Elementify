@@ -9,7 +9,7 @@
   <script src="script/prettify/prettify.js"></script>
   <script src="script/manual.js"></script>
 <link rel="stylesheet" href="./inject/css/0-styles.css"><script src="./inject/script/0-docs.js"></script><meta name="description" content="Ultra lightweight vanilla JS library for DOM and events manipulation, form manipulation and data validation"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="elementify"><meta property="twitter:description" content="Ultra lightweight vanilla JS library for DOM and events manipulation, form manipulation and data validation"></head>
-<body class="layout-container manual-root manual-index" data-ice="rootContainer">
+<body class="layout-container manual-root" data-ice="rootContainer">
 
 <header>
   <a href="./" style="display: flex; align-items: center;"><img src="./image/brand_logo.png" style="width:34px;"></a>
@@ -42,25 +42,25 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><div class="github-markdown">
-  
+<div class="content" data-ice="content"><div class="github-markdown" data-ice="content"><p></p><p><a href="https://liqueurdetoile.com" target="\_blank"><img src="https://hosting.liqueurdetoile.com/logo_lqdt.png"></a></p>
 
-  
-
-  <div class="manual-cards">
-    
-  <div class="manual-card-wrap" data-ice="cards">
-      <div class="manual-card">
-        <div data-ice="card"><h1>Elementify</h1><p>Elementify is a vanilla JS library designed to be :</p><ul>
+<p></p>
+<h1 id="elementify">Elementify</h1><p>Elementify is a vanilla JS library designed to be :</p>
+<ul>
 <li>powerful but still ultra-lightweight (39,2 KB minified and 8,32KB gzipped)</li>
 <li>cross-browser (IE9+)</li>
 <li>focused on DOM manipulation, events management and data validation</li>
 <li>focused on improving and adding functionnalities to vanilla JS, not shimming or replacing it.</li>
 <li>UMD pattern for easy integration</li>
-</ul><h2>Features</h2><p>Elementify is not working by enhancing DOM objects but introduce a kind of new layer with new Objects
-that ghosts actual DOM nodes and elements.</p><p>For obvious performance constraint, Elementify only create enhanced objects when required.
-You can easily pass from one layer to another in order to dig the best of the two worlds.</p><p>This table presents the basic functionalities that have been ignored,
-ghosted, improved, created and to do between vanilla and elementified layer.</p><p>This chart is subject to change at any time.</p><table>
+</ul>
+<h2 id="features">Features</h2><p>Elementify is not working by enhancing DOM objects but introduce a kind of new layer with new Objects
+that ghosts actual DOM nodes and elements.</p>
+<p>For obvious performance constraint, Elementify only create enhanced objects when required.
+You can easily pass from one layer to another in order to dig the best of the two worlds.</p>
+<p>This table presents the basic functionalities that have been ignored,
+ghosted, improved, created and to do between vanilla and elementified layer.</p>
+<p>This chart is subject to change at any time.</p>
+<table>
 <thead>
 <tr>
 <th>Vanilla Object</th>
@@ -118,8 +118,10 @@ ghosted, improved, created and to do between vanilla and elementified layer.</p>
 <td>-</td>
 </tr>
 </tbody>
-</table><h2>Usage</h2><h3>Importing library modules in global scopes</h3><p>To avoid polluting the global cope namespace, all modules will be accessible under elementify namespace. You can create
-global var to hoist any module or mass importing them with <code>elementify.load()</code>.</p><h3>Create elements</h3><pre><code class="lang-javascript"><code class="source-code prettyprint">/**
+</table>
+<h2 id="usage">Usage</h2><h3 id="importing-library-modules-in-global-scopes">Importing library modules in global scopes</h3><p>To avoid polluting the global cope namespace, all modules will be accessible under elementify namespace. You can create
+global var to hoist any module or mass importing them with <code>elementify.load()</code>.</p>
+<h3 id="create-elements">Create elements</h3><pre><code class="lang-javascript"><code class="source-code prettyprint">/**
 *  All following asserts will lead to the same HtmlElement with a node
 *  equal to &lt;div class=&quot;div1 div2&quot; id=&quot;div&quot;&gt;DIV&lt;/div&gt;
 */
@@ -128,17 +130,20 @@ var div = new Element(&apos;div&apos;, {class: [&apos;div1&apos;, &apos;div2&apo
 var div = new Element(&apos;div&apos;).addClass(&apos;div1 div2&apos;).attr(&apos;id&apos;, &apos;div&apos;).html(&apos;DIV&apos;);
 var div = Q(&apos;+div&apos;, {class: [&apos;div1&apos;, &apos;div2&apos;], id:&apos;div&apos;, innerHTML: &apos;DIV&apos;});
 var div = Q(&apos;+div&apos;).addClass(&apos;div1 div2&apos;).attr(&apos;id&apos;, &apos;div&apos;).html(&apos;DIV&apos;);</code>
-</code></pre><p>All properties setters are chainable for easing creation. The <code>Q</code> magic function is quite similar to the famous <code>$</code> one. It can query the DOM or create elements.</p><p>Both Element and Q will check the input and returns the appropriate Element (windowElement, DocumentElement, HtmlElement, FormElement or InputElement) or a Collection of these.</p><h3>Query DOM</h3><pre><code class="lang-html"><code class="source-code prettyprint">&lt;div class=&quot;e1&quot; data-rel=&quot;f1&quot;&gt;&lt;/div&gt;
+</code></pre>
+<p>All properties setters are chainable for easing creation. The <code>Q</code> magic function is quite similar to the famous <code>$</code> one. It can query the DOM or create elements.</p>
+<p>Both Element and Q will check the input and returns the appropriate Element (windowElement, DocumentElement, HtmlElement, FormElement or InputElement) or a Collection of these.</p>
+<h3 id="query-dom">Query DOM</h3><pre><code class="lang-html"><code class="source-code prettyprint">&lt;div class=&quot;e1&quot; data-rel=&quot;f1&quot;&gt;&lt;/div&gt;
 &lt;div class=&quot;e2&quot; data-rel=&quot;f2&quot;&gt;&lt;/div&gt;
 &lt;div class=&quot;e3&quot; data-rel=&quot;f3&quot;&gt;&lt;/div&gt;</code>
-</code></pre><pre><code class="lang-javascript"><code class="source-code prettyprint">Q(&apos;.e1&apos;).data(&apos;rel&apos;) // returns &apos;f1&apos;
+</code></pre>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">Q(&apos;.e1&apos;).data(&apos;rel&apos;) // returns &apos;f1&apos;
 Q(&apos;div&apos;).attr(&apos;class&apos;) // returns [&apos;e1&apos;, &apos;e2&apos;, &apos;e3&apos;]
 Q(&apos;[data-rel=&quot;f3&quot;&apos;).node.className // returns &apos;e3&apos;</code>
-</code></pre><p>The <code>Q</code> magic function is used to query the DOM and returned the appropriate Element/Collection.</p><p>When a method is called on a Collection, Elementify will try to apply it to each member of the Collection and returns an array of result with the same indexing.</p><p>To access the ghosted vanilla element, simply call the <code>element</code> or <code>node</code> property of the Elementify object.</p></div>
-        <a data-ice="link" href="manual/overview.html"></a>
-      </div>
-    </div>
-</div>
+</code></pre>
+<p>The <code>Q</code> magic function is used to query the DOM and returned the appropriate Element/Collection.</p>
+<p>When a method is called on a Collection, Elementify will try to apply it to each member of the Collection and returns an array of result with the same indexing.</p>
+<p>To access the ghosted vanilla element, simply call the <code>element</code> or <code>node</code> property of the Elementify object.</p>
 </div>
 </div>
 

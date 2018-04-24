@@ -40,6 +40,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-NodeMetrics">NodeMetrics</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors">CSSSelector</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/DOMRect">DOMRect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment">DocumentFragment</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/Element">Element</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/API/FormData">FormData</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/Node">Node</a></span></span></li>
@@ -202,7 +203,7 @@ export default class FormElement extends HtmlElement {
   *  @version 1.0.0
   *  @author Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
   */
-  get data() {
+  get datas() {
     let data = new ObjectArray();
 
     this.fields.forEach(function (field) {
@@ -220,7 +221,7 @@ export default class FormElement extends HtmlElement {
   *  @version 1.0.0
   *  @author Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
   */
-  set data(o) {
+  set datas(o) {
     let data = new ObjectArray(o).flatten(true);
 
     data.forEach(function (v, f) {
@@ -238,7 +239,7 @@ export default class FormElement extends HtmlElement {
   *  @author Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
   */
   get urlEncode() {
-    return this.data.urlEncode();
+    return this.datas.urlEncode();
   }
 
   /**
@@ -251,7 +252,7 @@ export default class FormElement extends HtmlElement {
   *  @author Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
   */
   get formUrlEncode() {
-    return this.data.formUrlEncode();
+    return this.datas.formUrlEncode();
   }
 
   /**
@@ -265,7 +266,7 @@ export default class FormElement extends HtmlElement {
   get formData() {
     var fd = new FormData();
 
-    this.data.forEach(function (v, k) { fd.append(k, v); });
+    this.datas.forEach(function (v, k) { fd.append(k, v); });
     return fd;
   }
 
@@ -278,7 +279,7 @@ export default class FormElement extends HtmlElement {
   *  @author Liqueur de Toile &lt;contact@liqueurdetoile.com&gt;
   */
   get json() {
-    return JSON.stringify(this.data.data);
+    return JSON.stringify(this.datas.data);
   }
 
   /**
@@ -292,7 +293,7 @@ export default class FormElement extends HtmlElement {
   */
   set json(j) {
     try {
-      this.data = JSON.parse(j);
+      this.datas = JSON.parse(j);
     } catch (e) {
       throw new TypeError(&apos;Argument is not a valid JSON string&apos;);
     }

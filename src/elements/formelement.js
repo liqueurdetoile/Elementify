@@ -139,7 +139,7 @@ export default class FormElement extends HtmlElement {
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
   */
-  get data() {
+  get datas() {
     let data = new ObjectArray();
 
     this.fields.forEach(function (field) {
@@ -157,7 +157,7 @@ export default class FormElement extends HtmlElement {
   *  @version 1.0.0
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
   */
-  set data(o) {
+  set datas(o) {
     let data = new ObjectArray(o).flatten(true);
 
     data.forEach(function (v, f) {
@@ -175,7 +175,7 @@ export default class FormElement extends HtmlElement {
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
   */
   get urlEncode() {
-    return this.data.urlEncode();
+    return this.datas.urlEncode();
   }
 
   /**
@@ -188,7 +188,7 @@ export default class FormElement extends HtmlElement {
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
   */
   get formUrlEncode() {
-    return this.data.formUrlEncode();
+    return this.datas.formUrlEncode();
   }
 
   /**
@@ -202,7 +202,7 @@ export default class FormElement extends HtmlElement {
   get formData() {
     var fd = new FormData();
 
-    this.data.forEach(function (v, k) { fd.append(k, v); });
+    this.datas.forEach(function (v, k) { fd.append(k, v); });
     return fd;
   }
 
@@ -215,7 +215,7 @@ export default class FormElement extends HtmlElement {
   *  @author Liqueur de Toile <contact@liqueurdetoile.com>
   */
   get json() {
-    return JSON.stringify(this.data.data);
+    return JSON.stringify(this.datas.data);
   }
 
   /**
@@ -229,7 +229,7 @@ export default class FormElement extends HtmlElement {
   */
   set json(j) {
     try {
-      this.data = JSON.parse(j);
+      this.datas = JSON.parse(j);
     } catch (e) {
       throw new TypeError('Argument is not a valid JSON string');
     }

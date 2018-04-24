@@ -91,7 +91,11 @@ function Q(s, e) {
 
   if (q === null) return new Element();
 
-  if (typeof q !== 'undefined' && typeof q.length !== 'undefined') {
+  if (
+    typeof q !== 'undefined' &&
+    typeof q.length !== 'undefined' &&
+    q.nodeName !== 'FORM'
+  ) {
     if (q.length > 1) {
       r = new Collection();
       r.query = s;

@@ -40,6 +40,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-NodeMetrics">NodeMetrics</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors">CSSSelector</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/DOMRect">DOMRect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment">DocumentFragment</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/Element">Element</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/API/FormData">FormData</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/Node">Node</a></span></span></li>
@@ -76,88 +77,28 @@
 <p></p>
 <h1 id="elementify">Elementify</h1><p>Elementify is a vanilla JS library designed to be :</p>
 <ul>
-<li>powerful but still lightweight and cross-browser (IE9+)</li>
+<li>powerful but still ultra-lightweight (39,2 KB minified and 8,32KB gzipped)</li>
+<li>cross-browser (IE9+)</li>
 <li>focused on DOM manipulation, events management and data validation</li>
+<li>focused on improving and adding functionnalities to vanilla JS, not shimming or replacing it.</li>
+<li>UMD pattern for easy integration</li>
 </ul>
-<h2 id="why-elementify--">Why Elementify ?</h2><p>Except data validation in Elementify core, libraries like Jquery do the same things than Elementify, and even more.
-The problem is they are working by enhancing actual DOM elements making less comfortable to work with vanilla
-methods and properties of the object or a collection of objects.</p>
-<p>On the other hand, there is somme really cools shortcuts and functionnalities that are not available in vanilla or
-in some browsers.</p>
+<h2 id="why-elementify--">Why Elementify ?</h2><p>Oh no, again an other library to manipulate the DOM ! Really ?</p>
+<p>Wait ! Elementify main purpose is not to shim the DOM across browsers. Most of the time, you&apos;ll have to rely on vanilla things to do your stuff.</p>
+<p>You can see Elementify as the missing link between full vanilla JS and Jquery. Jquery or Mootools (or Underscore in its way)
+are a <strong>replacement</strong> to browser&apos;s vanilla JS, even for things that are really common nowadays. They are <strong>heavy</strong> but complete
+libraries.</p>
+<p>On the other side, Elementify is a <strong>lightweight</strong> creates an abstraction layer to manage events, manipulate the DOM and validate data with ease. You can switch between
+vanilla and elementified layers at will and choose the best - or the only one - layer able to do your stuff.</p>
 <p>I follow three main goals when building Elementify :</p>
 <ul>
-<li>Add a functional layer above DOM with all great functionnalities we beloved</li>
-<li>Focus to stay lightweight</li>
+<li>Have most of the great functionnalities we beloved on other heavy-weighted library for manipulating the DOM</li>
+<li>Easy event management and easy data validation client-side</li>
+<li>Syntax and lazyness friendly</li>
+<li>Focus to stay lightweight and low-memory. Not the <strong>fastest</strong> but the <strong>smallest</strong></li>
 <li>Have an UMD compliant library for easing integration in other projects</li>
 </ul>
-<p>So that&apos;s it. Elementify will <em>elementify</em> the DOM.</p>
-<h2 id="features">Features</h2><p>Elementify is not working by enhancing DOM objects but introduce a kind of new layer with new Objects
-that ghosts actual DOM nodes and elements.</p>
-<p>For obvious performance constraint, Elementify only create enhanced objects when required.
-You can easily pass from one layer to another in order to dig the best of the two worlds.</p>
-<p>This table presents the basic functionalities that have been ignored,
-ghosted, improved, created and to do between vanilla and elementified layer.</p>
-<p>This chart is subject to change at any time.</p>
-<table>
-<thead>
-<tr>
-<th>Vanilla Object</th>
-<th>Elementify Object</th>
-<th>Ignored</th>
-<th>Ghosted</th>
-<th>Improved</th>
-<th>created</th>
-<th>Todo</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>window</td>
-<td>WindowElement</td>
-<td>Nearly all</td>
-<td>-</td>
-<td>Events</td>
-<td>-</td>
-<td>Import metrics</td>
-</tr>
-<tr>
-<td>Document</td>
-<td>DocumentElement</td>
-<td>Nearly All</td>
-<td>-</td>
-<td>Events</td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td>HTMLElement</td>
-<td>HtmlElement</td>
-<td>Nearly none</td>
-<td>Nearly all with cross-browser polyfill</td>
-<td>Positioning, Events</td>
-<td>-</td>
-</tr>
-<tr>
-<td>HTMLFormElement</td>
-<td>FormElement</td>
-<td>Nearly all</td>
-<td>very few</td>
-<td>-</td>
-<td>Form validation and data serialize, json, formData exports</td>
-<td>-</td>
-</tr>
-<tr>
-<td>HTMLFormElement Element</td>
-<td>InputElement</td>
-<td>Nearly all</td>
-<td>very few</td>
-<td>Value/checked management for radio and checkbox</td>
-<td>Validation rules and method</td>
-<td>-</td>
-</tr>
-</tbody>
-</table>
-<p>I must say that most of the methods for HtmlElement have been inspired by JQuery but with slighly difference in many cases.</p>
+<p>So that&apos;s it. Elementify will simply, well, <em>elementify</em> the browser and the DOM.</p>
 <h2 id="installation">Installation</h2><h3 id="as-a-module">As a module</h3><pre><code><code class="source-code prettyprint">npm install elementify</code>
 </code></pre><p>or</p>
 <pre><code><code class="source-code prettyprint">yarn add elementify</code>
@@ -178,7 +119,7 @@ import {Collection, Element, Q, ready, complete} from &apos;elementify&apos;;</c
 <p>The elementify library will be added to global (window) scope. If you wish to import its exported modules in global scope, simply call</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">elementify.load()</code>
 </code></pre>
-<p>It will monkey-patch the native Element class by adding the magic constructor for elementify objects.</p>
+<p>It will monkey-patch the native Element class by adding the constructor for elementify objects.</p>
 <h2 id="usage">Usage</h2><p>We will assume that the exported modules of elementify are in global running scope.</p>
 <h3 id="create-elements">Create elements</h3><pre><code class="lang-javascript"><code class="source-code prettyprint">/**
 *  All following asserts will lead to the same HtmlElement with a node
@@ -192,7 +133,7 @@ var div = Q(&apos;+div&apos;).addClass(&apos;div1 div2&apos;).attr(&apos;id&apos
 </code></pre>
 <p>All properties setters are chainable for easing creation. The <code>Q</code> magic function is quite similar to the famous <code>$</code> one. It can query the DOM or create elements.</p>
 <p>Both Element and Q will check the input and returns the appropriate Element (windowElement, DocumentElement, HtmlElement, FormElement or InputElement) or a Collection of these.</p>
-<h3 id="ghost-dom">Ghost DOM</h3><pre><code class="lang-html"><code class="source-code prettyprint">&lt;div class=&quot;e1&quot; data-rel=&quot;f1&quot;&gt;&lt;/div&gt;
+<h3 id="query-dom">Query DOM</h3><pre><code class="lang-html"><code class="source-code prettyprint">&lt;div class=&quot;e1&quot; data-rel=&quot;f1&quot;&gt;&lt;/div&gt;
 &lt;div class=&quot;e2&quot; data-rel=&quot;f2&quot;&gt;&lt;/div&gt;
 &lt;div class=&quot;e3&quot; data-rel=&quot;f3&quot;&gt;&lt;/div&gt;</code>
 </code></pre>
@@ -203,7 +144,7 @@ Q(&apos;[data-rel=&quot;f3&quot;&apos;).node.className // returns &apos;e3&apos;
 <p>The <code>Q</code> magic function is used to query the DOM and returned the appropriate Element/Collection.</p>
 <p>When a method is called on a Collection, Elementify will try to apply it to each member of the Collection and returns an array of result with the same indexing.</p>
 <p>To access the ghosted vanilla element, simply call the <code>element</code> or <code>node</code> property of the Elementify object.</p>
-<h2 id="documentation">Documentation</h2><p>A nearly complete reference is available here : <a href="https://liqueurdetoile.github.io/Elementify/">https://liqueurdetoile.github.io/Elementify</a>.</p>
+<h2 id="documentation">Documentation</h2><p>A nearly complete API reference is available here : <a href="https://liqueurdetoile.github.io/Elementify/">https://liqueurdetoile.github.io/Elementify</a>.</p>
 <p>Wish I could spare some time to write examples and a manual.</p>
 <h2 id="bugs-and-features-requests">Bugs and features requests</h2><p>Elementify is test-driven though it did not prevent all issues. Please report here any trouble or features request.</p>
 <h2 id="want-to-help--">Want to help ?</h2><p>There is many more to do to implements othe features. Don&apos;t mind fork Elementify, tweak it and submit a pull request.</p>

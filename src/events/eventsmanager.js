@@ -8,10 +8,10 @@ import ObjectArray from 'dot-object-array';
 import Q from 'query';
 
 /**
-*  EventsManager class provide an object in order to track and
-*  manage user-defined events on HtmlElement
+*  EventsManager class provide an object in order to
+*  easily track and manage user-defined events
+*  Eventified Elements
 *
-*  @private
 *  @version 1.0.0
 *  @since 1.0.0
 *  @author Liqueur de Toile <contact@liqueurdetoile.com>
@@ -20,6 +20,8 @@ import Q from 'query';
 
 export default class EventsManager {
   /**
+  *  @version 1.0.0
+  *  @since 1.0.0
   *  @returns {EventsManager} Event manager
   */
   constructor() {
@@ -44,13 +46,13 @@ export default class EventsManager {
   */
   clean() {
     this.orm.forEach(function (v, k) {
-      if (!Q('[data-__id__="' + k + '"]').length) delete (this.orm._data[k]);
+      if (!Q('[data-__id__="' + k + '"]').length) this.orm.remove(k);
     }.bind(this));
   }
 
   /**
   *  Check if object have event, specific event or specific event/callback
-  *  given the `key` paramater value
+  *  given the `key` parameter value
   *
   *  @version 1.0.0
   *  @since 1.0.0

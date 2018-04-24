@@ -40,6 +40,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-NodeMetrics">NodeMetrics</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors">CSSSelector</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/DOMRect">DOMRect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment">DocumentFragment</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/Element">Element</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/API/FormData">FormData</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/Node">Node</a></span></span></li>
@@ -191,8 +192,8 @@ describe(&apos;FormElement&apos;, function () {
 
       f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;f1&quot; value=&quot;fixture1&quot;&gt;&apos;);
       f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;f2&quot; value=&quot;fixture2&quot;&gt;&apos;);
-      f.data.should.be.instanceof(ObjectArray);
-      f.data.data.should.eql({f1: &apos;fixture1&apos;, f2: &apos;fixture2&apos;});
+      f.datas.should.be.instanceof(ObjectArray);
+      f.datas.data.should.eql({f1: &apos;fixture1&apos;, f2: &apos;fixture2&apos;});
     });
 
     it(&apos;should export data to ObjectArray with dotted keys&apos;, function () {
@@ -200,8 +201,8 @@ describe(&apos;FormElement&apos;, function () {
 
       f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;fixture.f1&quot; value=&quot;fixture1&quot;&gt;&apos;);
       f.append(&apos;&lt;input type=&quot;text&quot; name=&quot;fixture.f2&quot; value=&quot;fixture2&quot;&gt;&apos;);
-      f.data.should.be.instanceof(ObjectArray);
-      f.data.data.should.eql({fixture: {f1: &apos;fixture1&apos;, f2: &apos;fixture2&apos;}});
+      f.datas.should.be.instanceof(ObjectArray);
+      f.datas.data.should.eql({fixture: {f1: &apos;fixture1&apos;, f2: &apos;fixture2&apos;}});
     });
 
     it(&apos;should export data to JSON&apos;, function () {
@@ -267,6 +268,35 @@ describe(&apos;FormElement&apos;, function () {
       let f = new Element(&apos;form&apos;);
 
       expect((function test() { f.json = js; })).to.throw(TypeError);
+    });
+  });
+
+  describe(&apos;Events management&apos;, function () {
+    it(&apos;should prevent submitting&apos;, function () {
+      let f = new Element(&apos;form&apos;);
+      let spy = sinon.spy();
+
+      f.on(&apos;submit&apos;, (ev) =&gt; {
+        ev.preventDefault();
+        spy();
+      });
+
+      Q(&apos;body&apos;).append(f);
+      f.fire(&apos;submit&apos;);
+      spy.called.should.be.true;
+      f.remove();
+    });
+  });
+
+  describe(&apos;Should find a form by id&apos;, function () {
+    it(&apos;should find form&apos;, function () {
+      let f = new Element(&apos;form&apos;, {
+        id: &apos;form-login&apos;
+      });
+
+      Q(document.body).append(f);
+      Q(&apos;#form-login&apos;).should.eql(f);
+      f.remove();
     });
   });
 });

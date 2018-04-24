@@ -128,8 +128,8 @@ describe('FormElement', function () {
 
       f.append('<input type="text" name="f1" value="fixture1">');
       f.append('<input type="text" name="f2" value="fixture2">');
-      f.data.should.be.instanceof(ObjectArray);
-      f.data.data.should.eql({f1: 'fixture1', f2: 'fixture2'});
+      f.datas.should.be.instanceof(ObjectArray);
+      f.datas.data.should.eql({f1: 'fixture1', f2: 'fixture2'});
     });
 
     it('should export data to ObjectArray with dotted keys', function () {
@@ -137,8 +137,8 @@ describe('FormElement', function () {
 
       f.append('<input type="text" name="fixture.f1" value="fixture1">');
       f.append('<input type="text" name="fixture.f2" value="fixture2">');
-      f.data.should.be.instanceof(ObjectArray);
-      f.data.data.should.eql({fixture: {f1: 'fixture1', f2: 'fixture2'}});
+      f.datas.should.be.instanceof(ObjectArray);
+      f.datas.data.should.eql({fixture: {f1: 'fixture1', f2: 'fixture2'}});
     });
 
     it('should export data to JSON', function () {
@@ -204,6 +204,35 @@ describe('FormElement', function () {
       let f = new Element('form');
 
       expect((function test() { f.json = js; })).to.throw(TypeError);
+    });
+  });
+
+  describe('Events management', function () {
+    it('should prevent submitting', function () {
+      let f = new Element('form');
+      let spy = sinon.spy();
+
+      f.on('submit', (ev) => {
+        ev.preventDefault();
+        spy();
+      });
+
+      Q('body').append(f);
+      f.fire('submit');
+      spy.called.should.be.true;
+      f.remove();
+    });
+  });
+
+  describe('Should find a form by id', function () {
+    it('should find form', function () {
+      let f = new Element('form', {
+        id: 'form-login'
+      });
+
+      Q(document.body).append(f);
+      Q('#form-login').should.eql(f);
+      f.remove();
     });
   });
 });

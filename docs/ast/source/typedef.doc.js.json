@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 3099,
+  "end": 3204,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 99,
+      "line": 102,
       "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 3099,
+    "end": 3204,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 99,
+        "line": 102,
         "column": 0
       }
     },
@@ -238,6 +238,22 @@
             "column": 2
           }
         }
+      },
+      {
+        "type": "CommentBlock",
+        "value": "*\n*  @external {DocumentFragment} https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment\n",
+        "start": 3099,
+        "end": 3203,
+        "loc": {
+          "start": {
+            "line": 99,
+            "column": 0
+          },
+          "end": {
+            "line": 101,
+            "column": 2
+          }
+        }
       }
     ]
   },
@@ -446,6 +462,22 @@
         },
         "end": {
           "line": 98,
+          "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n*  @external {DocumentFragment} https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment\n",
+      "start": 3099,
+      "end": 3203,
+      "loc": {
+        "start": {
+          "line": 99,
+          "column": 0
+        },
+        "end": {
+          "line": 101,
           "column": 2
         }
       }
@@ -661,6 +693,22 @@
       }
     },
     {
+      "type": "CommentBlock",
+      "value": "*\n*  @external {DocumentFragment} https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment\n",
+      "start": 3099,
+      "end": 3203,
+      "loc": {
+        "start": {
+          "line": 99,
+          "column": 0
+        },
+        "end": {
+          "line": 101,
+          "column": 2
+        }
+      }
+    },
+    {
       "type": {
         "label": "eof",
         "beforeExpr": false,
@@ -673,15 +721,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 3099,
-      "end": 3099,
+      "start": 3204,
+      "end": 3204,
       "loc": {
         "start": {
-          "line": 99,
+          "line": 102,
           "column": 0
         },
         "end": {
-          "line": 99,
+          "line": 102,
           "column": 0
         }
       }

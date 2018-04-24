@@ -40,6 +40,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-NodeMetrics">NodeMetrics</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors">CSSSelector</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/DOMRect">DOMRect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment">DocumentFragment</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/Element">Element</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/en-US/docs/Web/API/FormData">FormData</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/Node">Node</a></span></span></li>
@@ -62,7 +63,7 @@
 
 <div class="content" data-ice="content"><div class="header-notice">
   <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import EventsManager from &apos;<span><a href="file/src/events/eventsmanager.js.html#lineNumber21">elementify/lib/events/eventsmanager.js</a></span>&apos;</code></pre></div>
-  <span data-ice="access">private</span>
+  <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   <span data-ice="version">| version 1.0.0</span>
@@ -87,8 +88,9 @@
 
   
   
-  <div class="description" data-ice="description"><p> EventsManager class provide an object in order to track and
- manage user-defined events on HtmlElement</p>
+  <div class="description" data-ice="description"><p> EventsManager class provide an object in order to
+ easily track and manage user-defined events
+ Eventified Elements</p>
 </div>
   
 
@@ -131,8 +133,8 @@
       </div>
     </td>
     <td>
-      
-      
+      <span class="version" data-ice="version">version 1.0.0</span>
+      <span class="since" data-ice="since">since 1.0.0</span>
     </td>
   </tr>
 </tbody>
@@ -258,7 +260,7 @@
         
         
         <div data-ice="description"><p> Check if object have event, specific event or specific event/callback
- given the <code>key</code> paramater value</p>
+ given the <code>key</code> parameter value</p>
 </div>
       </div>
     </td>
@@ -376,9 +378,9 @@
     
     <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(): <span><a href="class/src/events/eventsmanager.js~EventsManager.html">EventsManager</a></span></span>
     <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/events/eventsmanager.js.html#lineNumber25">source</a></span></span>
+      <span class="version" data-ice="version">version 1.0.0</span>
+      <span class="since" data-ice="since">since 1.0.0</span>
+      <span data-ice="source"><span><a href="file/src/events/eventsmanager.js.html#lineNumber27">source</a></span></span>
     </span>
   </h3>
 
@@ -437,7 +439,7 @@
     <span class="right-info">
       
       <span class="since" data-ice="since">since 1.0.0</span>
-      <span data-ice="source"><span><a href="file/src/events/eventsmanager.js.html#lineNumber32">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/events/eventsmanager.js.html#lineNumber34">source</a></span></span>
     </span>
   </h3>
 
@@ -484,7 +486,7 @@
     <span class="right-info">
       <span class="version" data-ice="version">version 1.0.0</span>
       <span class="since" data-ice="since">since 1.0.0</span>
-      <span data-ice="source"><span><a href="file/src/events/eventsmanager.js.html#lineNumber45">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/events/eventsmanager.js.html#lineNumber47">source</a></span></span>
     </span>
   </h3>
 
@@ -541,7 +543,7 @@
     <span class="right-info">
       <span class="version" data-ice="version">version 1.0.0</span>
       <span class="since" data-ice="since">since 1.0.0</span>
-      <span data-ice="source"><span><a href="file/src/events/eventsmanager.js.html#lineNumber133">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/events/eventsmanager.js.html#lineNumber135">source</a></span></span>
     </span>
   </h3>
 
@@ -623,7 +625,7 @@
     <span class="right-info">
       <span class="version" data-ice="version">version 1.0.0</span>
       <span class="since" data-ice="since">since 1.0.0</span>
-      <span data-ice="source"><span><a href="file/src/events/eventsmanager.js.html#lineNumber63">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/events/eventsmanager.js.html#lineNumber65">source</a></span></span>
     </span>
   </h3>
 
@@ -631,7 +633,7 @@
   
   
   <div data-ice="description"><p> Check if object have event, specific event or specific event/callback
- given the <code>key</code> paramater value</p>
+ given the <code>key</code> parameter value</p>
 </div>
 
   
@@ -699,7 +701,7 @@
     <span class="right-info">
       <span class="version" data-ice="version">version 1.0.0</span>
       <span class="since" data-ice="since">since 1.0.0</span>
-      <span data-ice="source"><span><a href="file/src/events/eventsmanager.js.html#lineNumber98">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/events/eventsmanager.js.html#lineNumber100">source</a></span></span>
     </span>
   </h3>
 
@@ -775,7 +777,7 @@
     <span class="right-info">
       <span class="version" data-ice="version">version 1.0.0</span>
       <span class="since" data-ice="since">since 1.0.0</span>
-      <span data-ice="source"><span><a href="file/src/events/eventsmanager.js.html#lineNumber80">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/events/eventsmanager.js.html#lineNumber82">source</a></span></span>
     </span>
   </h3>
 
@@ -863,7 +865,7 @@
     <span class="right-info">
       <span class="version" data-ice="version">version 1.0.0</span>
       <span class="since" data-ice="since">since 1.0.0</span>
-      <span data-ice="source"><span><a href="file/src/events/eventsmanager.js.html#lineNumber115">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/events/eventsmanager.js.html#lineNumber117">source</a></span></span>
     </span>
   </h3>
 
