@@ -151,19 +151,25 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/tests/element.spec.js.html#lineNumber77",
-    "Element Class ",
-    "test"
-  ],
-  [
-    "",
     "test-file/tests/element.spec.js.html#lineNumber22",
     "Element Class ",
     "test"
   ],
   [
     "",
-    "test-file/tests/element.spec.js.html#lineNumber30",
+    "test-file/tests/element.spec.js.html#lineNumber77",
+    "Element Class ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/tests/element.spec.js.html#lineNumber37",
+    "Element Class  ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/tests/element.spec.js.html#lineNumber23",
     "Element Class  ",
     "test"
   ],
@@ -175,7 +181,19 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/tests/element.spec.js.html#lineNumber23",
+    "test-file/tests/element.spec.js.html#lineNumber85",
+    "Element Class  ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/tests/element.spec.js.html#lineNumber92",
+    "Element Class  ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/tests/element.spec.js.html#lineNumber30",
     "Element Class  ",
     "test"
   ],
@@ -188,24 +206,6 @@ window.esdocSearchIndex = [
   [
     "",
     "test-file/tests/element.spec.js.html#lineNumber44",
-    "Element Class  ",
-    "test"
-  ],
-  [
-    "",
-    "test-file/tests/element.spec.js.html#lineNumber92",
-    "Element Class  ",
-    "test"
-  ],
-  [
-    "",
-    "test-file/tests/element.spec.js.html#lineNumber37",
-    "Element Class  ",
-    "test"
-  ],
-  [
-    "",
-    "test-file/tests/element.spec.js.html#lineNumber85",
     "Element Class  ",
     "test"
   ],
@@ -1242,6 +1242,48 @@ window.esdocSearchIndex = [
     "test"
   ],
   [
+    "",
+    "test-file/tests/inputelement.spec.js.html#lineNumber309",
+    "InputElement Checkbox value getter and setter",
+    "test"
+  ],
+  [
+    "",
+    "test-file/tests/inputelement.spec.js.html#lineNumber310",
+    "InputElement Checkbox value getter and setter should get 0 as value",
+    "test"
+  ],
+  [
+    "",
+    "test-file/tests/inputelement.spec.js.html#lineNumber319",
+    "InputElement Checkbox value getter and setter should get 1 as value",
+    "test"
+  ],
+  [
+    "",
+    "test-file/tests/inputelement.spec.js.html#lineNumber329",
+    "InputElement Checkbox value getter and setter should get undefined as value",
+    "test"
+  ],
+  [
+    "",
+    "test-file/tests/inputelement.spec.js.html#lineNumber339",
+    "InputElement Checkbox value getter and setter should get value attribute as value",
+    "test"
+  ],
+  [
+    "",
+    "test-file/tests/inputelement.spec.js.html#lineNumber370",
+    "InputElement Checkbox value getter and setter should set value",
+    "test"
+  ],
+  [
+    "",
+    "test-file/tests/inputelement.spec.js.html#lineNumber350",
+    "InputElement Checkbox value getter and setter should toggle checked state",
+    "test"
+  ],
+  [
     "inputelement#constructor src/elements/inputelement.js~inputelement#constructor,inputelement#constructor",
     "test-file/tests/inputelement.spec.js.html#lineNumber14",
     "InputElement Constructor",
@@ -1963,13 +2005,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/elements/formelement.js~formelement#datas",
-    "class/src/elements/formelement.js~FormElement.html#instance-get-datas",
+    "class/src/elements/formelement.js~FormElement.html#instance-set-datas",
     "src/elements/formelement.js~FormElement#datas",
     "member"
   ],
   [
     "src/elements/formelement.js~formelement#datas",
-    "class/src/elements/formelement.js~FormElement.html#instance-set-datas",
+    "class/src/elements/formelement.js~FormElement.html#instance-get-datas",
     "src/elements/formelement.js~FormElement#datas",
     "member"
   ],
@@ -2011,13 +2053,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/elements/formelement.js~formelement#json",
-    "class/src/elements/formelement.js~FormElement.html#instance-set-json",
+    "class/src/elements/formelement.js~FormElement.html#instance-get-json",
     "src/elements/formelement.js~FormElement#json",
     "member"
   ],
   [
     "src/elements/formelement.js~formelement#json",
-    "class/src/elements/formelement.js~FormElement.html#instance-get-json",
+    "class/src/elements/formelement.js~FormElement.html#instance-set-json",
     "src/elements/formelement.js~FormElement#json",
     "member"
   ],
@@ -2407,13 +2449,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/elements/htmlelement.js~htmlelement#width",
-    "class/src/elements/htmlelement.js~HtmlElement.html#instance-get-width",
+    "class/src/elements/htmlelement.js~HtmlElement.html#instance-set-width",
     "src/elements/htmlelement.js~HtmlElement#width",
     "member"
   ],
   [
     "src/elements/htmlelement.js~htmlelement#width",
-    "class/src/elements/htmlelement.js~HtmlElement.html#instance-set-width",
+    "class/src/elements/htmlelement.js~HtmlElement.html#instance-get-width",
     "src/elements/htmlelement.js~HtmlElement#width",
     "member"
   ],
@@ -2521,13 +2563,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/elements/inputelement.js~inputelement#value",
-    "class/src/elements/inputelement.js~InputElement.html#instance-set-value",
+    "class/src/elements/inputelement.js~InputElement.html#instance-get-value",
     "src/elements/inputelement.js~InputElement#value",
     "member"
   ],
   [
     "src/elements/inputelement.js~inputelement#value",
-    "class/src/elements/inputelement.js~InputElement.html#instance-get-value",
+    "class/src/elements/inputelement.js~InputElement.html#instance-set-value",
     "src/elements/inputelement.js~InputElement#value",
     "member"
   ],

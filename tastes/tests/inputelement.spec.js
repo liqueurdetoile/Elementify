@@ -305,4 +305,76 @@ describe('InputElement', function () {
       i.tooltip('tooltip').outerHTML.should.equal('<span data-for="fixture" data-type="tooltip">tooltip</span>');
     });
   });
+
+  describe('Checkbox value getter and setter', function () {
+    it('should get 0 as value', function () {
+      let check = Q('+input', {
+        type: 'checkbox'
+      });
+
+      check.node.checked.should.be.false;
+      check.value.should.equal(0);
+    });
+
+    it('should get 1 as value', function () {
+      let check = Q('+input', {
+        type: 'checkbox',
+        checked: 'checked'
+      });
+
+      check.node.checked.should.be.true;
+      check.value.should.equal(1);
+    });
+
+    it('should get undefined as value', function () {
+      let check = Q('+input', {
+        type: 'checkbox',
+        value: 'fixture'
+      });
+
+      check.node.checked.should.be.false;
+      expect(check.value).to.be.undefined;
+    });
+
+    it('should get value attribute as value', function () {
+      let check = Q('+input', {
+        type: 'checkbox',
+        value: 'fixture',
+        checked: 'checked'
+      });
+
+      check.node.checked.should.be.true;
+      check.value.should.equal('fixture');
+    });
+
+    it('should toggle checked state', function () {
+      let check = Q('+input', {
+        type: 'checkbox'
+      });
+
+      check.node.checked.should.be.false;
+      check.value = true;
+      check.node.checked.should.be.true;
+      check.value = false;
+      check.node.checked.should.be.false;
+      check.value = 1;
+      check.node.checked.should.be.true;
+      check.value = 0;
+      check.node.checked.should.be.false;
+      check.value = '1';
+      check.node.checked.should.be.true;
+      check.value = '0';
+      check.node.checked.should.be.false;
+    });
+
+    it('should set value', function () {
+      let check = Q('+input', {
+        type: 'checkbox'
+      });
+
+      check.value = 'fixture';
+      check.node.checked.should.be.false;
+      check.node.value.should.equal('fixture');
+    });
+  });
 });

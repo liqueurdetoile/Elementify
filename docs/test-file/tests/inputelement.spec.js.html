@@ -369,6 +369,78 @@ describe(&apos;InputElement&apos;, function () {
       i.tooltip(&apos;tooltip&apos;).outerHTML.should.equal(&apos;&lt;span data-for=&quot;fixture&quot; data-type=&quot;tooltip&quot;&gt;tooltip&lt;/span&gt;&apos;);
     });
   });
+
+  describe(&apos;Checkbox value getter and setter&apos;, function () {
+    it(&apos;should get 0 as value&apos;, function () {
+      let check = Q(&apos;+input&apos;, {
+        type: &apos;checkbox&apos;
+      });
+
+      check.node.checked.should.be.false;
+      check.value.should.equal(0);
+    });
+
+    it(&apos;should get 1 as value&apos;, function () {
+      let check = Q(&apos;+input&apos;, {
+        type: &apos;checkbox&apos;,
+        checked: &apos;checked&apos;
+      });
+
+      check.node.checked.should.be.true;
+      check.value.should.equal(1);
+    });
+
+    it(&apos;should get undefined as value&apos;, function () {
+      let check = Q(&apos;+input&apos;, {
+        type: &apos;checkbox&apos;,
+        value: &apos;fixture&apos;
+      });
+
+      check.node.checked.should.be.false;
+      expect(check.value).to.be.undefined;
+    });
+
+    it(&apos;should get value attribute as value&apos;, function () {
+      let check = Q(&apos;+input&apos;, {
+        type: &apos;checkbox&apos;,
+        value: &apos;fixture&apos;,
+        checked: &apos;checked&apos;
+      });
+
+      check.node.checked.should.be.true;
+      check.value.should.equal(&apos;fixture&apos;);
+    });
+
+    it(&apos;should toggle checked state&apos;, function () {
+      let check = Q(&apos;+input&apos;, {
+        type: &apos;checkbox&apos;
+      });
+
+      check.node.checked.should.be.false;
+      check.value = true;
+      check.node.checked.should.be.true;
+      check.value = false;
+      check.node.checked.should.be.false;
+      check.value = 1;
+      check.node.checked.should.be.true;
+      check.value = 0;
+      check.node.checked.should.be.false;
+      check.value = &apos;1&apos;;
+      check.node.checked.should.be.true;
+      check.value = &apos;0&apos;;
+      check.node.checked.should.be.false;
+    });
+
+    it(&apos;should set value&apos;, function () {
+      let check = Q(&apos;+input&apos;, {
+        type: &apos;checkbox&apos;
+      });
+
+      check.value = &apos;fixture&apos;;
+      check.node.checked.should.be.false;
+      check.node.value.should.equal(&apos;fixture&apos;);
+    });
+  });
 });
 </code></pre>
 

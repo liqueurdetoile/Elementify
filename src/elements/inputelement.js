@@ -186,6 +186,8 @@ export default class InputElement extends HtmlElement {
         break;
       case 'checkbox' :
       case 'radio' :
+        if (val === 'true' || val === 1 || val === '1') val = true;
+        if (val === 'false' || val === 0 || val === '0') val = false;
         if (val === true || val === false) this.node.checked = val;
         else this.element.value = val;
         break;
