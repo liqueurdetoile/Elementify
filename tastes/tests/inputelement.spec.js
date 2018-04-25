@@ -76,9 +76,9 @@ describe('InputElement', function () {
         i.type = 'checkbox';
         i.attr('type').should.equal('checkbox');
 
-        i.val().should.be.false;
+        i.val().should.equal(0);
         i.node.checked = true;
-        i.val().should.be.true;
+        i.val().should.equal(1);
         i.node.checked = false;
         i.val('test');
         expect(i.val()).to.be.undefined;

@@ -154,7 +154,7 @@ export default class InputElement extends HtmlElement {
       case 'radio' :
         if (typeof this.attr('value') !== 'undefined' && this.attr('value') !== null) {
           ret = (this.node.checked ? this.attr('value') : undefined);
-        } else ret = this.node.checked;
+        } else ret = this.node.checked ? 1 : 0;
         break;
       default:
         ret = (this.node.value || '').trim();

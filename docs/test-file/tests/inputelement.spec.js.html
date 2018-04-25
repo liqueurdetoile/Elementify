@@ -140,9 +140,9 @@ describe(&apos;InputElement&apos;, function () {
         i.type = &apos;checkbox&apos;;
         i.attr(&apos;type&apos;).should.equal(&apos;checkbox&apos;);
 
-        i.val().should.be.false;
+        i.val().should.equal(0);
         i.node.checked = true;
-        i.val().should.be.true;
+        i.val().should.equal(1);
         i.node.checked = false;
         i.val(&apos;test&apos;);
         expect(i.val()).to.be.undefined;
