@@ -55,6 +55,9 @@ export default class EventifiedElement {
   on(event, callback, capture = false) {
     const cbid = this._callbackId(callback);
 
+    // Prevent attaching event to a documentFragment itself
+    if (!this.length) return this;
+
     // Avoid 2 same callbacks to be attached to an event
     if (!eventsManager.has(`${this._id}.${event}.${cbid}`)) {
       this.element.addEventListener(event, callback, capture);
@@ -84,6 +87,8 @@ export default class EventifiedElement {
   */
   off(event, callback, capture = false) {
     const cbid = this._callbackId(callback);
+
+    if (!this.length) return this;
 
     if (!event) {
       // Remove all events
