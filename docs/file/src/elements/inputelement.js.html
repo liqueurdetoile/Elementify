@@ -248,6 +248,11 @@ export default class InputElement extends HtmlElement {
         while ((o = this.child(n++)).length &amp;&amp; val !== o.value);
         if (o.length) this.value = val;
         break;
+      case &apos;checkbox&apos; :
+      case &apos;radio&apos; :
+        if (val === true || val === false) this.node.checked = val;
+        else this.element.value = val;
+        break;
       default:
         this.element.value = val;
         break;
