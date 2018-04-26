@@ -115,7 +115,7 @@ describe('InputElement', function () {
             f2: 'fixture2'
           }
         });
-        i.value.should.equal('f1');
+        i.value.should.equal('');
       });
     });
 
@@ -375,6 +375,23 @@ describe('InputElement', function () {
       check.value = 'fixture';
       check.node.checked.should.be.false;
       check.node.value.should.equal('fixture');
+    });
+  });
+
+  describe('Select tag', function () {
+    var select = Q(`+<select>
+      <option id="option1" value="1" selected>Fixture1</option>
+      <option id="option2" value="2">Fixture2</option>
+      <option id="option3" value="3">Fixture3</option>
+    </select>`);
+
+    it('should get value', function () {
+      expect(select.value).to.equal('1');
+    });
+
+    it('should set value', function () {
+      select.value = 2;
+      Q('#option2', select).node.selected.should.be.true;
     });
   });
 });

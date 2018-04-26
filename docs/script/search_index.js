@@ -151,25 +151,19 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/tests/element.spec.js.html#lineNumber22",
-    "Element Class ",
-    "test"
-  ],
-  [
-    "",
     "test-file/tests/element.spec.js.html#lineNumber77",
     "Element Class ",
     "test"
   ],
   [
     "",
-    "test-file/tests/element.spec.js.html#lineNumber37",
-    "Element Class  ",
+    "test-file/tests/element.spec.js.html#lineNumber22",
+    "Element Class ",
     "test"
   ],
   [
     "",
-    "test-file/tests/element.spec.js.html#lineNumber23",
+    "test-file/tests/element.spec.js.html#lineNumber30",
     "Element Class  ",
     "test"
   ],
@@ -181,19 +175,7 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/tests/element.spec.js.html#lineNumber85",
-    "Element Class  ",
-    "test"
-  ],
-  [
-    "",
-    "test-file/tests/element.spec.js.html#lineNumber92",
-    "Element Class  ",
-    "test"
-  ],
-  [
-    "",
-    "test-file/tests/element.spec.js.html#lineNumber30",
+    "test-file/tests/element.spec.js.html#lineNumber37",
     "Element Class  ",
     "test"
   ],
@@ -205,7 +187,25 @@ window.esdocSearchIndex = [
   ],
   [
     "",
+    "test-file/tests/element.spec.js.html#lineNumber23",
+    "Element Class  ",
+    "test"
+  ],
+  [
+    "",
     "test-file/tests/element.spec.js.html#lineNumber44",
+    "Element Class  ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/tests/element.spec.js.html#lineNumber92",
+    "Element Class  ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/tests/element.spec.js.html#lineNumber85",
     "Element Class  ",
     "test"
   ],
@@ -715,13 +715,13 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/tests/htmlelement.spec.js.html#lineNumber364",
+    "test-file/tests/htmlelement.spec.js.html#lineNumber370",
     "HTMLElement Class DOM manipulations Prepend should prepend tag to existing dom element",
     "test"
   ],
   [
     "",
-    "test-file/tests/htmlelement.spec.js.html#lineNumber370",
+    "test-file/tests/htmlelement.spec.js.html#lineNumber364",
     "HTMLElement Class DOM manipulations Prepend should prepend tag to existing dom element",
     "test"
   ],
@@ -1380,6 +1380,24 @@ window.esdocSearchIndex = [
     "test"
   ],
   [
+    "",
+    "test-file/tests/inputelement.spec.js.html#lineNumber381",
+    "InputElement Select tag",
+    "test"
+  ],
+  [
+    "",
+    "test-file/tests/inputelement.spec.js.html#lineNumber388",
+    "InputElement Select tag should get value",
+    "test"
+  ],
+  [
+    "",
+    "test-file/tests/inputelement.spec.js.html#lineNumber392",
+    "InputElement Select tag should set value",
+    "test"
+  ],
+  [
     "tooltip src/elements/inputelement.js~inputelement#tooltip,tooltip",
     "test-file/tests/inputelement.spec.js.html#lineNumber299",
     "InputElement Tooltip method",
@@ -2005,13 +2023,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/elements/formelement.js~formelement#datas",
-    "class/src/elements/formelement.js~FormElement.html#instance-set-datas",
+    "class/src/elements/formelement.js~FormElement.html#instance-get-datas",
     "src/elements/formelement.js~FormElement#datas",
     "member"
   ],
   [
     "src/elements/formelement.js~formelement#datas",
-    "class/src/elements/formelement.js~FormElement.html#instance-get-datas",
+    "class/src/elements/formelement.js~FormElement.html#instance-set-datas",
     "src/elements/formelement.js~FormElement#datas",
     "member"
   ],
@@ -2053,13 +2071,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/elements/formelement.js~formelement#json",
-    "class/src/elements/formelement.js~FormElement.html#instance-get-json",
+    "class/src/elements/formelement.js~FormElement.html#instance-set-json",
     "src/elements/formelement.js~FormElement#json",
     "member"
   ],
   [
     "src/elements/formelement.js~formelement#json",
-    "class/src/elements/formelement.js~FormElement.html#instance-set-json",
+    "class/src/elements/formelement.js~FormElement.html#instance-get-json",
     "src/elements/formelement.js~FormElement#json",
     "member"
   ],
@@ -2137,13 +2155,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/elements/htmlelement.js~htmlelement#bottom",
-    "class/src/elements/htmlelement.js~HtmlElement.html#instance-get-bottom",
+    "class/src/elements/htmlelement.js~HtmlElement.html#instance-set-bottom",
     "src/elements/htmlelement.js~HtmlElement#bottom",
     "member"
   ],
   [
     "src/elements/htmlelement.js~htmlelement#bottom",
-    "class/src/elements/htmlelement.js~HtmlElement.html#instance-set-bottom",
+    "class/src/elements/htmlelement.js~HtmlElement.html#instance-get-bottom",
     "src/elements/htmlelement.js~HtmlElement#bottom",
     "member"
   ],

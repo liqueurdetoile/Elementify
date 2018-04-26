@@ -4656,7 +4656,7 @@
     "__docId__": 162,
     "kind": "file",
     "name": "src/elements/inputelement.js",
-    "content": "/**\n*  @file Input Element definition class\n*  @author  Liqueur de Toile <contact@liqueurdetoile.com>\n*  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}\n*/\n\nimport ObjectArray from 'dot-object-array';\nimport HtmlElement from 'elements/htmlelement';\nimport Q from 'query';\nimport uniqid from 'utilities/uniqid';\n\n/**\n*  InputElement is the common basic class wrapping all vanilla HTML inputs.\n*  It provides all properties and method to :\n*  - get/set Element value\n*  - reset Element value\n*  - validate Element value\n*\n*  @version 1.0.0\n*  @since 1.0.0\n*  @author Liqueur de Toile <contact@liqueurdetoile.com>\n*/\n\nexport default class InputElement extends HtmlElement {\n  /**\n  *  InputElement constructor\n  *  Node and options are passed through {@link Element} call.\n  *\n  *  If the Element have required or pattern atributes, validation\n  *  rules will be automatically set accordingly.\n  *\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  *  @private\n  *\n  *  @param {Element} node Input element\n  *  @param {KeyValueObject} options Options for the InputElement\n  *\n  *  Specific keys are :\n  *\n  *  - `value`: initial value of the Element\n  *  - `options`: list of options {value: text} for a select tag\n  *\n  *  @returns {InputElement}\n  *  @see https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement\n  */\n  constructor(node, options = {}) {\n    super(node, options);\n\n    /**\n    *  Rules for validation\n    *\n    *  @type {ObjectArray}\n    *  @since 1.0.0\n    */\n    this._rules = new ObjectArray();\n\n    /**\n    *  Errors after validation\n    *\n    *  @type {ObjectArray}\n    *  @since 1.0.0\n    */\n    this._errors = new ObjectArray();\n\n    // Add input type to Textarea and Select for further switch operations\n    if (this.node.nodeName === 'TEXTAREA') this.type = 'textarea';\n    if (this.node.nodeName === 'SELECT') {\n      this.type = 'select';\n      // Generates options items\n      if (options.options) {\n        for (let key in options.options) {\n          this.append(`<option value=\"${key}\" ${key === options.value ? 'selected' : ''}>` +\n                      `${options.options[key]}` +\n                      '</option>');\n        }\n      }\n    }\n\n    // Set value\n    if (options.value !== undefined) {\n      this.value = this.node.defaultValue = options.value;\n    }\n\n    // Set validation rules\n    if (this.attr('required')) this.rule('required');\n    if (this.attr('pattern')) this.rule('patternAttribute', this.attr('pattern'), null, true);\n    this.rule(this.attr('type'));\n  }\n\n  /**\n  *  Get a unique name\n  *  - `name`attribute value\n  *  - `id` attribute value if name not set\n  *  - A random unique id if both name and value are not set\n  *\n  *  @type {string}\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  */\n  get name() {\n    let name = this.node.name || this.node.id;\n\n    if (name === '') name = 'input-' + uniqid();\n    return name;\n  }\n\n  /**\n  *  Get standardized lowercased type attribute\n  *\n  *  @type {string}\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  */\n  get type() {\n    return (this.attr('type') || 'text').toLowerCase();\n  }\n\n  /**\n  *  Set input type attribute\n  *\n  *  @type {string}\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  */\n  set type(t) {\n    this.attr('type', t);\n  }\n\n  /**\n  *  Get value\n  *\n  *  It normalizes the behaviour for boolean inputs (radio & checkbox) :\n  *  - If no value attribute is set, it will return `true` or `false`\n  *  - If a value attribute is set, it will return undefined and will be\n  *  skipped in fields list if not checked or returns its value otherwise.\n  *\n  *  @type {boolean|string|undefined}\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  *  @todo\n  *  - Add more casting (all values are considered as string when extracted)\n  */\n  get value() {\n    var ret;\n\n    switch (this.type) {\n      case 'checkbox' :\n      case 'radio' :\n        if (typeof this.attr('value') !== 'undefined' && this.attr('value') !== null) {\n          ret = (this.node.checked ? this.attr('value') : undefined);\n        } else ret = this.node.checked ? 1 : 0;\n        break;\n      default:\n        ret = (this.node.value || '').trim();\n        break;\n    }\n    return ret;\n  }\n\n  /**\n  *  Set value\n  *\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  */\n  set value(val) {\n    val = (String(val)).trim();\n\n    switch (this.type) {\n      case 'textarea': // Update textarea content\n        this.element.value = val;\n        this.html(val);\n        break;\n      case 'select': // Validate value is an option\n        let o, n = 1;\n\n        while ((o = this.child(n++)).length && val !== o.value);\n        if (o.length) this.value = val;\n        break;\n      case 'checkbox' :\n      case 'radio' :\n        if (val === 'true' || val === 1 || val === '1') val = true;\n        if (val === 'false' || val === 0 || val === '0') val = false;\n        if (val === true || val === false) this.node.checked = val;\n        else this.element.value = val;\n        break;\n      default:\n        this.element.value = val;\n        break;\n    }\n  }\n\n  /**\n  *  Get/Set value. It's a chainable alias for the getter/setter\n  *  properties\n  *\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  *\n  *  @param {number|string} [v] Value to set\n  *  @returns {this|boolean|string|undefined}\n  *  @see {@link value}\n  */\n  val(v) {\n    if (typeof v !== 'undefined' && v !== null) {\n      this.value = v;\n      return this;\n    }\n    return this.value;\n  }\n\n  /**\n  *  Dirty state\n  *\n  *  Will be `true` if field value/state have changed\n  *  `false` otherwise\n  *\n  *  @type {boolean}\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  *  @see https://www.sitepoint.com/detect-html-form-changes/\n  */\n  get dirty() {\n    if (\n      this.type === 'checkbox' ||\n      this.type === 'radio'\n    ) return this.node.checked !== this.node.defaultChecked;\n    else if (this.type === 'select') {\n      let c = false, def = 0, o, ol, opt;\n\n      for (o = 0, ol = this.node.options.length; o < ol; o++) {\n        opt = this.node.options[o];\n        c = c || (opt.selected !== opt.defaultSelected);\n        if (opt.defaultSelected) def = o;\n      }\n      if (c && !this.node.multiple) c = (def !== this.node.selectedIndex);\n    }\n    return this.value !== this.node.defaultValue;\n  }\n\n  /**\n  *  Add a validation rule. Some presets are available :\n  *\n  *  - `required` : Value must be not empty. Add a `required` attribute to the Element\n  *  - `sameas` : Value must be the same than another field. __You must\n  *  provide a CSS Selector to query this field as second argument__\n  *  - `int` : Strict integer (only numbers)\n  *  - `number` : Decimal number (with dot). Change Element type attribute to `number`\n  *  - `email` : E-mail pattern. Change Element type attribute to `email`\n  *\n  *  For custom error messages when validating through browser or programmatically,\n  *  you can set the title attribute of the InputElement or provide a message when\n  *  creating rule.\n  *\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  *\n  *  @param {string}  name  Name of the rule (preset or custom)\n  *  @param {string|RegExp|CSSSelector|InputRuleCallback} [pattern]\n  *  - Presets will usually don't require this value\n  *  - For preset `sameas`, you must provide the required CSS selector\n  *  to find the other Element in order to check value.\n  *  - For custom rule, you can provide a valid RegExp object or a callback. Any other value\n  *  will be evaluated as a RegExp if fourth parameter is set to `true`.\n  *  @param {string}  [message]   A message linked to a non validated rule can be store here\n  *  @param {boolean} [evaluate = false]  If `true`, the method will try to evaluate\n  *  `pattern`parameter as a regular expression. If `false`, it will simply don't create rule\n  *  if `pattern` is not a {@link Function} or a {@link RegExp}.\n  *  @returns {this} Chainable\n  *  @todo  Add more presets\n  */\n  rule(name, pattern, message, evaluate = false) {\n    // Presets\n    switch (name) {\n      case 'required':\n        this._rules.push('required.pattern', /^(?!\\s*$).+/);\n        this._rules.push('required.message', message || 'FIELD_REQUIRED');\n        this.attr('required', 'required');\n        break;\n      case 'sameas':\n        this._rules.push('sameas.pattern', pattern);\n        this._rules.push('sameas.message', message || ('FIELD_NOT_MATCHING_' + pattern));\n        break;\n      case 'int':\n        this._rules.push('int.pattern', /^\\-?\\d+$/);\n        this._rules.push('int.message', message || 'FIELD_NOT_INT');\n        this.type = 'number';\n        break;\n      case 'number':\n        this._rules.push('number.pattern', /^\\-?\\d+\\.?\\d*$/);\n        this._rules.push('number.message', message || 'FIELD_NOT_DECIMAL');\n        this.type = 'number';\n        break;\n      case 'email':\n        this._rules.push('email.pattern', /^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$/); //eslint-disable-line\n        this._rules.push('email.message', message || 'FIELD_NOT_EMAIL');\n        this.type = 'email';\n        break;\n      default:\n        if (pattern instanceof Function) {\n          this._rules.push(name + '.callback', pattern);\n          this._rules.push(name + '.message', message);\n        } else if (pattern instanceof RegExp || evaluate) {\n          this._rules.push(name + '.pattern', new RegExp(pattern));\n          this._rules.push(name + '.message', message);\n        }\n    }\n    return this;\n  }\n\n  /**\n  *  Export rules set on the Element\n  *\n  *  @type {InputValidationRules}\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  */\n  get rules() {\n    return this._rules.data;\n  }\n\n  /**\n  *  Import rules set on the Element\n  *\n  *  @type {InputValidationRules}\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  */\n  set rules(rules) {\n    this._rules.import(rules);\n  }\n\n  /**\n  *  Validate the field against the rules. Any errors will be logged\n  *  in {@link errors} property.\n  *\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  *\n  *  @returns {boolean} `true`if field validates, `false` otherwise.\n  */\n  validate() {\n    // Reset errors\n    this._errors.empty();\n\n    // fix : Some older browsers may returns the placeholder as value\n    if (this.value === this.attr('placeholder')) this.value = '';\n\n    return this._rules.reduce(function (validate, v, k) {\n      if (k === 'sameas') validate = this.value === Q(v.pattern).value;\n      else if (v.pattern) validate = v.pattern.test(this.value);\n      else validate = v.callback.call(this, this);\n      if (!validate) this._errors.push(k, v.message || this.attr('title'));\n      return validate;\n    }.bind(this), true);\n  }\n\n  /**\n  *  Fetch validation errors\n  *\n  *  @type {Object}\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  */\n  get errors() {\n    return this._errors.data;\n  }\n\n  /**\n  *  Returns a label HtmlElement linked to this inputElement\n  *\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  *\n  *  @param {string} t Text for label\n  *  @param {KeyValueObject} o Options for HtmLElement\n  *  @returns {HtmlElement} Label\n  */\n  label(t, o) {\n    return Q(`+<label for=\"${this.name}\">${t}</label>`, o);\n  }\n\n  /**\n  *  Returns a tooltip HtmlElement linked to this inputElement\n  *\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  *\n  *  @param {$type} t Text for tooltip\n  *  @param {KeyValueObject} o Options for HtmLElement\n  *  @returns {HtmlElement} Tooltip\n  */\n  tooltip(t, o) {\n    return Q(`+<span data-for=\"${this.name}\" data-type=\"tooltip\">${t}</span>`, o);\n  }\n}\n",
+    "content": "/**\n*  @file Input Element definition class\n*  @author  Liqueur de Toile <contact@liqueurdetoile.com>\n*  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}\n*/\n\nimport ObjectArray from 'dot-object-array';\nimport HtmlElement from 'elements/htmlelement';\nimport Q from 'query';\nimport uniqid from 'utilities/uniqid';\n\n/**\n*  InputElement is the common basic class wrapping all vanilla HTML inputs.\n*  It provides all properties and method to :\n*  - get/set Element value\n*  - reset Element value\n*  - validate Element value\n*\n*  @version 1.0.0\n*  @since 1.0.0\n*  @author Liqueur de Toile <contact@liqueurdetoile.com>\n*/\n\nexport default class InputElement extends HtmlElement {\n  /**\n  *  InputElement constructor\n  *  Node and options are passed through {@link Element} call.\n  *\n  *  If the Element have required or pattern atributes, validation\n  *  rules will be automatically set accordingly.\n  *\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  *  @private\n  *\n  *  @param {Element} node Input element\n  *  @param {KeyValueObject} options Options for the InputElement\n  *\n  *  Specific keys are :\n  *\n  *  - `value`: initial value of the Element\n  *  - `options`: list of options {value: text} for a select tag\n  *\n  *  @returns {InputElement}\n  *  @see https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement\n  */\n  constructor(node, options = {}) {\n    super(node, options);\n\n    /**\n    *  Rules for validation\n    *\n    *  @type {ObjectArray}\n    *  @since 1.0.0\n    */\n    this._rules = new ObjectArray();\n\n    /**\n    *  Errors after validation\n    *\n    *  @type {ObjectArray}\n    *  @since 1.0.0\n    */\n    this._errors = new ObjectArray();\n\n    // Add input type to Textarea and Select for further switch operations\n    if (this.node.nodeName === 'TEXTAREA') this.type = 'textarea';\n    if (this.node.nodeName === 'SELECT') {\n      this.type = 'select';\n      // Generates options items\n      if (options.options) {\n        for (let key in options.options) {\n          this.append(`<option value=\"${key}\" ${key === options.value ? 'selected' : ''}>` +\n                      `${options.options[key]}` +\n                      '</option>');\n        }\n      }\n    }\n\n    // Set value\n    if (options.value !== undefined) {\n      this.value = this.node.defaultValue = options.value;\n    }\n\n    // Set validation rules\n    if (this.attr('required')) this.rule('required');\n    if (this.attr('pattern')) this.rule('patternAttribute', this.attr('pattern'), null, true);\n    this.rule(this.attr('type'));\n  }\n\n  /**\n  *  Get a unique name\n  *  - `name`attribute value\n  *  - `id` attribute value if name not set\n  *  - A random unique id if both name and value are not set\n  *\n  *  @type {string}\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  */\n  get name() {\n    let name = this.node.name || this.node.id;\n\n    if (name === '') name = 'input-' + uniqid();\n    return name;\n  }\n\n  /**\n  *  Get standardized lowercased type attribute\n  *\n  *  @type {string}\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  */\n  get type() {\n    return (this.attr('type') || 'text').toLowerCase();\n  }\n\n  /**\n  *  Set input type attribute\n  *\n  *  @type {string}\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  */\n  set type(t) {\n    this.attr('type', t);\n  }\n\n  /**\n  *  Get value\n  *\n  *  It normalizes the behaviour for boolean inputs (radio & checkbox) :\n  *  - If no value attribute is set, it will return `true` or `false`\n  *  - If a value attribute is set, it will return undefined and will be\n  *  skipped in fields list if not checked or returns its value otherwise.\n  *\n  *  @type {boolean|string|undefined}\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  *  @todo\n  *  - Add more casting (all values are considered as string when extracted)\n  */\n  get value() {\n    var ret;\n\n    switch (this.type) {\n      case 'checkbox' :\n      case 'radio' :\n        if (typeof this.attr('value') !== 'undefined' && this.attr('value') !== null) {\n          ret = (this.node.checked ? this.attr('value') : undefined);\n        } else ret = this.node.checked ? 1 : 0;\n        break;\n      default:\n        ret = (this.node.value || '').trim();\n        break;\n    }\n    return ret;\n  }\n\n  /**\n  *  Set value\n  *\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  */\n  set value(val) {\n    val = (String(val)).trim();\n\n    switch (this.type) {\n      case 'textarea': // Update textarea content\n        this.element.value = val;\n        this.html(val);\n        break;\n      case 'checkbox' :\n      case 'radio' :\n        if (val === 'true' || val === 1 || val === '1') val = true;\n        if (val === 'false' || val === 0 || val === '0') val = false;\n        if (val === true || val === false) this.node.checked = val;\n        else this.element.value = val;\n        break;\n      default:\n        this.element.value = val;\n        break;\n    }\n  }\n\n  /**\n  *  Get/Set value. It's a chainable alias for the getter/setter\n  *  properties\n  *\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  *\n  *  @param {number|string} [v] Value to set\n  *  @returns {this|boolean|string|undefined}\n  *  @see {@link value}\n  */\n  val(v) {\n    if (typeof v !== 'undefined' && v !== null) {\n      this.value = v;\n      return this;\n    }\n    return this.value;\n  }\n\n  /**\n  *  Dirty state\n  *\n  *  Will be `true` if field value/state have changed\n  *  `false` otherwise\n  *\n  *  @type {boolean}\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  *  @see https://www.sitepoint.com/detect-html-form-changes/\n  */\n  get dirty() {\n    if (\n      this.type === 'checkbox' ||\n      this.type === 'radio'\n    ) return this.node.checked !== this.node.defaultChecked;\n    else if (this.type === 'select') {\n      let c = false, def = 0, o, ol, opt;\n\n      for (o = 0, ol = this.node.options.length; o < ol; o++) {\n        opt = this.node.options[o];\n        c = c || (opt.selected !== opt.defaultSelected);\n        if (opt.defaultSelected) def = o;\n      }\n      if (c && !this.node.multiple) c = (def !== this.node.selectedIndex);\n    }\n    return this.value !== this.node.defaultValue;\n  }\n\n  /**\n  *  Add a validation rule. Some presets are available :\n  *\n  *  - `required` : Value must be not empty. Add a `required` attribute to the Element\n  *  - `sameas` : Value must be the same than another field. __You must\n  *  provide a CSS Selector to query this field as second argument__\n  *  - `int` : Strict integer (only numbers)\n  *  - `number` : Decimal number (with dot). Change Element type attribute to `number`\n  *  - `email` : E-mail pattern. Change Element type attribute to `email`\n  *\n  *  For custom error messages when validating through browser or programmatically,\n  *  you can set the title attribute of the InputElement or provide a message when\n  *  creating rule.\n  *\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  *\n  *  @param {string}  name  Name of the rule (preset or custom)\n  *  @param {string|RegExp|CSSSelector|InputRuleCallback} [pattern]\n  *  - Presets will usually don't require this value\n  *  - For preset `sameas`, you must provide the required CSS selector\n  *  to find the other Element in order to check value.\n  *  - For custom rule, you can provide a valid RegExp object or a callback. Any other value\n  *  will be evaluated as a RegExp if fourth parameter is set to `true`.\n  *  @param {string}  [message]   A message linked to a non validated rule can be store here\n  *  @param {boolean} [evaluate = false]  If `true`, the method will try to evaluate\n  *  `pattern`parameter as a regular expression. If `false`, it will simply don't create rule\n  *  if `pattern` is not a {@link Function} or a {@link RegExp}.\n  *  @returns {this} Chainable\n  *  @todo  Add more presets\n  */\n  rule(name, pattern, message, evaluate = false) {\n    // Presets\n    switch (name) {\n      case 'required':\n        this._rules.push('required.pattern', /^(?!\\s*$).+/);\n        this._rules.push('required.message', message || 'FIELD_REQUIRED');\n        this.attr('required', 'required');\n        break;\n      case 'sameas':\n        this._rules.push('sameas.pattern', pattern);\n        this._rules.push('sameas.message', message || ('FIELD_NOT_MATCHING_' + pattern));\n        break;\n      case 'int':\n        this._rules.push('int.pattern', /^\\-?\\d+$/);\n        this._rules.push('int.message', message || 'FIELD_NOT_INT');\n        this.type = 'number';\n        break;\n      case 'number':\n        this._rules.push('number.pattern', /^\\-?\\d+\\.?\\d*$/);\n        this._rules.push('number.message', message || 'FIELD_NOT_DECIMAL');\n        this.type = 'number';\n        break;\n      case 'email':\n        this._rules.push('email.pattern', /^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$/); //eslint-disable-line\n        this._rules.push('email.message', message || 'FIELD_NOT_EMAIL');\n        this.type = 'email';\n        break;\n      default:\n        if (pattern instanceof Function) {\n          this._rules.push(name + '.callback', pattern);\n          this._rules.push(name + '.message', message);\n        } else if (pattern instanceof RegExp || evaluate) {\n          this._rules.push(name + '.pattern', new RegExp(pattern));\n          this._rules.push(name + '.message', message);\n        }\n    }\n    return this;\n  }\n\n  /**\n  *  Export rules set on the Element\n  *\n  *  @type {InputValidationRules}\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  */\n  get rules() {\n    return this._rules.data;\n  }\n\n  /**\n  *  Import rules set on the Element\n  *\n  *  @type {InputValidationRules}\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  */\n  set rules(rules) {\n    this._rules.import(rules);\n  }\n\n  /**\n  *  Validate the field against the rules. Any errors will be logged\n  *  in {@link errors} property.\n  *\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  *\n  *  @returns {boolean} `true`if field validates, `false` otherwise.\n  */\n  validate() {\n    // Reset errors\n    this._errors.empty();\n\n    // fix : Some older browsers may returns the placeholder as value\n    if (this.value === this.attr('placeholder')) this.value = '';\n\n    return this._rules.reduce(function (validate, v, k) {\n      if (k === 'sameas') validate = this.value === Q(v.pattern).value;\n      else if (v.pattern) validate = v.pattern.test(this.value);\n      else validate = v.callback.call(this, this);\n      if (!validate) this._errors.push(k, v.message || this.attr('title'));\n      return validate;\n    }.bind(this), true);\n  }\n\n  /**\n  *  Fetch validation errors\n  *\n  *  @type {Object}\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  */\n  get errors() {\n    return this._errors.data;\n  }\n\n  /**\n  *  Returns a label HtmlElement linked to this inputElement\n  *\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  *\n  *  @param {string} t Text for label\n  *  @param {KeyValueObject} o Options for HtmLElement\n  *  @returns {HtmlElement} Label\n  */\n  label(t, o) {\n    return Q(`+<label for=\"${this.name}\">${t}</label>`, o);\n  }\n\n  /**\n  *  Returns a tooltip HtmlElement linked to this inputElement\n  *\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  *\n  *  @param {$type} t Text for tooltip\n  *  @param {KeyValueObject} o Options for HtmLElement\n  *  @returns {HtmlElement} Tooltip\n  */\n  tooltip(t, o) {\n    return Q(`+<span data-for=\"${this.name}\" data-type=\"tooltip\">${t}</span>`, o);\n  }\n}\n",
     "static": true,
     "longname": "F:/Projets/Elementify/src/elements/inputelement.js",
     "access": "public",
@@ -4930,7 +4930,7 @@
     ]
   },
   {
-    "__docId__": 176,
+    "__docId__": 175,
     "kind": "method",
     "name": "val",
     "memberof": "src/elements/inputelement.js~InputElement",
@@ -4943,7 +4943,7 @@
     "see": [
       "{@link value}"
     ],
-    "lineNumber": 212,
+    "lineNumber": 206,
     "since": "1.0.0",
     "version": "1.0.0",
     "unknown": [
@@ -4982,7 +4982,7 @@
     }
   },
   {
-    "__docId__": 178,
+    "__docId__": 177,
     "kind": "get",
     "name": "dirty",
     "memberof": "src/elements/inputelement.js~InputElement",
@@ -4995,7 +4995,7 @@
     "see": [
       "https://www.sitepoint.com/detect-html-form-changes/"
     ],
-    "lineNumber": 232,
+    "lineNumber": 226,
     "since": "1.0.0",
     "version": "1.0.0",
     "unknown": [
@@ -5014,7 +5014,7 @@
     }
   },
   {
-    "__docId__": 179,
+    "__docId__": 178,
     "kind": "method",
     "name": "rule",
     "memberof": "src/elements/inputelement.js~InputElement",
@@ -5024,7 +5024,7 @@
     "longname": "src/elements/inputelement.js~InputElement#rule",
     "access": "public",
     "description": " Add a validation rule. Some presets are available :\n\n - `required` : Value must be not empty. Add a `required` attribute to the Element\n - `sameas` : Value must be the same than another field. __You must\n provide a CSS Selector to query this field as second argument__\n - `int` : Strict integer (only numbers)\n - `number` : Decimal number (with dot). Change Element type attribute to `number`\n - `email` : E-mail pattern. Change Element type attribute to `email`\n\n For custom error messages when validating through browser or programmatically,\n you can set the title attribute of the InputElement or provide a message when\n creating rule.",
-    "lineNumber": 282,
+    "lineNumber": 276,
     "since": "1.0.0",
     "version": "1.0.0",
     "todo": [
@@ -5097,7 +5097,7 @@
     }
   },
   {
-    "__docId__": 183,
+    "__docId__": 182,
     "kind": "get",
     "name": "rules",
     "memberof": "src/elements/inputelement.js~InputElement",
@@ -5107,7 +5107,36 @@
     "longname": "src/elements/inputelement.js~InputElement#rules",
     "access": "public",
     "description": " Export rules set on the Element",
-    "lineNumber": 329,
+    "lineNumber": 323,
+    "since": "1.0.0",
+    "version": "1.0.0",
+    "unknown": [
+      {
+        "tagName": "@author",
+        "tagValue": "Liqueur de Toile <contact@liqueurdetoile.com>"
+      }
+    ],
+    "type": {
+      "nullable": null,
+      "types": [
+        "InputValidationRules"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 183,
+    "kind": "set",
+    "name": "rules",
+    "memberof": "src/elements/inputelement.js~InputElement",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/elements/inputelement.js~InputElement#rules",
+    "access": "public",
+    "description": " Import rules set on the Element",
+    "lineNumber": 335,
     "since": "1.0.0",
     "version": "1.0.0",
     "unknown": [
@@ -5127,35 +5156,6 @@
   },
   {
     "__docId__": 184,
-    "kind": "set",
-    "name": "rules",
-    "memberof": "src/elements/inputelement.js~InputElement",
-    "generator": false,
-    "async": false,
-    "static": false,
-    "longname": "src/elements/inputelement.js~InputElement#rules",
-    "access": "public",
-    "description": " Import rules set on the Element",
-    "lineNumber": 341,
-    "since": "1.0.0",
-    "version": "1.0.0",
-    "unknown": [
-      {
-        "tagName": "@author",
-        "tagValue": "Liqueur de Toile <contact@liqueurdetoile.com>"
-      }
-    ],
-    "type": {
-      "nullable": null,
-      "types": [
-        "InputValidationRules"
-      ],
-      "spread": false,
-      "description": null
-    }
-  },
-  {
-    "__docId__": 185,
     "kind": "method",
     "name": "validate",
     "memberof": "src/elements/inputelement.js~InputElement",
@@ -5165,7 +5165,7 @@
     "longname": "src/elements/inputelement.js~InputElement#validate",
     "access": "public",
     "description": " Validate the field against the rules. Any errors will be logged\n in {@link errors} property.",
-    "lineNumber": 355,
+    "lineNumber": 349,
     "since": "1.0.0",
     "version": "1.0.0",
     "unknown": [
@@ -5189,7 +5189,7 @@
     "params": []
   },
   {
-    "__docId__": 187,
+    "__docId__": 186,
     "kind": "get",
     "name": "errors",
     "memberof": "src/elements/inputelement.js~InputElement",
@@ -5199,7 +5199,7 @@
     "longname": "src/elements/inputelement.js~InputElement#errors",
     "access": "public",
     "description": " Fetch validation errors",
-    "lineNumber": 379,
+    "lineNumber": 373,
     "since": "1.0.0",
     "version": "1.0.0",
     "unknown": [
@@ -5218,7 +5218,7 @@
     }
   },
   {
-    "__docId__": 188,
+    "__docId__": 187,
     "kind": "method",
     "name": "label",
     "memberof": "src/elements/inputelement.js~InputElement",
@@ -5228,7 +5228,7 @@
     "longname": "src/elements/inputelement.js~InputElement#label",
     "access": "public",
     "description": " Returns a label HtmlElement linked to this inputElement",
-    "lineNumber": 394,
+    "lineNumber": 388,
     "since": "1.0.0",
     "version": "1.0.0",
     "unknown": [
@@ -5273,7 +5273,7 @@
     }
   },
   {
-    "__docId__": 189,
+    "__docId__": 188,
     "kind": "method",
     "name": "tooltip",
     "memberof": "src/elements/inputelement.js~InputElement",
@@ -5283,7 +5283,7 @@
     "longname": "src/elements/inputelement.js~InputElement#tooltip",
     "access": "public",
     "description": " Returns a tooltip HtmlElement linked to this inputElement",
-    "lineNumber": 409,
+    "lineNumber": 403,
     "since": "1.0.0",
     "version": "1.0.0",
     "unknown": [
@@ -5328,7 +5328,7 @@
     }
   },
   {
-    "__docId__": 190,
+    "__docId__": 189,
     "kind": "file",
     "name": "src/elements/windowelement.js",
     "content": "/**\n*  @file Window Element definition class\n*  @author  Liqueur de Toile <contact@liqueurdetoile.com>\n*  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}\n*/\n\nimport EventifiedElement from 'elements/eventifiedelement';\n\nexport default class WindowElement extends EventifiedElement {\n  constructor(options) {\n    super();\n\n    this.element = this.node = window;\n    this.length = 0;\n  }\n}\n",
@@ -5339,7 +5339,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 191,
+    "__docId__": 190,
     "kind": "class",
     "name": "WindowElement",
     "memberof": "src/elements/windowelement.js",
@@ -5358,7 +5358,7 @@
     ]
   },
   {
-    "__docId__": 192,
+    "__docId__": 191,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/elements/windowelement.js~WindowElement",
@@ -5372,7 +5372,7 @@
     "undocument": true
   },
   {
-    "__docId__": 193,
+    "__docId__": 192,
     "kind": "member",
     "name": "element",
     "memberof": "src/elements/windowelement.js~WindowElement",
@@ -5389,7 +5389,7 @@
     }
   },
   {
-    "__docId__": 194,
+    "__docId__": 193,
     "kind": "member",
     "name": "length",
     "memberof": "src/elements/windowelement.js~WindowElement",
@@ -5406,7 +5406,7 @@
     }
   },
   {
-    "__docId__": 195,
+    "__docId__": 194,
     "kind": "file",
     "name": "src/events/complete.js",
     "content": "/**\n*  @file Complete event for elementify\n*  @author  Liqueur de Toile <contact@liqueurdetoile.com>\n*  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}\n*/\n\n/**\n*  Returns a promise fullfilled when document is at complete state\n*  meaning all assets have been loaded\n*\n*  @since 1.0.0\n*  @version 1.0.0\n*  @author Liqueur de Toile <contact@liqueurdetoile.com>\n*\n*  @param {Function}  callback  Callback to be run when event fired\n*  @returns {undefined|Promise}\n*  @example\n*  // With promise\n*  complete().then(function() { console.log('Assets loaded !') });\n*\n*  // With callback\n*  complete(function() { console.log('Assets loaded !') });\n*\n*/\n\nexport default function complete(callback) {\n  function process(resolve, reject) {\n    if (document.readyState === 'complete') {\n      if (callback instanceof Function) callback();\n      resolve(true);\n    } else {\n      document.addEventListener('readystatechange', (ev) => {\n        if (document.readyState === 'complete') {\n          if (callback instanceof Function) callback(ev);\n          resolve(true);\n        }\n      });\n    }\n  }\n\n  if (typeof Promise !== 'undefined') return new Promise(process);\n  return process(()=>{}, ()=>{});\n}\n",
@@ -5417,7 +5417,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 196,
+    "__docId__": 195,
     "kind": "function",
     "name": "complete",
     "memberof": "src/events/complete.js",
@@ -5469,7 +5469,7 @@
     }
   },
   {
-    "__docId__": 197,
+    "__docId__": 196,
     "kind": "file",
     "name": "src/events/eventsmanager.js",
     "content": "/**\n*  @file Events manager class for elementify\n*  @author  Liqueur de Toile <contact@liqueurdetoile.com>\n*  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}\n*/\n\nimport ObjectArray from 'dot-object-array';\nimport Q from 'query';\n\n/**\n*  EventsManager class provide an object in order to\n*  easily track and manage user-defined events\n*  Eventified Elements\n*\n*  @version 1.0.0\n*  @since 1.0.0\n*  @author Liqueur de Toile <contact@liqueurdetoile.com>\n*  @see HtmlElement\n*/\n\nexport default class EventsManager {\n  /**\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @returns {EventsManager} Event manager\n  */\n  constructor() {\n    /**\n    *  Events storage\n    *\n    *  @type {ObjectArray}\n    *  @since 1.0.0\n    */\n    this.orm = new ObjectArray();\n  }\n\n  /**\n  *  Cleans events database from object that are not in DOM anymore.\n  *  This method is called each time the events manager is accessed\n  *\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  *\n  *  @returns {void}\n  */\n  clean() {\n    this.orm.forEach(function (v, k) {\n      if (!Q('[data-__id__=\"' + k + '\"]').length) this.orm.remove(k);\n    }.bind(this));\n  }\n\n  /**\n  *  Check if object have event, specific event or specific event/callback\n  *  given the `key` parameter value\n  *\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  *\n  *  @param {string} [key] All events if not provided or path to the event or event callback\n  *  in dotted way\n  *  @returns {boolean} `true` if result found\n  */\n  has(key) {\n    this.clean();\n    return this.orm.has(key);\n  }\n\n  /**\n  *  Add and event/callback\n  *\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  *\n  *  @param {string} key Event name\n  *  @param {Function} val Event callback\n  *  @param {string} pKey Context parent key (useless)\n  *  @returns {this} Chainable\n  */\n  push(key, val, pKey) {\n    this.clean();\n    this.orm.push(key, val, pKey);\n    return this;\n  }\n\n  /**\n  *  Fetch all events, specific event or specific event/callback\n  *  given the `key` paramater value\n  *\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  *\n  *  @param {string} [key] All events if not provided or path to the event or event callback\n  *  in dotted way\n  *  @returns {boolean} `true` if result found\n  */\n  pull(key) {\n    this.clean();\n    return this.orm.pull(key);\n  }\n\n  /**\n  *  Remove all events, specific event or specific event/callback\n  *  given the `key` paramater value\n  *\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  *\n  *  @param {string} [key] All events if not provided or path to the event or event callback\n  *  in dotted way\n  *  @returns {boolean} `true` if result found\n  */\n  remove(key) {\n    this.clean();\n    this.orm.remove(key);\n    return this;\n  }\n\n  /**\n  *  Iterates on all events, specific event or specific event/callback\n  *  given the `pKey` paramater value\n  *\n  *  @version 1.0.0\n  *  @since 1.0.0\n  *  @author Liqueur de Toile <contact@liqueurdetoile.com>\n  *\n  *  @param {Function}  cb  Callback for iteration\n  *  @param {string} [pKey] Context parent key\n  *  @returns {boolean} `true` if result found\n  */\n  forEach(cb, pKey) {\n    this.orm.forEach(cb, pKey);\n  }\n}\n",
@@ -5480,7 +5480,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 198,
+    "__docId__": 197,
     "kind": "class",
     "name": "EventsManager",
     "memberof": "src/events/eventsmanager.js",
@@ -5506,7 +5506,7 @@
     "interface": false
   },
   {
-    "__docId__": 199,
+    "__docId__": 198,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/events/eventsmanager.js~EventsManager",
@@ -5535,7 +5535,7 @@
     }
   },
   {
-    "__docId__": 200,
+    "__docId__": 199,
     "kind": "member",
     "name": "orm",
     "memberof": "src/events/eventsmanager.js~EventsManager",
@@ -5555,7 +5555,7 @@
     }
   },
   {
-    "__docId__": 201,
+    "__docId__": 200,
     "kind": "method",
     "name": "clean",
     "memberof": "src/events/eventsmanager.js~EventsManager",
@@ -5589,7 +5589,7 @@
     "params": []
   },
   {
-    "__docId__": 202,
+    "__docId__": 201,
     "kind": "method",
     "name": "has",
     "memberof": "src/events/eventsmanager.js~EventsManager",
@@ -5634,7 +5634,7 @@
     }
   },
   {
-    "__docId__": 203,
+    "__docId__": 202,
     "kind": "method",
     "name": "push",
     "memberof": "src/events/eventsmanager.js~EventsManager",
@@ -5699,7 +5699,7 @@
     }
   },
   {
-    "__docId__": 204,
+    "__docId__": 203,
     "kind": "method",
     "name": "pull",
     "memberof": "src/events/eventsmanager.js~EventsManager",
@@ -5744,7 +5744,7 @@
     }
   },
   {
-    "__docId__": 205,
+    "__docId__": 204,
     "kind": "method",
     "name": "remove",
     "memberof": "src/events/eventsmanager.js~EventsManager",
@@ -5789,7 +5789,7 @@
     }
   },
   {
-    "__docId__": 206,
+    "__docId__": 205,
     "kind": "method",
     "name": "forEach",
     "memberof": "src/events/eventsmanager.js~EventsManager",
@@ -5844,7 +5844,7 @@
     }
   },
   {
-    "__docId__": 207,
+    "__docId__": 206,
     "kind": "file",
     "name": "src/events/ready.js",
     "content": "/**\n*  @file Ready event for elementify\n*  @author  Liqueur de Toile <contact@liqueurdetoile.com>\n*  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}\n*/\n\n/**\n*  Returns a promise fullfilled when document is at interactive state\n*  meaning DOM is safe to manipulate\n*\n*  @since 1.0.0\n*  @version 1.0.0\n*  @author Liqueur de Toile <contact@liqueurdetoile.com>\n*\n*  @returns {Promise}\n*  @example\n*  ready().then(function() { console.log('Can manipulate DOM!') });\n*/\nexport default function ready(callback) {\n  function process(resolve, reject) {\n    if (document.readyState === 'interactive' || document.readyState === 'complete') {\n      if (callback instanceof Function) callback();\n      resolve(true);\n    } else {\n      document.addEventListener('readystatechange', (ev) => {\n        if (document.readyState === 'interactive') {\n          if (callback instanceof Function) callback(ev);\n          resolve(true);\n        }\n      });\n    }\n  }\n\n  if (typeof Promise !== 'undefined') return new Promise(process);\n  return process(()=>{}, ()=>{});\n}\n",
@@ -5855,7 +5855,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 208,
+    "__docId__": 207,
     "kind": "function",
     "name": "ready",
     "memberof": "src/events/ready.js",
@@ -5902,7 +5902,7 @@
     ]
   },
   {
-    "__docId__": 209,
+    "__docId__": 208,
     "kind": "file",
     "name": "src/index.js",
     "content": "/**\n*  @file Elementify main\n*  @author  Liqueur de Toile <contact@liqueurdetoile.com>\n*  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}\n*/\n\nimport load from 'load';\nimport Element from 'element';\nimport Collection from 'collection';\nimport Q from 'query';\nimport ready from 'events/ready';\nimport complete from 'events/complete';\nimport ObjectArray from 'dot-object-array';\nimport uniqid from 'utilities/uniqid';\n\nexport {load, Collection, Element, Q, ready, complete, ObjectArray, uniqid};\n",
@@ -5913,7 +5913,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 210,
+    "__docId__": 209,
     "kind": "file",
     "name": "src/load.js",
     "content": "/**\n*  @file Elementify main\n*  @author  Liqueur de Toile <contact@liqueurdetoile.com>\n*  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}\n*/\n\nimport Element from 'element';\nimport Collection from 'collection';\nimport Q from 'query';\n\n/**\n*  Load Elementify names exports into the global scope. Therefore,\n*  these functions and objects will be directly accessible.\n*\n*  You can personnalize the name of the Q function (and\n*  may try $ ;)\n*\n*  @since 1.0.0\n*  @version 1.0.0\n*  @author Liqueur de Toile <contact@liqueurdetoile.com>\n*  @license MIT {@https://github.com/liqueurdetoile/DotObjectArray/blob/master/LICENSE}\n*  @see {@link Q}\n*\n*  @params {String} [Qname='Q'] Name for Q [function]{@link Q} in the global scope.\n*/\n\nexport default function load(Qname = 'Q') {\n  window.Element = Element;\n  window.Collection = Collection;\n  window[Qname] = Q;\n}\n",
@@ -5924,7 +5924,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 211,
+    "__docId__": 210,
     "kind": "function",
     "name": "load",
     "memberof": "src/load.js",
@@ -5971,7 +5971,7 @@
     "return": null
   },
   {
-    "__docId__": 212,
+    "__docId__": 211,
     "kind": "file",
     "name": "src/query.js",
     "content": "/**\n*  @file Q function definition\n*  @author  Liqueur de Toile <contact@liqueurdetoile.com>\n*  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}\n*/\n\nimport Element from 'element';\nimport Collection from 'collection';\n\n/**\n*  The `Q` function can be used to create Elements,\n*  enhance nodes and query DOM or nodes. It's the swiss army knife\n*  of elementify\n*\n*  ### query syntax\n*\n*  `Q` will returns an empty collection if\n*  no elements are found with the given query. A single HtmLElement (or extended\n*  Form, FormElement) if there is only one result and a collection if\n*  there is more than one result.\n*\n*  In query mode, the first parameter must be a valid CSS query selector :\n*\n*  <ul>\n*  <li>#idname for single id search will trigger `getElementById`</li>\n*  <li>.classname for single class search will trigger `getElementsByClassName`</li>\n*  <li>@elementName for a single name attribute search will trigger `getElementsByName`</li>\n*  <li>=tagName for a single tag name search will trigger `getElementsByTagName`</li>\n*  </ul>\n*\n*  Any others queries will be treated through `querySelectorAll`. For single queries,\n*  using the above functions will generally be faster than falling down to `querySelectorAll`.\n*\n*  `Q` tweaks the query so you can perform id or name search in nodes that are not in DOM.\n*\n*  The second parameter let restrict the search to a node.\n*\n*  ### Creating and enhancing syntax\n*\n*  If the first parameter is empty, `Q` will return an HtmlElement with an\n*  underlying {@link DocumentFragment}.\n*  You can use `Q` as an alias for [Element constructor]{@link elementify.Element}\n*  with prepending a `+` on the string node description or providing\n*  a valid Element node created with `document.createElement()`.\n*\n*  Any element node provided to `Q` will be returned enhanced.\n*  Any HtmlElement or Collection will be returned as is.\n*\n*\n*  @since 1.0.0\n*  @version 1.0.0\n*  @author Liqueur de Toile <contact@liqueurdetoile.com>\n*\n*  @param {Element|Node|String} [s] Element definition or search query\n*  @param {Element|Node|String|ArrayObject} [e] Element options or search context\n*  @returns {Collection|HtmlElement}\n*/\nfunction Q(s, e) {\n  var q, r;\n\n  // Create/Enhance mode\n  if (typeof s === 'undefined') return new Element();\n  if (s.enhanced) return s;\n  if (s.nodeType || s === window) return new Element(s, e);\n  if (s[0] === '+') return new Element(s.slice(1), e);\n\n  // Query mode\n  if (typeof e === 'undefined') e = document;\n  else if (e.node) e = e.node;\n\n  // Tweak search if e not equal to document\n  if (e !== document) {\n    // Let ID search into a node\n    if (s[0] === '#') s = s.replace('#', '[id=\"') + '\"]';\n    // Let name search into a node\n    if (s[0] === '@') s = s.replace('@', '[name=\"') + '\"]';\n  }\n\n  try {\n    q = e[ {\n      '#': 'getElementById',\n      '.': 'getElementsByClassName',\n      '@': 'getElementsByName',\n      '=': 'getElementsByTagName'\n    }[ s[0] ] ](s.slice(1));\n  } catch (ex) {\n    try {\n      q = e.querySelectorAll(s);\n    } catch (ex) { throw new TypeError('Invalid CSS query Selector'); }\n  }\n\n  if (q === null) return new Element();\n\n  if (\n    typeof q !== 'undefined' &&\n    typeof q.length !== 'undefined' &&\n    q.nodeName !== 'FORM'\n  ) {\n    if (q.length > 1) {\n      r = new Collection();\n      r.query = s;\n      for (let i = 0; i < q.length; i++) r.push(new Element(q.item([i])));\n    } else if (q.length === 1) {\n      r = new Element(q.item([0]));\n    } else return new Element();\n  } else r = new Element(q);\n  return r;\n}\n\nexport default Q;\n",
@@ -5982,7 +5982,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 213,
+    "__docId__": 212,
     "kind": "function",
     "name": "Q",
     "memberof": "src/query.js",
@@ -6046,7 +6046,7 @@
     }
   },
   {
-    "__docId__": 214,
+    "__docId__": 213,
     "kind": "file",
     "name": "src/typedef.doc.js",
     "content": "/**\n*  @file Docs file for typedef\n*  @author  Liqueur de Toile <contact@liqueurdetoile.com>\n*  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}\n*/\n\n/**\n*  Any vanilla object that is on the form of a paired key/value structure :\n*\n*  @typedef {Object} KeyValueObject\n*  @example\n*  {\n*   key1: value1,\n*   key2: value2,\n*   [...],\n*   keyN: valueN\n*  }\n*/\n\n/**\n*  A read-only object that parses position and size informations about an HtmlElement.\n*  The position is relative to viewport. If you want absolute positionning on a page,\n*  you must also use scrollX and scrollY values\n*\n*  @typedef {Object|DOMRect} NodeMetrics\n*\n*  @property {Number} left  Left offset from viewport in pixels\n*  @property {Number} top  Top offset from viewport in pixels\n*  @property {Number} right  Right offset from viewport in pixels\n*  @property {Number} bottom  Bottom offset from viewport in pixels\n*  @property {Number} width  Width in pixels\n*  @property {Number} height  Height in pixels\n*  @property {Number} outerWidth  Outer width in pixels\n*  @property {Number} outerHeight  Outer height in pixels\n*  @property {Number} scrollX Offset of the viewport from left in pixels\n*  @property {Number} scrollY Offset of the viewport from top in pixels\n*/\n\n/**\n*  Object used to store the validation rules on an InputElement.\n*  \n*  @typedef {Object} InputValidationRules\n*  @property  {RegExp|CSSSelector}  pattern Pattern used for regexp or CSS Selector with `sameas`\n*  @property  {string}  message   Message stored with the rule (usually an error Key for i18n to user)\n*/\n\n/**\n*  This callback is used in forEach callback iteration on a Collection.\n*\n*  The callback is provided with two parameters :\n*  - element {{@link HtmlElement}} Current element in the iteration\n*  - index {Number}  Index of the current iterated element\n*\n*  @typedef {Function} ForEachCallback\n*/\n\n/**\n*  This callback is used in rule validation for InputElement.\n*\n*  The callback is provided with the InputElement context. You can then call\n*  `this.value` to fetch InputElement value.\n*  It __must__ return `true` if validates or `false` otherwise.\n*\n*  @typedef {Function} InputRuleCallback\n*  @example\n*  var i = new Element('<input type=\"text\">');\n*\n*  i.rule('myRule', function() {\n*     return this.value > 5;\n*  }, 'value must be over 5');\n*  \n*  i.value = 3;\n*  i.validate(); // returns false\n*  console.log(i.errors); // outputs {myRule: 'value must be over 5'}\n* \n*/\n\n/**\n*  @external {DOMRect} https://developer.mozilla.org/fr/docs/Web/API/DOMRect\n*/\n/**\n*  @external {Node} https://developer.mozilla.org/fr/docs/Web/API/Node\n*/\n/**\n*  @external {Element} https://developer.mozilla.org/fr/docs/Web/API/Element\n*/\n/**\n*  @external {ObjectArray} https://liqueurdetoile.github.io/DotObjectArray/\n*/\n/**\n*  @external {FormData} https://developer.mozilla.org/en-US/docs/Web/API/FormData\n*/\n/**\n*  @external {RegExp} https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp\n*/\n/**\n*  @external {CSSSelector} https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors\n*/\n/**\n*  @external {DocumentFragment} https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment\n*/\n",
@@ -6057,7 +6057,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 215,
+    "__docId__": 214,
     "kind": "typedef",
     "name": "KeyValueObject",
     "memberof": "src/typedef.doc.js",
@@ -6077,7 +6077,7 @@
     }
   },
   {
-    "__docId__": 216,
+    "__docId__": 215,
     "kind": "typedef",
     "name": "NodeMetrics",
     "memberof": "src/typedef.doc.js",
@@ -6197,7 +6197,7 @@
     }
   },
   {
-    "__docId__": 217,
+    "__docId__": 216,
     "kind": "typedef",
     "name": "InputValidationRules",
     "memberof": "src/typedef.doc.js",
@@ -6237,7 +6237,7 @@
     }
   },
   {
-    "__docId__": 218,
+    "__docId__": 217,
     "kind": "typedef",
     "name": "ForEachCallback",
     "memberof": "src/typedef.doc.js",
@@ -6254,7 +6254,7 @@
     }
   },
   {
-    "__docId__": 219,
+    "__docId__": 218,
     "kind": "typedef",
     "name": "InputRuleCallback",
     "memberof": "src/typedef.doc.js",
@@ -6274,7 +6274,7 @@
     }
   },
   {
-    "__docId__": 220,
+    "__docId__": 219,
     "kind": "external",
     "name": "DOMRect",
     "externalLink": "https://developer.mozilla.org/fr/docs/Web/API/DOMRect",
@@ -6285,7 +6285,7 @@
     "description": ""
   },
   {
-    "__docId__": 221,
+    "__docId__": 220,
     "kind": "external",
     "name": "Node",
     "externalLink": "https://developer.mozilla.org/fr/docs/Web/API/Node",
@@ -6296,7 +6296,7 @@
     "description": ""
   },
   {
-    "__docId__": 222,
+    "__docId__": 221,
     "kind": "external",
     "name": "Element",
     "externalLink": "https://developer.mozilla.org/fr/docs/Web/API/Element",
@@ -6307,7 +6307,7 @@
     "description": ""
   },
   {
-    "__docId__": 223,
+    "__docId__": 222,
     "kind": "external",
     "name": "ObjectArray",
     "externalLink": "https://liqueurdetoile.github.io/DotObjectArray/",
@@ -6318,7 +6318,7 @@
     "description": ""
   },
   {
-    "__docId__": 224,
+    "__docId__": 223,
     "kind": "external",
     "name": "FormData",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/FormData",
@@ -6329,7 +6329,7 @@
     "description": ""
   },
   {
-    "__docId__": 225,
+    "__docId__": 224,
     "kind": "external",
     "name": "RegExp",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
@@ -6340,7 +6340,7 @@
     "description": ""
   },
   {
-    "__docId__": 226,
+    "__docId__": 225,
     "kind": "external",
     "name": "CSSSelector",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors",
@@ -6351,7 +6351,7 @@
     "description": ""
   },
   {
-    "__docId__": 227,
+    "__docId__": 226,
     "kind": "external",
     "name": "DocumentFragment",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment",
@@ -6362,7 +6362,7 @@
     "description": ""
   },
   {
-    "__docId__": 228,
+    "__docId__": 227,
     "kind": "file",
     "name": "src/utilities/hash.js",
     "content": "/**\n*  @file Hashing text utility function\n*  @author  Liqueur de Toile <contact@liqueurdetoile.com>\n*  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}\n*/\n\n/**\n*  This function takes a string as argument\n*  and returns its hash.\n*\n*  Probavility of collision is rather high\n*\n*  @since 1.0.0\n*  @version 1.0.0\n*  @author Liqueur de Toile <contact@liqueurdetoile.com>\n*\n*  @param {string} text Text to process\n*  @returns {string} Hash\n*/\nexport default function (text) {\n  const verb = 'abcdefghijkl';\n  var hash = 0, i, chr, ret;\n\n  if (!text) return hash;\n  for (i = 0; i < text.length; i++) {\n    chr = text.charCodeAt(i);\n    hash = ((hash << 5) - hash) + chr;\n    hash |= 0; // Convert to 32bit integer\n  }\n\n  ret = verb.charAt(10); // Convert the integer into string\n  if (hash < 0) ret = verb.charAt(11);\n  hash = Math.abs(hash);\n  while (hash) {\n    i = hash % 10;\n    hash = (hash - i) / 10;\n    ret += verb.charAt(i);\n  }\n\n  return ret;\n}\n",
@@ -6373,7 +6373,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 229,
+    "__docId__": 228,
     "kind": "function",
     "name": "hash",
     "memberof": "src/utilities/hash.js",
@@ -6421,7 +6421,7 @@
     }
   },
   {
-    "__docId__": 230,
+    "__docId__": 229,
     "kind": "file",
     "name": "src/utilities/uniqid.js",
     "content": "/**\n*  @file Hashing text utility function\n*  @author  Liqueur de Toile <contact@liqueurdetoile.com>\n*  @license Apache-2.0 {@link https://www.apache.org/licenses/LICENSE-2.0}\n*/\n\n/**\n*  This function returns a unique identifier\n*\n*  @since 1.0.0\n*  @version 1.0.0\n*  @author Liqueur de Toile <contact@liqueurdetoile.com>\n*\n*  @param {string} [prefix] Prefix to prepend\n*  @param {boolean} [moreEntropy] Add more entropy to generator (slower)\n*  @see http://locutus.io/php/uniqid/\n*  @returns {string} Hash\n*/\n\nexport default function (prefix, moreEntropy) {\n  var retId;\n  var _formatSeed = function (seed, reqWidth) {\n    seed = parseInt(seed, 10).toString(16); // to hex str\n    if (reqWidth < seed.length) {\n      // so long we split\n      return seed.slice(seed.length - reqWidth);\n    }\n    if (reqWidth > seed.length) {\n      // so short we pad\n      return Array(1 + (reqWidth - seed.length)).join('0') + seed;\n    }\n    return seed;\n  };\n  var $global = (typeof window !== 'undefined' ? window : global);\n  var $locutus = $global.$locutus || {};\n\n  $locutus.php = $locutus.php || {};\n\n  if (typeof prefix === 'undefined') {\n    prefix = '';\n  }\n\n  if (!$locutus.php.uniqidSeed) {\n    // init seed with big random int\n    $locutus.php.uniqidSeed = Math.floor(Math.random() * 0x75bcd15);\n  }\n  $locutus.php.uniqidSeed++;\n  // start with prefix, add current milliseconds hex string\n  retId = prefix;\n  retId += _formatSeed(parseInt(new Date().getTime() / 1000, 10), 8);\n  // add seed hex string\n  retId += _formatSeed($locutus.php.uniqidSeed, 5);\n  if (moreEntropy) {\n    // for more entropy we add a float lower to 10\n    retId += (Math.random() * 10).toFixed(8).toString();\n  }\n  return retId;\n}\n",
@@ -6432,7 +6432,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 231,
+    "__docId__": 230,
     "kind": "function",
     "name": "uniqid",
     "memberof": "src/utilities/uniqid.js",
@@ -6525,7 +6525,7 @@
     "access": "public"
   },
   {
-    "__docId__": 232,
+    "__docId__": 231,
     "kind": "testFile",
     "name": "tests/collection.spec.js",
     "content": "import {Q, Collection} from 'index';\n\n/**\n*  @test {Collection}\n*/\ndescribe('Collection class', function () {\n  /**\n  *  @test {Collection#constructor}\n  */\n  describe('constructor', function () {\n    it('should return an empty collection', function () {\n      let i = new Collection();\n\n      i.should.be.instanceof(Collection);\n      i.length.should.equal(0);\n    });\n  });\n\n  /**\n  *  @test {Collection#push}\n  */\n  describe('push', function () {\n    it('should push an HtmlElement', function () {\n      let i = new Collection();\n      let e = Q('+div');\n\n      i.push(e);\n      i.length.should.equal(1);\n      i.elements[0].should.equal(e);\n    });\n\n    it('should push a node', function () {\n      let i = new Collection();\n      let e = document.createElement('div');\n\n      i.push(e);\n      i.length.should.equal(1);\n      i.elements[0].should.eql(Q(e));\n    });\n\n    it('should throw an exception', function () {\n      let i = new Collection();\n      let e = 'foo';\n\n      expect(i.push.bind(i, e)).to.throw('Only Element Object can be added to a collection of Elements');\n    });\n  });\n});\n",
@@ -6536,7 +6536,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 233,
+    "__docId__": 232,
     "kind": "test",
     "name": "describe0",
     "testId": 0,
@@ -6552,7 +6552,7 @@
     ]
   },
   {
-    "__docId__": 234,
+    "__docId__": 233,
     "kind": "test",
     "name": "describe1",
     "testId": 1,
@@ -6568,7 +6568,7 @@
     ]
   },
   {
-    "__docId__": 235,
+    "__docId__": 234,
     "kind": "test",
     "name": "it2",
     "testId": 2,
@@ -6581,7 +6581,7 @@
     "lineNumber": 11
   },
   {
-    "__docId__": 236,
+    "__docId__": 235,
     "kind": "test",
     "name": "describe3",
     "testId": 3,
@@ -6597,7 +6597,7 @@
     ]
   },
   {
-    "__docId__": 237,
+    "__docId__": 236,
     "kind": "test",
     "name": "it4",
     "testId": 4,
@@ -6610,7 +6610,7 @@
     "lineNumber": 23
   },
   {
-    "__docId__": 238,
+    "__docId__": 237,
     "kind": "test",
     "name": "it5",
     "testId": 5,
@@ -6623,7 +6623,7 @@
     "lineNumber": 32
   },
   {
-    "__docId__": 239,
+    "__docId__": 238,
     "kind": "test",
     "name": "it6",
     "testId": 6,
@@ -6636,7 +6636,7 @@
     "lineNumber": 41
   },
   {
-    "__docId__": 240,
+    "__docId__": 239,
     "kind": "testFile",
     "name": "tests/element.spec.js",
     "content": "import {Element} from 'index';\n\ndescribe('Element Class', function () {\n\n  var html = ['a', 'abbr', 'acronym', 'address', 'applet', 'h1'];\n  var formElements = ['input', 'select', 'button', 'textarea'];\n\n  it('should create a DocumentFragment HtmlElement in case of void input', function () {\n    var e = new Element();\n\n    e.node.nodeType.should.equal(11);\n  });\n\n  it('should create a DocumentFragment HtmlElement in case of silly string input', function () {\n    // var e = new Element('my silly input');\n    var e = new Element(null);\n\n    e.node.nodeType.should.equal(11);\n  });\n\n  html.forEach(function (tag) {\n    describe('HtmlElement creation : ' + tag, function () {\n      it('should create HtmlElement from ' + tag + ' string tag name', function () {\n        var e = new Element(tag);\n\n        e.enhanced.should.equal(true);\n        e.node.nodeName.should.equal(tag.toUpperCase());\n      });\n\n      it('should create HtmlElement from ' + tag + ' node', function () {\n        var e = new Element(document.createElement(tag));\n\n        e.enhanced.should.equal(true);\n        e.node.nodeName.should.equal(tag.toUpperCase());\n      });\n\n      it('should create HtmlElement from ' + tag + ' string', function () {\n        var e = new Element('<' + tag + '></' + tag + '>');\n\n        e.enhanced.should.equal(true);\n        e.node.nodeName.should.equal(tag.toUpperCase());\n      });\n\n      it('should create Collection from ' + tag + ' string', function () {\n        var e = new Element('<' + tag + '></' + tag + '><' + tag + '></' + tag + '>');\n\n        e.length.should.equal(2);\n      });\n\n      it('should returns same HtmlElement when HtmlElement given in arguments', function () {\n        var e = new Element(tag);\n        var f = new Element(e);\n\n        e.enhanced.should.equal(true);\n        (e === f).should.equal(true);\n      });\n\n      it('should returns same Collection when Collection given in arguments', function () {\n        var e = new Element('<' + tag + '></' + tag + '><' + tag + '></' + tag + '>');\n        var f = new Element(e);\n\n        (e === f).should.equal(true);\n      });\n    });\n  });\n\n  describe('Form creation', function () {\n    it('should create Form from string', function () {\n      var e = new Element('form');\n\n      expect(typeof e.validate).to.equal('function');\n      e.node.nodeName.should.equal('FORM');\n    });\n  });\n\n  formElements.forEach(function (tag) {\n    describe('FormElement creation : ' + tag, function () {\n      it('should create FormElement from ' + tag + ' string tag name', function () {\n        var e = new Element(tag);\n\n        e.node.nodeName.should.equal(tag.toUpperCase());\n        expect(typeof e.validate).to.equal('function');\n      });\n\n      it('should create FormElement from ' + tag + ' node', function () {\n        var e = new Element(document.createElement(tag));\n\n        e.node.nodeName.should.equal(tag.toUpperCase());\n        expect(typeof e.validate).to.equal('function');\n      });\n\n      it('should create FormElement from ' + tag + ' string', function () {\n        var e = new Element('<' + tag + '></' + tag + '>');\n\n        e.node.nodeName.should.equal(tag.toUpperCase());\n        expect(typeof e.validate).to.equal('function');\n      });\n\n      it('should create Collection from ' + tag + ' string', function () {\n        var e = new Element('<' + tag + '></' + tag + '><' + tag + '></' + tag + '>');\n\n        e.length.should.equal(2);\n      });\n\n      it('should returns same FormElement when FormElement given in arguments', function () {\n        var e = new Element(tag);\n        var f = new Element(e);\n\n        (e === f).should.equal(true);\n      });\n\n      it('should returns same Collection when Collection given in arguments', function () {\n        var e = new Element('<' + tag + '></' + tag + '><' + tag + '></' + tag + '>');\n        var f = new Element(e);\n\n        (e === f).should.equal(true);\n      });\n    });\n  });\n});\n",
@@ -6647,7 +6647,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 241,
+    "__docId__": 240,
     "kind": "test",
     "name": "describe7",
     "testId": 7,
@@ -6660,7 +6660,7 @@
     "lineNumber": 3
   },
   {
-    "__docId__": 242,
+    "__docId__": 241,
     "kind": "test",
     "name": "it8",
     "testId": 8,
@@ -6673,7 +6673,7 @@
     "lineNumber": 8
   },
   {
-    "__docId__": 243,
+    "__docId__": 242,
     "kind": "test",
     "name": "it9",
     "testId": 9,
@@ -6686,7 +6686,7 @@
     "lineNumber": 14
   },
   {
-    "__docId__": 244,
+    "__docId__": 243,
     "kind": "test",
     "name": "describe10",
     "testId": 10,
@@ -6698,7 +6698,7 @@
     "lineNumber": 22
   },
   {
-    "__docId__": 245,
+    "__docId__": 244,
     "kind": "test",
     "name": "it11",
     "testId": 11,
@@ -6710,7 +6710,7 @@
     "lineNumber": 23
   },
   {
-    "__docId__": 246,
+    "__docId__": 245,
     "kind": "test",
     "name": "it12",
     "testId": 12,
@@ -6722,7 +6722,7 @@
     "lineNumber": 30
   },
   {
-    "__docId__": 247,
+    "__docId__": 246,
     "kind": "test",
     "name": "it13",
     "testId": 13,
@@ -6734,7 +6734,7 @@
     "lineNumber": 37
   },
   {
-    "__docId__": 248,
+    "__docId__": 247,
     "kind": "test",
     "name": "it14",
     "testId": 14,
@@ -6746,7 +6746,7 @@
     "lineNumber": 44
   },
   {
-    "__docId__": 249,
+    "__docId__": 248,
     "kind": "test",
     "name": "it15",
     "testId": 15,
@@ -6759,7 +6759,7 @@
     "lineNumber": 50
   },
   {
-    "__docId__": 250,
+    "__docId__": 249,
     "kind": "test",
     "name": "it16",
     "testId": 16,
@@ -6772,7 +6772,7 @@
     "lineNumber": 58
   },
   {
-    "__docId__": 251,
+    "__docId__": 250,
     "kind": "test",
     "name": "describe17",
     "testId": 17,
@@ -6785,7 +6785,7 @@
     "lineNumber": 67
   },
   {
-    "__docId__": 252,
+    "__docId__": 251,
     "kind": "test",
     "name": "it18",
     "testId": 18,
@@ -6798,7 +6798,7 @@
     "lineNumber": 68
   },
   {
-    "__docId__": 253,
+    "__docId__": 252,
     "kind": "test",
     "name": "describe19",
     "testId": 19,
@@ -6810,7 +6810,7 @@
     "lineNumber": 77
   },
   {
-    "__docId__": 254,
+    "__docId__": 253,
     "kind": "test",
     "name": "it20",
     "testId": 20,
@@ -6822,7 +6822,7 @@
     "lineNumber": 78
   },
   {
-    "__docId__": 255,
+    "__docId__": 254,
     "kind": "test",
     "name": "it21",
     "testId": 21,
@@ -6834,7 +6834,7 @@
     "lineNumber": 85
   },
   {
-    "__docId__": 256,
+    "__docId__": 255,
     "kind": "test",
     "name": "it22",
     "testId": 22,
@@ -6846,7 +6846,7 @@
     "lineNumber": 92
   },
   {
-    "__docId__": 257,
+    "__docId__": 256,
     "kind": "test",
     "name": "it23",
     "testId": 23,
@@ -6858,7 +6858,7 @@
     "lineNumber": 99
   },
   {
-    "__docId__": 258,
+    "__docId__": 257,
     "kind": "test",
     "name": "it24",
     "testId": 24,
@@ -6871,7 +6871,7 @@
     "lineNumber": 105
   },
   {
-    "__docId__": 259,
+    "__docId__": 258,
     "kind": "test",
     "name": "it25",
     "testId": 25,
@@ -6884,7 +6884,7 @@
     "lineNumber": 112
   },
   {
-    "__docId__": 260,
+    "__docId__": 259,
     "kind": "testFile",
     "name": "tests/events.spec.js",
     "content": "import {ready, complete} from 'index';\n\n/**\n*  @test {ready}\n*/\ndescribe('Ready', function () {\n  it('Should run callback at interactive ready state', function (done) {\n    let spy = sinon.spy();\n\n    ready(() => spy());\n    ready(() => {\n      spy.called.should.be.true;\n      done();\n    });\n    spy.called.should.be.false;\n  });\n});\n\n/**\n*  @test {complete}\n*/\ndescribe('Complete', function () {\n  it('Should run callback at complete ready state', function (done) {\n    let spy = sinon.spy();\n\n    complete(() => spy());\n    complete(() => {\n      spy.called.should.be.true;\n      done();\n    });\n    spy.called.should.be.false;\n  });\n});\n",
@@ -6895,7 +6895,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 261,
+    "__docId__": 260,
     "kind": "test",
     "name": "describe26",
     "testId": 26,
@@ -6911,7 +6911,7 @@
     ]
   },
   {
-    "__docId__": 262,
+    "__docId__": 261,
     "kind": "test",
     "name": "it27",
     "testId": 27,
@@ -6924,7 +6924,7 @@
     "lineNumber": 7
   },
   {
-    "__docId__": 263,
+    "__docId__": 262,
     "kind": "test",
     "name": "describe28",
     "testId": 28,
@@ -6940,7 +6940,7 @@
     ]
   },
   {
-    "__docId__": 264,
+    "__docId__": 263,
     "kind": "test",
     "name": "it29",
     "testId": 29,
@@ -6953,7 +6953,7 @@
     "lineNumber": 23
   },
   {
-    "__docId__": 265,
+    "__docId__": 264,
     "kind": "testFile",
     "name": "tests/formelement.spec.js",
     "content": "import {Q, Element} from 'index';\r\nimport ObjectArray from 'dot-object-array';\r\n\r\n/**\r\n*  @test {FormElement}\r\n*/\r\ndescribe('FormElement', function () {\r\n  /**\r\n  *  @test {FormElement#constructor}\r\n  */\r\n  describe('Constructor', function () {\r\n    it('should return and empty FormElement', function () {\r\n      let f = new Element('form');\r\n\r\n      f.node.nodeName.should.equal('FORM');\r\n      f.node.method.should.equal('get');\r\n    });\r\n\r\n    it('should return a FormElement with Element method attribute set to post', function () {\r\n      let f = new Element('form', {method: 'post'});\r\n\r\n      f.node.nodeName.should.equal('FORM');\r\n      f.node.method.should.equal('post');\r\n    });\r\n  });\r\n\r\n  /**\r\n  *  @test {FormElement#field}\r\n  *  @test {FormElement#fields}\r\n  */\r\n  describe('Fields access', function () {\r\n    it('should find a field, even if the name is already used elsewhere', function () {\r\n      let f = new Element('form');\r\n      let fake = Q('+<input type=\"text\" name=\"fixture1\" value=\"fixtureFake\">');\r\n\r\n      f.append('<input type=\"text\" name=\"fixture1\" value=\"fixture1\">');\r\n      Q('body').append(f).append(fake);\r\n\r\n      f.field('fixture1').length.should.equal(1);\r\n      f.field('fixture1').value.should.equal('fixture1');\r\n\r\n      f.remove();\r\n      fake.remove();\r\n    });\r\n\r\n    it('should return a collection of fields of the form', function () {\r\n      let f = new Element('form');\r\n      let fake = Q('+<input type=\"text\" name=\"fixture1\" value=\"fixtureFake\">');\r\n\r\n      f.append('<input type=\"text\" name=\"fixture1\" value=\"fixture1\">');\r\n      f.append('<input type=\"text\" name=\"fixture2\" value=\"fixture2\">');\r\n      Q('body').append(f).append(fake);\r\n\r\n      f.fields.length.should.equal(2);\r\n      f.fields.elements[0].value.should.equal('fixture1');\r\n      f.fields.elements[1].value.should.equal('fixture2');\r\n\r\n      f.remove();\r\n      fake.remove();\r\n    });\r\n\r\n    it('should return a collection of fields and ignore fields with class form-ignore', function () {\r\n      let f = new Element('form');\r\n\r\n      f.append('<input type=\"text\" name=\"fixture1\" value=\"fixture1\">');\r\n      f.append('<input type=\"text\" name=\"fixture2\" value=\"fixture2\">');\r\n      f.append('<input type=\"text\" class=\"form-ignore\" name=\"fixture3\" value=\"fixture3\">');\r\n      Q('body').append(f);\r\n\r\n      f.fields.length.should.equal(2);\r\n      f.fields.elements[0].value.should.equal('fixture1');\r\n      f.fields.elements[1].value.should.equal('fixture2');\r\n\r\n      f.remove();\r\n    });\r\n  });\r\n\r\n  /**\r\n  *  @test {FormElement#dirty}\r\n  */\r\n  describe('Dirty', function () {\r\n    it('should return false if no field changed', function () {\r\n      let f = new Element('form');\r\n\r\n      f.append('<input type=\"text\" name=\"fixture1\" value=\"fixture1\">');\r\n      f.dirty.should.be.false;\r\n    });\r\n    it('should return true if field changed', function () {\r\n      let f = new Element('form');\r\n\r\n      f.append('<input type=\"text\" name=\"fixture1\" value=\"fixture1\">');\r\n      f.field('fixture1').value = 'fixtureX';\r\n      f.dirty.should.be.true;\r\n    });\r\n  });\r\n\r\n  /**\r\n  *  @test {FormElement#validate}\r\n  *  @test {FormElement.errors}\r\n  */\r\n  describe('Validate', function () {\r\n    it('should validate', function () {\r\n      let f = new Element('form');\r\n      let i = new Element('input', {required: 'required'});\r\n\r\n      f.append(i);\r\n      f.validate().should.be.false;\r\n      i.hasClass('field-not-validate').should.be.true;\r\n      i.hasClass('field-validate').should.be.false;\r\n      f._errors.length().should.equal(1);\r\n      i.value = 'a';\r\n      f.validate().should.be.true;\r\n      i.hasClass('field-not-validate').should.be.false;\r\n      i.hasClass('field-validate').should.be.true;\r\n    });\r\n  });\r\n\r\n  /**\r\n  *  @test {FormElement.data}\r\n  *  @test {FormElement.urlEncode}\r\n  *  @test {FormElement.formUrlEncode}\r\n  *  @test {FormElement.formData}\r\n  *  @test {FormElement.json}\r\n  */\r\n  describe('Data export and import', function () {\r\n    it('should export data to ObjectArray', function () {\r\n      let f = new Element('form');\r\n\r\n      f.append('<input type=\"text\" name=\"f1\" value=\"fixture1\">');\r\n      f.append('<input type=\"text\" name=\"f2\" value=\"fixture2\">');\r\n      f.datas.should.be.instanceof(ObjectArray);\r\n      f.datas.data.should.eql({f1: 'fixture1', f2: 'fixture2'});\r\n    });\r\n\r\n    it('should export data to ObjectArray with dotted keys', function () {\r\n      let f = new Element('form');\r\n\r\n      f.append('<input type=\"text\" name=\"fixture.f1\" value=\"fixture1\">');\r\n      f.append('<input type=\"text\" name=\"fixture.f2\" value=\"fixture2\">');\r\n      f.datas.should.be.instanceof(ObjectArray);\r\n      f.datas.data.should.eql({fixture: {f1: 'fixture1', f2: 'fixture2'}});\r\n    });\r\n\r\n    it('should export data to JSON', function () {\r\n      let f = new Element('form');\r\n\r\n      f.append('<input type=\"text\" name=\"f1\" value=\"fixture1\">');\r\n      f.append('<input type=\"text\" name=\"f2\" value=\"fixture2\">');\r\n      f.json.should.equal('{\"f1\":\"fixture1\",\"f2\":\"fixture2\"}');\r\n    });\r\n\r\n    it('should export data to JSON with dotted keys', function () {\r\n      let f = new Element('form');\r\n\r\n      f.append('<input type=\"text\" name=\"fixture.f1\" value=\"fixture1\">');\r\n      f.append('<input type=\"text\" name=\"fixture.f2\" value=\"fixture2\">');\r\n      f.json.should.equal('{\"fixture\":{\"f1\":\"fixture1\",\"f2\":\"fixture2\"}}');\r\n    });\r\n\r\n    it('should export data to urlEncode string', function () {\r\n      let f = new Element('form');\r\n\r\n      f.append('<input type=\"text\" name=\"f1\" value=\"fixture1\">');\r\n      f.append('<input type=\"text\" name=\"f2\" value=\"fixture2 space\">');\r\n      f.urlEncode.should.equal('f1=fixture1&f2=fixture2%20space');\r\n    });\r\n\r\n    it('should export data to formUrlEncode string', function () {\r\n      let f = new Element('form');\r\n\r\n      f.append('<input type=\"text\" name=\"f1\" value=\"fixture1\">');\r\n      f.append('<input type=\"text\" name=\"f2\" value=\"fixture2 space\">');\r\n      f.formUrlEncode.should.equal('f1=fixture1&f2=fixture2+space');\r\n    });\r\n\r\n    it('should import data into fields from JSON', function () {\r\n      let js = '{\"fixvoid\": true, \"f1\":\"fixture1\", \"f2\":\"fixture2\"}';\r\n      let f = new Element('form');\r\n\r\n      f.append('<input type=\"text\" name=\"f1\">');\r\n      f.append('<input type=\"text\" name=\"f2\">');\r\n      f.append('<input type=\"text\" name=\"f3\">');\r\n      f.json = js;\r\n      f.field('f1').value.should.equal('fixture1');\r\n      f.field('f2').value.should.equal('fixture2');\r\n      f.field('f3').value.should.equal('');\r\n    });\r\n\r\n    it('should import dotted keys data into fields from JSON', function () {\r\n      let js = '{\"fixvoid\": true,\"fixture\":{\"f1\":\"fixture1\",\"f2\":\"fixture2\"}}';\r\n      let f = new Element('form');\r\n\r\n      f.append('<input type=\"text\" name=\"fixture.f1\">');\r\n      f.append('<input type=\"text\" name=\"fixture.f2\">');\r\n      f.append('<input type=\"text\" name=\"fixture.f3\">');\r\n      f.json = js;\r\n      f.field('fixture.f1').value.should.equal('fixture1');\r\n      f.field('fixture.f2').value.should.equal('fixture2');\r\n      f.field('fixture.f3').value.should.equal('');\r\n    });\r\n\r\n    it('should throw an exception while import data into fields from JSON', function () {\r\n      let js = '\"fixvoid\": true,\"fixture\":{\"f1\":\"fixture1\",\"f2\":\"fixture2\"}}';\r\n      let f = new Element('form');\r\n\r\n      expect((function test() { f.json = js; })).to.throw(TypeError);\r\n    });\r\n  });\r\n\r\n  describe('Events management', function () {\r\n    it('should prevent submitting', function () {\r\n      let f = new Element('form');\r\n      let spy = sinon.spy();\r\n\r\n      f.on('submit', (ev) => {\r\n        ev.preventDefault();\r\n        spy();\r\n      });\r\n\r\n      Q('body').append(f);\r\n      f.fire('submit');\r\n      spy.called.should.be.true;\r\n      f.remove();\r\n    });\r\n  });\r\n\r\n  describe('Should find a form by id', function () {\r\n    it('should find form', function () {\r\n      let f = new Element('form', {\r\n        id: 'form-login'\r\n      });\r\n\r\n      Q(document.body).append(f);\r\n      Q('#form-login').should.eql(f);\r\n      f.remove();\r\n    });\r\n  });\r\n});\r\n",
@@ -6964,7 +6964,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 266,
+    "__docId__": 265,
     "kind": "test",
     "name": "describe30",
     "testId": 30,
@@ -6980,7 +6980,7 @@
     ]
   },
   {
-    "__docId__": 267,
+    "__docId__": 266,
     "kind": "test",
     "name": "describe31",
     "testId": 31,
@@ -6996,7 +6996,7 @@
     ]
   },
   {
-    "__docId__": 268,
+    "__docId__": 267,
     "kind": "test",
     "name": "it32",
     "testId": 32,
@@ -7009,7 +7009,7 @@
     "lineNumber": 12
   },
   {
-    "__docId__": 269,
+    "__docId__": 268,
     "kind": "test",
     "name": "it33",
     "testId": 33,
@@ -7022,7 +7022,7 @@
     "lineNumber": 19
   },
   {
-    "__docId__": 270,
+    "__docId__": 269,
     "kind": "test",
     "name": "describe34",
     "testId": 34,
@@ -7039,7 +7039,7 @@
     ]
   },
   {
-    "__docId__": 271,
+    "__docId__": 270,
     "kind": "test",
     "name": "it35",
     "testId": 35,
@@ -7052,7 +7052,7 @@
     "lineNumber": 32
   },
   {
-    "__docId__": 272,
+    "__docId__": 271,
     "kind": "test",
     "name": "it36",
     "testId": 36,
@@ -7065,7 +7065,7 @@
     "lineNumber": 46
   },
   {
-    "__docId__": 273,
+    "__docId__": 272,
     "kind": "test",
     "name": "it37",
     "testId": 37,
@@ -7078,7 +7078,7 @@
     "lineNumber": 62
   },
   {
-    "__docId__": 274,
+    "__docId__": 273,
     "kind": "test",
     "name": "describe38",
     "testId": 38,
@@ -7094,7 +7094,7 @@
     ]
   },
   {
-    "__docId__": 275,
+    "__docId__": 274,
     "kind": "test",
     "name": "it39",
     "testId": 39,
@@ -7107,7 +7107,7 @@
     "lineNumber": 82
   },
   {
-    "__docId__": 276,
+    "__docId__": 275,
     "kind": "test",
     "name": "it40",
     "testId": 40,
@@ -7120,7 +7120,7 @@
     "lineNumber": 88
   },
   {
-    "__docId__": 277,
+    "__docId__": 276,
     "kind": "test",
     "name": "describe41",
     "testId": 41,
@@ -7137,7 +7137,7 @@
     ]
   },
   {
-    "__docId__": 278,
+    "__docId__": 277,
     "kind": "test",
     "name": "it42",
     "testId": 42,
@@ -7150,7 +7150,7 @@
     "lineNumber": 102
   },
   {
-    "__docId__": 279,
+    "__docId__": 278,
     "kind": "test",
     "name": "describe43",
     "testId": 43,
@@ -7170,7 +7170,7 @@
     ]
   },
   {
-    "__docId__": 280,
+    "__docId__": 279,
     "kind": "test",
     "name": "it44",
     "testId": 44,
@@ -7183,7 +7183,7 @@
     "lineNumber": 126
   },
   {
-    "__docId__": 281,
+    "__docId__": 280,
     "kind": "test",
     "name": "it45",
     "testId": 45,
@@ -7196,7 +7196,7 @@
     "lineNumber": 135
   },
   {
-    "__docId__": 282,
+    "__docId__": 281,
     "kind": "test",
     "name": "it46",
     "testId": 46,
@@ -7209,7 +7209,7 @@
     "lineNumber": 144
   },
   {
-    "__docId__": 283,
+    "__docId__": 282,
     "kind": "test",
     "name": "it47",
     "testId": 47,
@@ -7222,7 +7222,7 @@
     "lineNumber": 152
   },
   {
-    "__docId__": 284,
+    "__docId__": 283,
     "kind": "test",
     "name": "it48",
     "testId": 48,
@@ -7235,7 +7235,7 @@
     "lineNumber": 160
   },
   {
-    "__docId__": 285,
+    "__docId__": 284,
     "kind": "test",
     "name": "it49",
     "testId": 49,
@@ -7248,7 +7248,7 @@
     "lineNumber": 168
   },
   {
-    "__docId__": 286,
+    "__docId__": 285,
     "kind": "test",
     "name": "it50",
     "testId": 50,
@@ -7261,7 +7261,7 @@
     "lineNumber": 176
   },
   {
-    "__docId__": 287,
+    "__docId__": 286,
     "kind": "test",
     "name": "it51",
     "testId": 51,
@@ -7274,7 +7274,7 @@
     "lineNumber": 189
   },
   {
-    "__docId__": 288,
+    "__docId__": 287,
     "kind": "test",
     "name": "it52",
     "testId": 52,
@@ -7287,7 +7287,7 @@
     "lineNumber": 202
   },
   {
-    "__docId__": 289,
+    "__docId__": 288,
     "kind": "test",
     "name": "describe53",
     "testId": 53,
@@ -7300,7 +7300,7 @@
     "lineNumber": 210
   },
   {
-    "__docId__": 290,
+    "__docId__": 289,
     "kind": "test",
     "name": "it54",
     "testId": 54,
@@ -7313,7 +7313,7 @@
     "lineNumber": 211
   },
   {
-    "__docId__": 291,
+    "__docId__": 290,
     "kind": "test",
     "name": "describe55",
     "testId": 55,
@@ -7326,7 +7326,7 @@
     "lineNumber": 227
   },
   {
-    "__docId__": 292,
+    "__docId__": 291,
     "kind": "test",
     "name": "it56",
     "testId": 56,
@@ -7339,7 +7339,7 @@
     "lineNumber": 228
   },
   {
-    "__docId__": 293,
+    "__docId__": 292,
     "kind": "testFile",
     "name": "tests/hash.spec.js",
     "content": "import hash from 'utilities/hash';\n\ndescribe('Hash utility function', function () {\n  it('should return 0 if no text as input', function () {\n    hash().should.equal(0);\n    hash('').should.equal(0);\n  });\n\n  it('should return hashed string', function () {\n    hash('a').should.equal('khj');\n  });\n});\n",
@@ -7350,7 +7350,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 294,
+    "__docId__": 293,
     "kind": "test",
     "name": "describe57",
     "testId": 57,
@@ -7363,7 +7363,7 @@
     "lineNumber": 3
   },
   {
-    "__docId__": 295,
+    "__docId__": 294,
     "kind": "test",
     "name": "it58",
     "testId": 58,
@@ -7376,7 +7376,7 @@
     "lineNumber": 4
   },
   {
-    "__docId__": 296,
+    "__docId__": 295,
     "kind": "test",
     "name": "it59",
     "testId": 59,
@@ -7389,7 +7389,7 @@
     "lineNumber": 9
   },
   {
-    "__docId__": 297,
+    "__docId__": 296,
     "kind": "testFile",
     "name": "tests/htmlelement.spec.js",
     "content": "import {Element} from 'index';\nimport {Q} from 'index';\n\ndescribe('HTMLElement Class', function () {\n  window.beforeEach(function () { // eslint-disable-line\n    let e = new Element('div', {\n      class: 'fixture',\n      id: 'fixture',\n      innerHTML: 'fixture'\n    });\n\n    document.body.appendChild(e.node);\n  });\n\n  window.afterEach(function () { // eslint-disable-line\n    Q('#fixture').remove();\n  });\n\n  describe('Constructor', function () {\n    it('should add attributes', function () {\n      let stringdiv = new Element('div', {\n        class: 'class1',\n        style: 'text-align:left; display:none'\n      });\n      let arraydiv = new Element('div', {\n        class: ['class1', 'class2'],\n        style: {\n          display: 'none',\n          padding: '20px',\n          marginLeft: '10em'\n        }\n      });\n\n      stringdiv.node.className.should.equal('class1');\n      stringdiv.style('text-align').should.equal('left');\n      stringdiv.style('display').should.equal('none');\n      arraydiv.node.className.should.equal('class1 class2');\n      arraydiv.style(['display', 'padding', 'marginLeft']).should.eql({\n        display: 'none',\n        padding: '20px',\n        marginLeft: '10em'\n      });\n      arraydiv.style('display').should.equal('none');\n      arraydiv.style('padding').should.equal('20px');\n      arraydiv.style('margin-left').should.equal('10em');\n    });\n  });\n\n  describe('forEach', function () {\n    it('should runs callback', function () {\n      Q('#fixture').forEach(function (el, i) {\n        el.node.id.should.equal('fixture');\n        i.should.equal(0);\n      });\n    });\n  });\n\n  describe('Attributes and Data Attributes', function () {\n    it('should set a single attribute', function () {\n      Q('#fixture').attr('fixture', 'fixture');\n      Q('#fixture').node.getAttribute('fixture').should.equal('fixture');\n    });\n    it('should get a single attribute', function () {\n      Q('#fixture').attr('fixture', 'fixture');\n      Q('#fixture').attr('fixture').should.equal('fixture');\n    });\n    it('should remove a single attribute', function () {\n      Q('#fixture').attr('fixture', null);\n      expect(Q('#fixture').node.getAttribute('fixture')).to.equal(null);\n    });\n    it('should create multiple attributes', function () {\n      Q('#fixture').attr({\n        fixture1: 'fixture1',\n        fixture2: 'fixture2',\n        fixture3: 'fixture3'\n      });\n      Q('#fixture').node.getAttribute('fixture1').should.equal('fixture1');\n      Q('#fixture').node.getAttribute('fixture2').should.equal('fixture2');\n      Q('#fixture').node.getAttribute('fixture2').should.equal('fixture2');\n    });\n    it('should get multiple attributes', function () {\n      Q('#fixture').attr({\n        fixture1: 'fixture1',\n        fixture2: 'fixture2',\n        fixture3: 'fixture3'\n      });\n      let r = Q('#fixture').attr(['fixture1', 'fixture2', 'fixture3']);\n\n      expect(r).to.eql({\n        fixture1: 'fixture1',\n        fixture2: 'fixture2',\n        fixture3: 'fixture3'\n      });\n    });\n    it('should edit multiple attributes', function () {\n      Q('#fixture').attr({\n        fixture1: 'fixture1',\n        fixture2: 'fixture2',\n        fixture3: 'fixture3'\n      });\n      Q('#fixture').attr({\n        fixture1: 'fixture1m',\n        fixture2: 'fixture2m',\n        fixture3: 'fixture3m'\n      });\n      Q('#fixture').node.getAttribute('fixture1').should.equal('fixture1m');\n      Q('#fixture').node.getAttribute('fixture2').should.equal('fixture2m');\n      Q('#fixture').node.getAttribute('fixture2').should.equal('fixture2m');\n    });\n    it('should remove multiple attributes', function () {\n      Q('#fixture').attr({\n        fixture1: 'fixture1',\n        fixture2: 'fixture2',\n        fixture3: 'fixture3'\n      });\n      Q('#fixture').attr({\n        fixture1: null,\n        fixture2: null,\n        fixture3: null\n      });\n      expect(Q('#fixture').node.getAttribute('fixture1')).to.equal(null);\n      expect(Q('#fixture').node.getAttribute('fixture2')).to.equal(null);\n      expect(Q('#fixture').node.getAttribute('fixture3')).to.equal(null);\n    });\n    it('should get all attributes', function () {\n      let r = Q('#fixture').attr();\n\n      r.should.eql({\n        class: 'fixture',\n        id: 'fixture'\n      });\n    });\n\n    it('should set a single data attribute', function () {\n      Q('#fixture').data('fixture', 'fixture');\n      Q('#fixture').node.getAttribute('data-fixture').should.equal('fixture');\n    });\n    it('should get a single data attribute', function () {\n      Q('#fixture').data('fixture', 'fixture');\n      Q('#fixture').data('fixture').should.equal('fixture');\n      expect(Q('#fixture').data('foo')).to.be.undefined;\n    });\n    it('should remove a single data attribute', function () {\n      Q('#fixture').data('fixture', null);\n      expect(Q('#fixture').node.getAttribute('data-fixture')).to.equal(null);\n    });\n    it('should set multiple data attributes', function () {\n      Q('#fixture').data({\n        fixture1: 'fixture1',\n        fixture2: 'fixture2',\n        fixture3: 'fixture3'\n      });\n      Q('#fixture').node.getAttribute('data-fixture1').should.equal('fixture1');\n      Q('#fixture').node.getAttribute('data-fixture2').should.equal('fixture2');\n      Q('#fixture').node.getAttribute('data-fixture2').should.equal('fixture2');\n    });\n    it('should get multiple data attributes', function () {\n      Q('#fixture').data({\n        fixture1: 'fixture1',\n        fixture2: 'fixture2',\n        fixture3: 'fixture3'\n      });\n      let r = Q('#fixture').data(['fixture1', 'fixture2', 'fixture3']);\n\n      expect(r).to.eql({\n        fixture1: 'fixture1',\n        fixture2: 'fixture2',\n        fixture3: 'fixture3'\n      });\n    });\n    it('should edit multiple data attributes', function () {\n      Q('#fixture').data({\n        fixture1: 'fixture1',\n        fixture2: 'fixture2',\n        fixture3: 'fixture3'\n      });\n      Q('#fixture').data({\n        fixture1: 'fixture1m',\n        fixture2: 'fixture2m',\n        fixture3: 'fixture3m'\n      });\n      Q('#fixture').node.getAttribute('data-fixture1').should.equal('fixture1m');\n      Q('#fixture').node.getAttribute('data-fixture2').should.equal('fixture2m');\n      Q('#fixture').node.getAttribute('data-fixture2').should.equal('fixture2m');\n    });\n    it('should remove multiple data attributes', function () {\n      Q('#fixture').data({\n        fixture1: 'fixture1',\n        fixture2: 'fixture2',\n        fixture3: 'fixture3'\n      });\n      Q('#fixture').data({\n        fixture1: null,\n        fixture2: null,\n        fixture3: null\n      });\n      expect(Q('#fixture').node.getAttribute('data-fixture1')).to.equal(null);\n      expect(Q('#fixture').node.getAttribute('data-fixture2')).to.equal(null);\n      expect(Q('#fixture').node.getAttribute('data-fixture3')).to.equal(null);\n    });\n    it('should get all data attributes', function () {\n      Q('#fixture').data({\n        id: 'id',\n        id2: 'id2'\n      });\n      let r = Q('#fixture').data();\n\n      r.should.eql({\n        id: 'id',\n        id2: 'id2'\n      });\n      Q('#fixture').data({\n        id: null,\n        id2: null\n      });\n    });\n  });\n\n  describe('Tree traversing', function () {\n    window.beforeEach(function () { // eslint-disable-line\n      let ul = new Element(\n        '<ul id=\"list\" class=\"list\">' +\n        '<li id=\"li11\"></li>' +\n        '<li id=\"li12\">' +\n          '<ul id=\"sublist\">' +\n            '<li id=\"li21\"></li>' +\n            '<li id=\"li22\" class=\"lisubsub\"></li>' +\n            '<li id=\"li23\" class=\"li23 lisubsub\"></li>' +\n          '</ul>' +\n        '</li>' +\n       '</ul>');\n\n      document.body.appendChild(ul.node);\n    });\n\n    window.afterEach(function () { // eslint-disable-line\n      Q('#list').remove();\n    });\n\n    describe('Element.parent and Element.parents', function () {\n      it('should find the first parent', function () {\n        Q('#li21').parent().node.id.should.equal('sublist');\n        Q('#li21').parent(1).node.id.should.equal('sublist');\n      });\n\n      it('should find the grand parent', function () {\n        Q('#li21').parent(2).node.id.should.equal('li12');\n      });\n\n      it('should find the grand grand parent', function () {\n        Q('#li21').parent(3).node.id.should.equal('list');\n      });\n\n      it('should return document', function () {\n        Q('#li21').parent(20).node.nodeType.should.equal(9);;\n      });\n\n      it('should find the parent with class \"list\"', function () {\n        Q('#li21').parents('.list').node.id.should.equal('list');\n        Q('#li21').parent('.list').node.id.should.equal('list');\n      });\n    });\n\n    describe('Element.child and Element.childs', function () {\n      it('should find the first child', function () {\n        Q('#list').child().node.id.should.equal('li11');\n        Q('#list').child(1).node.id.should.equal('li11');\n      });\n\n      it('should find the second child', function () {\n        Q('#list').child(2).node.id.should.equal('li12');\n      });\n\n      it('should return a DocumentFragment', function () {\n        Q('#list').child(3).node.nodeType.should.equal(11);;\n      });\n\n      it('should find the child with class \"li23\"', function () {\n        Q('#list').childs('.li23').node.id.should.equal('li23');\n        Q('#list').child('.li23').node.id.should.equal('li23');\n      });\n\n      it('should find the childs with class \"lisubsub\"', function () {\n        let r = Q('#list').child('.lisubsub');\n\n        r.length.should.equal(2);\n        r.elements[0].node.id.should.equal('li22');\n        r.elements[1].node.id.should.equal('li23');\n      });\n    });\n\n    describe('Element.previousSibling and Element.previousSiblings', function () {\n      it('should find the previous sibling', function () {\n        Q('#li23').previousSibling().node.id.should.equal('li22');\n        Q('#li23').previousSibling(1).node.id.should.equal('li22');\n      });\n\n      it('should find the second previous sibling', function () {\n        Q('#li23').previousSibling(2).node.id.should.equal('li21');\n      });\n\n      it('should return a DocumentFragment', function () {\n        Q('#li23').previousSibling(3).node.nodeType.should.equal(11);;\n      });\n\n      it('should find the previous sibling with class \"lisubsub\"', function () {\n        Q('#li23').previousSibling('.lisubsub').node.id.should.equal('li22');\n        Q('#li23').previousSiblings('.lisubsub').node.id.should.equal('li22');\n      });\n    });\n\n    describe('Element.nextSibling and Element.nextSiblings', function () {\n      it('should find the next sibling', function () {\n        Q('#li21').nextSibling().node.id.should.equal('li22');\n        Q('#li21').nextSibling(1).node.id.should.equal('li22');\n      });\n\n      it('should find the second next sibling', function () {\n        Q('#li21').nextSibling(2).node.id.should.equal('li23');\n      });\n\n      it('should return a DocumentFragment', function () {\n        Q('#li21').nextSibling(3).node.nodeType.should.equal(11);;\n      });\n\n      it('should find the next sibling with class \"lisubsub\"', function () {\n        Q('#li21').nextSibling('.lisubsub').node.id.should.equal('li22');\n        Q('#li21').nextSiblings('.lisubsub').node.id.should.equal('li22');\n      });\n    });\n  });\n\n  describe('DOM manipulations', function () {\n    describe('Append', function () {\n      it('should append tag to existing dom element', function () {\n        Q('#fixture').append('span');\n        Q('#fixture').child().node.nodeName.should.equal('SPAN');\n        Q('#fixture').empty();\n      });\n      it('should append string as node to existing dom element', function () {\n        Q('#fixture').append('<span id=\"span\"></span>');\n        Q('#fixture').child().node.id.should.equal('span');\n        Q('#fixture').empty();\n      });\n      it('should append node to existing dom element', function () {\n        Q('#fixture').append(document.createElement('span'));\n        Q('#fixture').child().node.nodeName.should.equal('SPAN');\n        Q('#fixture').empty();\n      });\n      it('should append element to existing dom element', function () {\n        Q('#fixture').append(new Element('span'));\n        Q('#fixture').child().node.nodeName.should.equal('SPAN');\n        Q('#fixture').empty();\n      });\n      it('should append tag to documentFragment', function () {\n        let f = new Element();\n\n        f.append('span');\n        f.child().node.nodeName.should.equal('SPAN');\n      });\n    });\n\n    describe('Prepend', function () {\n      it('should prepend tag to existing dom element', function () {\n        Q('#fixture').prepend('span');\n        Q('#fixture').child().node.nodeName.should.equal('SPAN');\n        Q('#fixture').empty();\n      });\n\n      it('should prepend tag to existing dom element', function () {\n        Q('#fixture').append('div');\n        Q('#fixture').prepend('span');\n        Q('#fixture').child().node.nodeName.should.equal('SPAN');\n        Q('#fixture').empty();\n      });\n    });\n\n    describe('Before', function () {\n      it('should insert before', function () {\n        Q('#fixture').prepend('span');\n        Q('#fixture').child().before('div');\n        Q('#fixture').child().node.nodeName.should.equal('DIV');\n        Q('#fixture').empty();\n      });\n    });\n\n    describe('After', function () {\n      it('should insert after', function () {\n        Q('#fixture').append('span');\n        Q('#fixture').child().after('div');\n        Q('#fixture').child().node.nodeName.should.equal('SPAN');\n        Q('#fixture').child(2).node.nodeName.should.equal('DIV');\n        Q('#fixture').empty();\n      });\n    });\n\n    describe('Wrap', function () {\n      it('should wrap element and return wrapped element', function () {\n        Q('#fixture').append('span');\n        let test = Q('#fixture').child().wrap('div');\n\n        Q('#fixture').child().node.nodeName.should.equal('DIV');\n        Q('#fixture').child().child().node.nodeName.should.equal('SPAN');\n        test.node.nodeName.should.equal('SPAN');\n        Q('#fixture').empty();\n      });\n\n      it('should wrap element and return wrapping element', function () {\n        Q('#fixture').append('span');\n        let test = Q('#fixture').child().wrap('div', false);\n\n        Q('#fixture').child().node.nodeName.should.equal('DIV');\n        Q('#fixture').child().child().node.nodeName.should.equal('SPAN');\n        test.node.nodeName.should.equal('DIV');\n        Q('#fixture').empty();\n      });\n    });\n\n    describe('Unwrap', function () {\n      it('should unwrap element', function () {\n        Q('#fixture').append('span');\n        let span = Q('#fixture').child();\n\n        Q('#fixture').child().wrap('div');\n        span.unwrap();\n        Q('#fixture').child().node.nodeName.should.equal('SPAN');\n        Q('#fixture').empty();\n      });\n    });\n\n    describe('Empty', function () {\n      it('shoud empty element text node', function () {\n        Q('#fixture').html('test');\n        Q('#fixture').node.innerHTML.should.equal('test');\n        Q('#fixture').empty();\n        Q('#fixture').node.innerHTML.should.equal('');\n      });\n\n      it('shoud empty element nodes', function () {\n        Q('#fixture').append('div');\n        Q('#fixture').append('div');\n        Q('#fixture').append('div');\n        Q('#fixture').childs('div').length.should.equal(3);\n        Q('#fixture').empty();\n        Q('#fixture').node.innerHTML.should.equal('');\n      });\n    });\n\n    describe('Remove', function () {\n      it('should remove element from DOM', function () {\n        Q('#fixture').after('div');\n        let div = Q('#fixture').nextSibling();\n\n        div.isInDom.should.equal(true);\n        div.remove();\n        div.isInDom.should.equal(false);\n      });\n    });\n  });\n\n  describe('Content, cloning and informations', function () {\n    describe('html', function () {\n      it('should get the html content', function () {\n        Q('#fixture').html().should.equal('fixture');\n      });\n      it('should set the html content', function () {\n        Q('#fixture').after('div');\n        let div = Q('#fixture').nextSibling();\n\n        div.html('test');\n        div.node.innerHTML.should.equal('test');\n        div.remove();\n      });\n    });\n\n    describe('outerHTML', function () {\n      it('should get the outerHTML content', function () {\n        Q('#fixture').outerHTML.should.equal('<div class=\"fixture\" id=\"fixture\">fixture</div>');\n      });\n    });\n\n    describe('clone', function () {\n      it('should create a clone', function () {\n        Q('#fixture').empty().append('div');\n        Q('#fixture').child().append('<div class=\"1\"></div><div class=\"2\"></div>');\n\n        let clone = Q('#fixture').child().clone();\n\n        Q('#fixture').append(clone);\n        Q('#fixture').child(1).html().should.equal(Q('#fixture').child(2).html());\n        clone.child().removeClass('1');\n        Q('#fixture').child(1).html().should.not.equal(Q('#fixture').child(2).html());\n      });\n    });\n\n    describe('shallow', function () {\n      it('should create a shallow copy', function () {\n        Q('#fixture').empty().append('div');\n        Q('#fixture').child().append('<div class=\"1\"></div><div class=\"2\"></div>');\n        let clone = Q('#fixture').child().shallow();\n\n        Q('#fixture').append(clone);\n        Q('#fixture').child(2).html().should.equal('');\n      });\n    });\n\n    describe('isInDom', function () {\n      it('should be true if is in dom', function () {\n        let div = new Element('div');\n\n        div.isInDom.should.equal(false);\n        Q('#fixture').append(div);\n        div.isInDom.should.equal(true);\n        Q('#fixture').empty();\n      });\n    });\n\n    describe('root', function () {\n      it('should return the root object container of the element', function () {\n        let div = new Element('div');\n\n        expect(div.root).to.equal(div.node);\n        document.body.appendChild(div.node);\n        expect(div.root).to.equal(document);\n        div.remove();\n      });\n    });\n  });\n\n  describe('Styles and display functions', function () {\n    describe('Styles', function () {\n      it('should return node style properties', function () {\n        Q('#fixture').styles.should.eql(getComputedStyle(document.getElementById('fixture')));\n      });\n    });\n    describe('Style', function () {\n      it('should return the initial style properties values', function () {\n        let div = Q('+div', {\n          style: {\n            color: 'red',\n            margin: '1em'\n          }\n        });\n\n        expect(div.style()).to.eql({color: 'red', margin: '1em'});\n        expect(div.style('color')).to.equal('red');\n        expect(div.style('unknown')).to.equal(undefined);\n        expect(div.style(['color', 'margin'])).to.eql({color: 'red', margin: '1em'});\n      });\n\n      it('should set style properties', function () {\n        let div = Q('+div');\n\n        div.style('background-color', 'red');\n        div.node.style.backgroundColor.should.equal('red');\n        div.style({backgroundColor: 'yellow', margin: '1em'});\n        div.node.style.backgroundColor.should.equal('yellow');\n        div.node.style.margin.should.equal('1em');\n        div.style({align: 'left'}, true).style().should.eql({align: 'left'});\n        expect(div.style(56)).to.equal(undefined);\n      });\n    });\n    describe('Visible, display, hide, show, toggle', function () {\n      it('should return false for an element not in DOM', function () {\n        let div = Q('+div');\n\n        expect(div.visible).to.equal(false);\n      });\n      it('should return true/false for an element in DOM', function () {\n        let div = Q('+div', {id: 'visible-fixture'});\n\n        document.body.appendChild(div.node);\n        expect(div.visible).to.equal(true);\n        div.display('none');\n        expect(div.visible).to.equal(false);\n        div.show();\n        expect(div.visible).to.equal(true);\n        div.hide();\n        expect(div.visible).to.equal(false);\n        div.toggle();\n        expect(div.visible).to.equal(true);\n        div.toggle();\n        expect(div.visible).to.equal(false);\n        div.remove();\n      });\n    });\n    describe('Classes', function () {\n      it('should check class', function () {\n        let div = Q('+div', {class: 'one two'});\n\n        div.hasClass('one').should.equal(true);\n        div.hasClass('one two').should.equal(false);\n        div.hasClass('one', 'two').should.equal(true);\n        div.hasClass('three').should.equal(false);\n        div.hasClass('one three').should.equal(false);\n        div.hasClass('one', 'three').should.equal(false);\n        div.hasClass('one', 'two', 'three').should.equal(false);\n      });\n\n      it('should add class', function () {\n        let div = Q('+div');\n\n        div.addClass('one').hasClass('one').should.equal(true);\n        div.addClass('one', 'two').hasClass('one', 'two').should.equal(true);\n      });\n\n      it('should remove class', function () {\n        let div = Q('+div', { class: ['one', 'two', 'three']});\n\n        div.removeClass('one').hasClass('one').should.equal(false);\n        div.removeClass('four').should.eql(div);\n        div.removeClass('three', 'two').node.className.should.equal('');\n      });\n\n      it('should toggle class', function () {\n        let div = Q('+div');\n\n        div.toggleClass('one').hasClass('one').should.equal(true);\n        div.toggleClass('one').hasClass('one').should.equal(false);\n        div.toggleClass('one', 'two').hasClass('one', 'two').should.equal(true);\n        div.toggleClass('one', 'two').hasClass('one', 'two').should.equal(false);\n        div.toggleClass('one', 'two').hasClass('one', 'two').should.equal(true);\n        div.toggleClass('one').hasClass('two').should.equal(true);\n        div.toggleClass('one').hasClass('one', 'two').should.equal(true);\n      });\n    });\n  });\n\n  describe('NodeMetrics', function () {\n    describe('Position', function () {\n      it('should return NodeMetrics object', function () {\n        let i = Q('+div', {\n          id: 'pFixture',\n          style: {\n            position: 'absolute',\n            top: '50px',\n            left: '50px',\n            width: '100px',\n            height: '100px',\n            border: '1px solid #000'\n          }\n        });\n\n        expect(i.position).to.be.an('object')\n          .to.have.all.keys('left', 'right', 'width', 'height', 'top', 'bottom', 'scrollX', 'scrollY');\n        i.position.should.eql({\n          left: undefined,\n          right: undefined,\n          width: undefined,\n          top: undefined,\n          bottom: undefined,\n          height: undefined,\n          scrollX: undefined,\n          scrollY: undefined\n        });\n        Q('=body').append(i);\n        i.position.should.contain({\n          left: 50,\n          top: 50,\n          width: 100,\n          height: 100\n        });\n      });\n\n      it('should set object position', function () {\n        Q('#pFixture').left = null;\n        Q('#pFixture').right = 50;\n        Q('#pFixture').position.should.contain({\n          right: 50,\n          top: 50,\n          width: 100,\n          height: 100\n        });\n      });\n    });\n  });\n\n  describe('Events', function () {\n    describe('Update events manager', function () {\n      var i, spy1, spy2, spy3;\n\n      window.beforeEach(function () {\n        i = Q('+div');\n        spy1 = () => {this.name = 'spy1';};\n        spy2 = () => {this.name = 'spy2';};\n        spy3 = () => {this.name = 'spy3';};\n\n        Q('body').append(i);\n        i.on('click', spy1);\n        i.on('click', spy2);\n        i.on('mouseover', spy3);\n      });\n\n      window.afterEach(function () {\n        i.remove();\n      });\n\n      it('should remove all listeners when element removed from DOM', function () {\n        i.remove();\n        i.hasEvent().should.be.false;\n      });\n\n      it('should remove all listeners when calling off()', function () {\n        i.off();\n        i.hasEvent().should.be.false;\n      });\n\n      it('should remove all clicks events when calling off(\\'click\\')', function () {\n        i.off('click');\n        i.hasEvent('click').should.be.false;\n        i.hasEvent('mouseover').should.be.true;\n      });\n\n      it('should remove only one click event when calling off(\\'click\\', spy1)', function () {\n        i.off('click', spy1);\n        i.hasEvent('click', spy1).should.be.false;\n        i.hasEvent('click', spy2).should.be.true;\n        i.hasEvent('mouseover').should.be.true;\n      });\n    });\n\n    describe('Native events - Single Element', function () {\n      var i, spy1, spy2, spy3, f1, f2, f3;\n\n      window.beforeEach(function () {\n        i = Q('+div');\n        spy1 = sinon.spy();\n        spy2 = sinon.spy();\n        spy3 = sinon.spy();\n        f1 = function () { spy1(); };\n        f2 = function () { spy2(); };\n        f3 = function () { spy3(); };\n\n        Q('body').append(i);\n      });\n\n      window.afterEach(function () {\n        i.remove();\n      });\n\n      it('Should add single listener on single HtmlElement and fire it', function () {\n        i.on('click', spy1);\n        i.fire('click');\n        spy1.called.should.be.true;\n        expect(spy1.args[0][0]).to.be.instanceof(Event);\n        expect(spy1.args[0][0].eventName).to.equal('click');\n        expect(spy1.args[0][0].target).to.equal(i.node);\n      });\n\n      it('Should add multiple listeners (same event) on single HtmlElement and fire it', function () {\n        i.on('click', f1);\n        i.on('click', f2);\n        i.fire('click');\n        spy1.called.should.be.true;\n        spy2.called.should.be.true;\n      });\n\n      it('Should add multiple listeners (multiple events) on single HtmlElement and fire it', function () {\n        i.on('click', f1);\n        i.on('click', f2);\n        i.on('mouseover', f3);\n        i.fire('click');\n        spy1.called.should.be.true;\n        spy2.called.should.be.true;\n        spy3.called.should.be.false;\n        i.fire('mouseover');\n        spy1.calledTwice.should.be.false;\n        spy2.calledTwice.should.be.false;\n        spy3.called.should.be.true;\n      });\n\n      it('Should remove single listener on single HtmlElement (specific call)', function () {\n        i.on('click', spy1);\n        i.off('click', spy1);\n        i.fire('click');\n        spy1.called.should.be.false;\n      });\n\n      it('Should remove single listener on single HtmlElement (event call)', function () {\n        i.on('click', spy1);\n        i.off('click');\n        i.fire('click');\n        spy1.called.should.be.false;\n      });\n\n      it('Should remove single listener on single HtmlElement (all events call)', function () {\n        i.on('click', spy1);\n        i.off();\n        i.fire('click');\n        spy1.called.should.be.false;\n      });\n\n      it('Should remove one among multiple listener (same event) on single HtmlElement and fire it', function () {\n        i.on('click', f1);\n        i.on('click', f2);\n        i.on('mouseover', f3);\n\n        i.off('click', f1);\n        i.fire('click');\n        spy1.called.should.be.false;\n        spy2.called.should.be.true;\n        spy3.called.should.be.false;\n      });\n\n      it('Should remove all for event multiple listener (same event) on single HtmlElement and fire it', function () {\n        i.on('click', f1);\n        i.on('click', f2);\n        i.on('mouseover', f3);\n\n        i.off('click');\n        i.fire('click');\n        spy1.called.should.be.false;\n        spy2.called.should.be.false;\n        spy3.called.should.be.false;\n      });\n\n      it('Should remove all multiple listener (same event) on single HtmlElement and fire it', function () {\n        i.on('click', f1);\n        i.on('click', f2);\n        i.on('mouseover', f3);\n        i.off();\n        i.fire('click');\n        i.fire('mouseover');\n        spy1.called.should.be.false;\n        spy2.called.should.be.false;\n        spy3.called.should.be.false;\n      });\n    });\n\n    describe('Native events - Others tests', function () {\n      it('Should add listener on Collection', function () {\n        let i = new Element('<div id=\"d1\"></div><div id=\"d2\"></div>');\n        let spy = sinon.spy();\n\n        Q('body').append(i);\n        i.on('click', spy);\n        i.fire('click');\n        spy.calledTwice.should.be.true;\n      });\n\n      it('Should remove listener on Collection', function () {\n        let i = new Element('<div id=\"d1\"></div><div id=\"d2\"></div>');\n        let spy = sinon.spy();\n\n        Q('body').append(i);\n        i.on('click', spy);\n        i.off();\n        i.fire('click');\n        spy.called.should.be.false;\n      });\n\n      it('Should add listener at construct on single HtmlElement', function () {\n        let spy = sinon.spy();\n        let i = Q('+div', {\n          events: {\n            click: spy\n          }\n        });\n\n        Q('body').append(i);\n        i.on('click', spy);\n        i.fire('click');\n        spy.called.should.be.true;\n      });\n\n      it('Should add listener at construct on Collection', function () {\n        let spy = sinon.spy();\n        let i = new Element('<div id=\"d1\"></div><div id=\"d2\"></div>', {\n          events: {\n            click: spy\n          }\n        });\n\n        Q('body').append(i);\n        i.on('click', spy);\n        i.fire('click');\n        spy.calledTwice.should.be.true;\n      });\n\n      it('Should fire event on window', function () {\n        let spy1 = sinon.spy();\n        let spy2 = sinon.spy();\n        let i = Q('+div');\n\n        window.addEventListener('click', spy1);\n        i.on('click', spy2);\n        i.fire('click', window);\n        spy1.called.should.be.true;\n        spy2.called.should.be.false;\n      });\n\n      it('Should fire event on another element', function () {\n        let spy1 = sinon.spy();\n        let spy2 = sinon.spy();\n        let i = Q('+div');\n        let j = Q('+div');\n\n        Q('body').append(i).append(j);\n        j.on('click', spy1);\n        i.on('click', spy2);\n        i.fire('click', j);\n        spy1.called.should.be.true;\n        spy2.called.should.be.false;\n      });\n\n      it('Should check registered events/event/callback', function () {\n        let i = Q('+div');\n\n        i.on('click', function f1() {});\n        i.hasEvent().should.be.false; // Not in DOM\n\n        Q(document.body).append(i);\n        i.on('click', function f1() {});\n        i.on('click', function f2() {});\n        i.on('mouseover', function f1() {});\n\n        i.hasEvent().should.be.true;\n        i.hasEvent('click').should.be.true;\n        i.hasEvent('mouseout').should.be.false;\n        i.hasEvent('click', function f1() {}).should.be.true;\n        i.hasEvent('click', function f3() {}).should.be.false;\n      });\n\n      it('Should fetch registered events/event/callback', function () {\n        let i = Q('+div');\n        let f1 = () => {};\n        let f2 = () => {};\n\n        i.on('click', function f1() {});\n        i.hasEvent().should.be.false; // Not in DOM\n\n        Q(document.body).append(i);\n        i.on('click', f1);\n        i.on('click', f2);\n        i.on('mouseover', function f1() {});\n\n        i.getEvent().should.have.all.keys('click', 'mouseover');\n        i.getEvent('click').should.have.all.keys(i._callbackId(f1), i._callbackId(f2));\n      });\n    });\n  });\n\n  describe('Fade in and out', function () {\n    before(function () {\n      let e = new Element('div', {\n        id: 'fixture-fade',\n        style: {\n          position: 'fixed',\n          top: 0,\n          left: 0,\n          width: '50px',\n          height: '50px',\n          'background-color': '#000'\n        }\n      });\n\n      document.body.appendChild(e.node);\n    });\n\n    after(function () { //eslint-disable-line\n      Q('#fixture-fade').remove();\n    });\n\n    it('should return a Promise if available or this (fadeOut)', function () {\n      let p = Q('#fixture-fade').fadeOut();\n\n      if (typeof Promise !== 'undefined') expect(p).to.be.instanceof(Promise);\n      else expect(p).to.eql(Q('#fixture-fade'));\n    });\n\n    it('should return a Promise if available or this (fadeIn)', function () {\n      let p = Q('#fixture-fade').fadeIn();\n\n      if (typeof Promise !== 'undefined') expect(p).to.be.instanceof(Promise);\n      else expect(p).to.eql(Q('#fixture-fade'));\n    });\n\n    it('should fade out in 400ms', function (done) {\n      Q('#fixture-fade').fadeOut({}, el => {\n        expect(el.node.style.opacity).to.equal('0');\n        done();\n      });\n    });\n    it('should fade in in 400ms', function (done) {\n      Q('#fixture-fade').fadeIn({}, el => {\n        expect(el.node.style.opacity).to.equal('1');\n        done();\n      });\n    });\n    it('should fade out in 1000ms', function (done) {\n      Q('#fixture-fade').fadeOut({duration: 1000}, el => {\n        expect(el.node.style.opacity).to.equal('0');\n        done();\n      });\n    });\n    it('should fade in in 1000ms', function (done) {\n      Q('#fixture-fade').fadeIn({duration: 1000}, el => {\n        expect(el.node.style.opacity).to.equal('1');\n        done();\n      });\n    });\n  });\n});\n",
@@ -7400,7 +7400,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 298,
+    "__docId__": 297,
     "kind": "test",
     "name": "describe60",
     "testId": 60,
@@ -7413,7 +7413,7 @@
     "lineNumber": 4
   },
   {
-    "__docId__": 299,
+    "__docId__": 298,
     "kind": "test",
     "name": "describe61",
     "testId": 61,
@@ -7426,7 +7426,7 @@
     "lineNumber": 19
   },
   {
-    "__docId__": 300,
+    "__docId__": 299,
     "kind": "test",
     "name": "it62",
     "testId": 62,
@@ -7439,7 +7439,7 @@
     "lineNumber": 20
   },
   {
-    "__docId__": 301,
+    "__docId__": 300,
     "kind": "test",
     "name": "describe63",
     "testId": 63,
@@ -7452,7 +7452,7 @@
     "lineNumber": 49
   },
   {
-    "__docId__": 302,
+    "__docId__": 301,
     "kind": "test",
     "name": "it64",
     "testId": 64,
@@ -7465,7 +7465,7 @@
     "lineNumber": 50
   },
   {
-    "__docId__": 303,
+    "__docId__": 302,
     "kind": "test",
     "name": "describe65",
     "testId": 65,
@@ -7478,7 +7478,7 @@
     "lineNumber": 58
   },
   {
-    "__docId__": 304,
+    "__docId__": 303,
     "kind": "test",
     "name": "it66",
     "testId": 66,
@@ -7491,7 +7491,7 @@
     "lineNumber": 59
   },
   {
-    "__docId__": 305,
+    "__docId__": 304,
     "kind": "test",
     "name": "it67",
     "testId": 67,
@@ -7504,7 +7504,7 @@
     "lineNumber": 63
   },
   {
-    "__docId__": 306,
+    "__docId__": 305,
     "kind": "test",
     "name": "it68",
     "testId": 68,
@@ -7517,7 +7517,7 @@
     "lineNumber": 67
   },
   {
-    "__docId__": 307,
+    "__docId__": 306,
     "kind": "test",
     "name": "it69",
     "testId": 69,
@@ -7530,7 +7530,7 @@
     "lineNumber": 71
   },
   {
-    "__docId__": 308,
+    "__docId__": 307,
     "kind": "test",
     "name": "it70",
     "testId": 70,
@@ -7543,7 +7543,7 @@
     "lineNumber": 81
   },
   {
-    "__docId__": 309,
+    "__docId__": 308,
     "kind": "test",
     "name": "it71",
     "testId": 71,
@@ -7556,7 +7556,7 @@
     "lineNumber": 95
   },
   {
-    "__docId__": 310,
+    "__docId__": 309,
     "kind": "test",
     "name": "it72",
     "testId": 72,
@@ -7569,7 +7569,7 @@
     "lineNumber": 110
   },
   {
-    "__docId__": 311,
+    "__docId__": 310,
     "kind": "test",
     "name": "it73",
     "testId": 73,
@@ -7582,7 +7582,7 @@
     "lineNumber": 125
   },
   {
-    "__docId__": 312,
+    "__docId__": 311,
     "kind": "test",
     "name": "it74",
     "testId": 74,
@@ -7595,7 +7595,7 @@
     "lineNumber": 134
   },
   {
-    "__docId__": 313,
+    "__docId__": 312,
     "kind": "test",
     "name": "it75",
     "testId": 75,
@@ -7608,7 +7608,7 @@
     "lineNumber": 138
   },
   {
-    "__docId__": 314,
+    "__docId__": 313,
     "kind": "test",
     "name": "it76",
     "testId": 76,
@@ -7621,7 +7621,7 @@
     "lineNumber": 143
   },
   {
-    "__docId__": 315,
+    "__docId__": 314,
     "kind": "test",
     "name": "it77",
     "testId": 77,
@@ -7634,7 +7634,7 @@
     "lineNumber": 147
   },
   {
-    "__docId__": 316,
+    "__docId__": 315,
     "kind": "test",
     "name": "it78",
     "testId": 78,
@@ -7647,7 +7647,7 @@
     "lineNumber": 157
   },
   {
-    "__docId__": 317,
+    "__docId__": 316,
     "kind": "test",
     "name": "it79",
     "testId": 79,
@@ -7660,7 +7660,7 @@
     "lineNumber": 171
   },
   {
-    "__docId__": 318,
+    "__docId__": 317,
     "kind": "test",
     "name": "it80",
     "testId": 80,
@@ -7673,7 +7673,7 @@
     "lineNumber": 186
   },
   {
-    "__docId__": 319,
+    "__docId__": 318,
     "kind": "test",
     "name": "it81",
     "testId": 81,
@@ -7686,7 +7686,7 @@
     "lineNumber": 201
   },
   {
-    "__docId__": 320,
+    "__docId__": 319,
     "kind": "test",
     "name": "describe82",
     "testId": 82,
@@ -7699,7 +7699,7 @@
     "lineNumber": 219
   },
   {
-    "__docId__": 321,
+    "__docId__": 320,
     "kind": "test",
     "name": "describe83",
     "testId": 83,
@@ -7712,7 +7712,7 @@
     "lineNumber": 240
   },
   {
-    "__docId__": 322,
+    "__docId__": 321,
     "kind": "test",
     "name": "it84",
     "testId": 84,
@@ -7725,7 +7725,7 @@
     "lineNumber": 241
   },
   {
-    "__docId__": 323,
+    "__docId__": 322,
     "kind": "test",
     "name": "it85",
     "testId": 85,
@@ -7738,7 +7738,7 @@
     "lineNumber": 246
   },
   {
-    "__docId__": 324,
+    "__docId__": 323,
     "kind": "test",
     "name": "it86",
     "testId": 86,
@@ -7751,7 +7751,7 @@
     "lineNumber": 250
   },
   {
-    "__docId__": 325,
+    "__docId__": 324,
     "kind": "test",
     "name": "it87",
     "testId": 87,
@@ -7764,7 +7764,7 @@
     "lineNumber": 254
   },
   {
-    "__docId__": 326,
+    "__docId__": 325,
     "kind": "test",
     "name": "it88",
     "testId": 88,
@@ -7777,7 +7777,7 @@
     "lineNumber": 258
   },
   {
-    "__docId__": 327,
+    "__docId__": 326,
     "kind": "test",
     "name": "describe89",
     "testId": 89,
@@ -7790,7 +7790,7 @@
     "lineNumber": 264
   },
   {
-    "__docId__": 328,
+    "__docId__": 327,
     "kind": "test",
     "name": "it90",
     "testId": 90,
@@ -7803,7 +7803,7 @@
     "lineNumber": 265
   },
   {
-    "__docId__": 329,
+    "__docId__": 328,
     "kind": "test",
     "name": "it91",
     "testId": 91,
@@ -7816,7 +7816,7 @@
     "lineNumber": 270
   },
   {
-    "__docId__": 330,
+    "__docId__": 329,
     "kind": "test",
     "name": "it92",
     "testId": 92,
@@ -7829,7 +7829,7 @@
     "lineNumber": 274
   },
   {
-    "__docId__": 331,
+    "__docId__": 330,
     "kind": "test",
     "name": "it93",
     "testId": 93,
@@ -7842,7 +7842,7 @@
     "lineNumber": 278
   },
   {
-    "__docId__": 332,
+    "__docId__": 331,
     "kind": "test",
     "name": "it94",
     "testId": 94,
@@ -7855,7 +7855,7 @@
     "lineNumber": 283
   },
   {
-    "__docId__": 333,
+    "__docId__": 332,
     "kind": "test",
     "name": "describe95",
     "testId": 95,
@@ -7868,7 +7868,7 @@
     "lineNumber": 292
   },
   {
-    "__docId__": 334,
+    "__docId__": 333,
     "kind": "test",
     "name": "it96",
     "testId": 96,
@@ -7881,7 +7881,7 @@
     "lineNumber": 293
   },
   {
-    "__docId__": 335,
+    "__docId__": 334,
     "kind": "test",
     "name": "it97",
     "testId": 97,
@@ -7894,7 +7894,7 @@
     "lineNumber": 298
   },
   {
-    "__docId__": 336,
+    "__docId__": 335,
     "kind": "test",
     "name": "it98",
     "testId": 98,
@@ -7907,7 +7907,7 @@
     "lineNumber": 302
   },
   {
-    "__docId__": 337,
+    "__docId__": 336,
     "kind": "test",
     "name": "it99",
     "testId": 99,
@@ -7920,7 +7920,7 @@
     "lineNumber": 306
   },
   {
-    "__docId__": 338,
+    "__docId__": 337,
     "kind": "test",
     "name": "describe100",
     "testId": 100,
@@ -7933,7 +7933,7 @@
     "lineNumber": 312
   },
   {
-    "__docId__": 339,
+    "__docId__": 338,
     "kind": "test",
     "name": "it101",
     "testId": 101,
@@ -7946,7 +7946,7 @@
     "lineNumber": 313
   },
   {
-    "__docId__": 340,
+    "__docId__": 339,
     "kind": "test",
     "name": "it102",
     "testId": 102,
@@ -7959,7 +7959,7 @@
     "lineNumber": 318
   },
   {
-    "__docId__": 341,
+    "__docId__": 340,
     "kind": "test",
     "name": "it103",
     "testId": 103,
@@ -7972,7 +7972,7 @@
     "lineNumber": 322
   },
   {
-    "__docId__": 342,
+    "__docId__": 341,
     "kind": "test",
     "name": "it104",
     "testId": 104,
@@ -7985,7 +7985,7 @@
     "lineNumber": 326
   },
   {
-    "__docId__": 343,
+    "__docId__": 342,
     "kind": "test",
     "name": "describe105",
     "testId": 105,
@@ -7998,7 +7998,7 @@
     "lineNumber": 333
   },
   {
-    "__docId__": 344,
+    "__docId__": 343,
     "kind": "test",
     "name": "describe106",
     "testId": 106,
@@ -8011,7 +8011,7 @@
     "lineNumber": 334
   },
   {
-    "__docId__": 345,
+    "__docId__": 344,
     "kind": "test",
     "name": "it107",
     "testId": 107,
@@ -8024,7 +8024,7 @@
     "lineNumber": 335
   },
   {
-    "__docId__": 346,
+    "__docId__": 345,
     "kind": "test",
     "name": "it108",
     "testId": 108,
@@ -8037,7 +8037,7 @@
     "lineNumber": 340
   },
   {
-    "__docId__": 347,
+    "__docId__": 346,
     "kind": "test",
     "name": "it109",
     "testId": 109,
@@ -8050,7 +8050,7 @@
     "lineNumber": 345
   },
   {
-    "__docId__": 348,
+    "__docId__": 347,
     "kind": "test",
     "name": "it110",
     "testId": 110,
@@ -8063,7 +8063,7 @@
     "lineNumber": 350
   },
   {
-    "__docId__": 349,
+    "__docId__": 348,
     "kind": "test",
     "name": "it111",
     "testId": 111,
@@ -8076,7 +8076,7 @@
     "lineNumber": 355
   },
   {
-    "__docId__": 350,
+    "__docId__": 349,
     "kind": "test",
     "name": "describe112",
     "testId": 112,
@@ -8089,7 +8089,7 @@
     "lineNumber": 363
   },
   {
-    "__docId__": 351,
+    "__docId__": 350,
     "kind": "test",
     "name": "it113",
     "testId": 113,
@@ -8102,7 +8102,7 @@
     "lineNumber": 364
   },
   {
-    "__docId__": 352,
+    "__docId__": 351,
     "kind": "test",
     "name": "it114",
     "testId": 114,
@@ -8115,7 +8115,7 @@
     "lineNumber": 370
   },
   {
-    "__docId__": 353,
+    "__docId__": 352,
     "kind": "test",
     "name": "describe115",
     "testId": 115,
@@ -8128,7 +8128,7 @@
     "lineNumber": 378
   },
   {
-    "__docId__": 354,
+    "__docId__": 353,
     "kind": "test",
     "name": "it116",
     "testId": 116,
@@ -8141,7 +8141,7 @@
     "lineNumber": 379
   },
   {
-    "__docId__": 355,
+    "__docId__": 354,
     "kind": "test",
     "name": "describe117",
     "testId": 117,
@@ -8154,7 +8154,7 @@
     "lineNumber": 387
   },
   {
-    "__docId__": 356,
+    "__docId__": 355,
     "kind": "test",
     "name": "it118",
     "testId": 118,
@@ -8167,7 +8167,7 @@
     "lineNumber": 388
   },
   {
-    "__docId__": 357,
+    "__docId__": 356,
     "kind": "test",
     "name": "describe119",
     "testId": 119,
@@ -8180,7 +8180,7 @@
     "lineNumber": 397
   },
   {
-    "__docId__": 358,
+    "__docId__": 357,
     "kind": "test",
     "name": "it120",
     "testId": 120,
@@ -8193,7 +8193,7 @@
     "lineNumber": 398
   },
   {
-    "__docId__": 359,
+    "__docId__": 358,
     "kind": "test",
     "name": "it121",
     "testId": 121,
@@ -8206,7 +8206,7 @@
     "lineNumber": 408
   },
   {
-    "__docId__": 360,
+    "__docId__": 359,
     "kind": "test",
     "name": "describe122",
     "testId": 122,
@@ -8219,7 +8219,7 @@
     "lineNumber": 419
   },
   {
-    "__docId__": 361,
+    "__docId__": 360,
     "kind": "test",
     "name": "it123",
     "testId": 123,
@@ -8232,7 +8232,7 @@
     "lineNumber": 420
   },
   {
-    "__docId__": 362,
+    "__docId__": 361,
     "kind": "test",
     "name": "describe124",
     "testId": 124,
@@ -8245,7 +8245,7 @@
     "lineNumber": 431
   },
   {
-    "__docId__": 363,
+    "__docId__": 362,
     "kind": "test",
     "name": "it125",
     "testId": 125,
@@ -8258,7 +8258,7 @@
     "lineNumber": 432
   },
   {
-    "__docId__": 364,
+    "__docId__": 363,
     "kind": "test",
     "name": "it126",
     "testId": 126,
@@ -8271,7 +8271,7 @@
     "lineNumber": 439
   },
   {
-    "__docId__": 365,
+    "__docId__": 364,
     "kind": "test",
     "name": "describe127",
     "testId": 127,
@@ -8284,7 +8284,7 @@
     "lineNumber": 449
   },
   {
-    "__docId__": 366,
+    "__docId__": 365,
     "kind": "test",
     "name": "it128",
     "testId": 128,
@@ -8297,7 +8297,7 @@
     "lineNumber": 450
   },
   {
-    "__docId__": 367,
+    "__docId__": 366,
     "kind": "test",
     "name": "describe129",
     "testId": 129,
@@ -8310,7 +8310,7 @@
     "lineNumber": 461
   },
   {
-    "__docId__": 368,
+    "__docId__": 367,
     "kind": "test",
     "name": "describe130",
     "testId": 130,
@@ -8323,7 +8323,7 @@
     "lineNumber": 462
   },
   {
-    "__docId__": 369,
+    "__docId__": 368,
     "kind": "test",
     "name": "it131",
     "testId": 131,
@@ -8336,7 +8336,7 @@
     "lineNumber": 463
   },
   {
-    "__docId__": 370,
+    "__docId__": 369,
     "kind": "test",
     "name": "it132",
     "testId": 132,
@@ -8349,7 +8349,7 @@
     "lineNumber": 466
   },
   {
-    "__docId__": 371,
+    "__docId__": 370,
     "kind": "test",
     "name": "describe133",
     "testId": 133,
@@ -8362,7 +8362,7 @@
     "lineNumber": 476
   },
   {
-    "__docId__": 372,
+    "__docId__": 371,
     "kind": "test",
     "name": "it134",
     "testId": 134,
@@ -8375,7 +8375,7 @@
     "lineNumber": 477
   },
   {
-    "__docId__": 373,
+    "__docId__": 372,
     "kind": "test",
     "name": "describe135",
     "testId": 135,
@@ -8388,7 +8388,7 @@
     "lineNumber": 482
   },
   {
-    "__docId__": 374,
+    "__docId__": 373,
     "kind": "test",
     "name": "it136",
     "testId": 136,
@@ -8401,7 +8401,7 @@
     "lineNumber": 483
   },
   {
-    "__docId__": 375,
+    "__docId__": 374,
     "kind": "test",
     "name": "describe137",
     "testId": 137,
@@ -8414,7 +8414,7 @@
     "lineNumber": 496
   },
   {
-    "__docId__": 376,
+    "__docId__": 375,
     "kind": "test",
     "name": "it138",
     "testId": 138,
@@ -8427,7 +8427,7 @@
     "lineNumber": 497
   },
   {
-    "__docId__": 377,
+    "__docId__": 376,
     "kind": "test",
     "name": "describe139",
     "testId": 139,
@@ -8440,7 +8440,7 @@
     "lineNumber": 507
   },
   {
-    "__docId__": 378,
+    "__docId__": 377,
     "kind": "test",
     "name": "it140",
     "testId": 140,
@@ -8453,7 +8453,7 @@
     "lineNumber": 508
   },
   {
-    "__docId__": 379,
+    "__docId__": 378,
     "kind": "test",
     "name": "describe141",
     "testId": 141,
@@ -8466,7 +8466,7 @@
     "lineNumber": 518
   },
   {
-    "__docId__": 380,
+    "__docId__": 379,
     "kind": "test",
     "name": "it142",
     "testId": 142,
@@ -8479,7 +8479,7 @@
     "lineNumber": 519
   },
   {
-    "__docId__": 381,
+    "__docId__": 380,
     "kind": "test",
     "name": "describe143",
     "testId": 143,
@@ -8492,7 +8492,7 @@
     "lineNumber": 530
   },
   {
-    "__docId__": 382,
+    "__docId__": 381,
     "kind": "test",
     "name": "describe144",
     "testId": 144,
@@ -8505,7 +8505,7 @@
     "lineNumber": 531
   },
   {
-    "__docId__": 383,
+    "__docId__": 382,
     "kind": "test",
     "name": "it145",
     "testId": 145,
@@ -8518,7 +8518,7 @@
     "lineNumber": 532
   },
   {
-    "__docId__": 384,
+    "__docId__": 383,
     "kind": "test",
     "name": "describe146",
     "testId": 146,
@@ -8531,7 +8531,7 @@
     "lineNumber": 536
   },
   {
-    "__docId__": 385,
+    "__docId__": 384,
     "kind": "test",
     "name": "it147",
     "testId": 147,
@@ -8544,7 +8544,7 @@
     "lineNumber": 537
   },
   {
-    "__docId__": 386,
+    "__docId__": 385,
     "kind": "test",
     "name": "it148",
     "testId": 148,
@@ -8557,7 +8557,7 @@
     "lineNumber": 551
   },
   {
-    "__docId__": 387,
+    "__docId__": 386,
     "kind": "test",
     "name": "describe149",
     "testId": 149,
@@ -8570,7 +8570,7 @@
     "lineNumber": 563
   },
   {
-    "__docId__": 388,
+    "__docId__": 387,
     "kind": "test",
     "name": "it150",
     "testId": 150,
@@ -8583,7 +8583,7 @@
     "lineNumber": 564
   },
   {
-    "__docId__": 389,
+    "__docId__": 388,
     "kind": "test",
     "name": "it151",
     "testId": 151,
@@ -8596,7 +8596,7 @@
     "lineNumber": 569
   },
   {
-    "__docId__": 390,
+    "__docId__": 389,
     "kind": "test",
     "name": "describe152",
     "testId": 152,
@@ -8609,7 +8609,7 @@
     "lineNumber": 587
   },
   {
-    "__docId__": 391,
+    "__docId__": 390,
     "kind": "test",
     "name": "it153",
     "testId": 153,
@@ -8622,7 +8622,7 @@
     "lineNumber": 588
   },
   {
-    "__docId__": 392,
+    "__docId__": 391,
     "kind": "test",
     "name": "it154",
     "testId": 154,
@@ -8635,7 +8635,7 @@
     "lineNumber": 600
   },
   {
-    "__docId__": 393,
+    "__docId__": 392,
     "kind": "test",
     "name": "it155",
     "testId": 155,
@@ -8648,7 +8648,7 @@
     "lineNumber": 607
   },
   {
-    "__docId__": 394,
+    "__docId__": 393,
     "kind": "test",
     "name": "it156",
     "testId": 156,
@@ -8661,7 +8661,7 @@
     "lineNumber": 615
   },
   {
-    "__docId__": 395,
+    "__docId__": 394,
     "kind": "test",
     "name": "describe157",
     "testId": 157,
@@ -8674,7 +8674,7 @@
     "lineNumber": 629
   },
   {
-    "__docId__": 396,
+    "__docId__": 395,
     "kind": "test",
     "name": "describe158",
     "testId": 158,
@@ -8687,7 +8687,7 @@
     "lineNumber": 630
   },
   {
-    "__docId__": 397,
+    "__docId__": 396,
     "kind": "test",
     "name": "it159",
     "testId": 159,
@@ -8700,7 +8700,7 @@
     "lineNumber": 631
   },
   {
-    "__docId__": 398,
+    "__docId__": 397,
     "kind": "test",
     "name": "it160",
     "testId": 160,
@@ -8713,7 +8713,7 @@
     "lineNumber": 665
   },
   {
-    "__docId__": 399,
+    "__docId__": 398,
     "kind": "test",
     "name": "describe161",
     "testId": 161,
@@ -8726,7 +8726,7 @@
     "lineNumber": 678
   },
   {
-    "__docId__": 400,
+    "__docId__": 399,
     "kind": "test",
     "name": "describe162",
     "testId": 162,
@@ -8739,7 +8739,7 @@
     "lineNumber": 679
   },
   {
-    "__docId__": 401,
+    "__docId__": 400,
     "kind": "test",
     "name": "it163",
     "testId": 163,
@@ -8752,7 +8752,7 @@
     "lineNumber": 698
   },
   {
-    "__docId__": 402,
+    "__docId__": 401,
     "kind": "test",
     "name": "it164",
     "testId": 164,
@@ -8765,7 +8765,7 @@
     "lineNumber": 703
   },
   {
-    "__docId__": 403,
+    "__docId__": 402,
     "kind": "test",
     "name": "it165",
     "testId": 165,
@@ -8778,7 +8778,7 @@
     "lineNumber": 708
   },
   {
-    "__docId__": 404,
+    "__docId__": 403,
     "kind": "test",
     "name": "it166",
     "testId": 166,
@@ -8791,7 +8791,7 @@
     "lineNumber": 714
   },
   {
-    "__docId__": 405,
+    "__docId__": 404,
     "kind": "test",
     "name": "describe167",
     "testId": 167,
@@ -8804,7 +8804,7 @@
     "lineNumber": 722
   },
   {
-    "__docId__": 406,
+    "__docId__": 405,
     "kind": "test",
     "name": "it168",
     "testId": 168,
@@ -8817,7 +8817,7 @@
     "lineNumber": 741
   },
   {
-    "__docId__": 407,
+    "__docId__": 406,
     "kind": "test",
     "name": "it169",
     "testId": 169,
@@ -8830,7 +8830,7 @@
     "lineNumber": 750
   },
   {
-    "__docId__": 408,
+    "__docId__": 407,
     "kind": "test",
     "name": "it170",
     "testId": 170,
@@ -8843,7 +8843,7 @@
     "lineNumber": 758
   },
   {
-    "__docId__": 409,
+    "__docId__": 408,
     "kind": "test",
     "name": "it171",
     "testId": 171,
@@ -8856,7 +8856,7 @@
     "lineNumber": 772
   },
   {
-    "__docId__": 410,
+    "__docId__": 409,
     "kind": "test",
     "name": "it172",
     "testId": 172,
@@ -8869,7 +8869,7 @@
     "lineNumber": 779
   },
   {
-    "__docId__": 411,
+    "__docId__": 410,
     "kind": "test",
     "name": "it173",
     "testId": 173,
@@ -8882,7 +8882,7 @@
     "lineNumber": 786
   },
   {
-    "__docId__": 412,
+    "__docId__": 411,
     "kind": "test",
     "name": "it174",
     "testId": 174,
@@ -8895,7 +8895,7 @@
     "lineNumber": 793
   },
   {
-    "__docId__": 413,
+    "__docId__": 412,
     "kind": "test",
     "name": "it175",
     "testId": 175,
@@ -8908,7 +8908,7 @@
     "lineNumber": 805
   },
   {
-    "__docId__": 414,
+    "__docId__": 413,
     "kind": "test",
     "name": "it176",
     "testId": 176,
@@ -8921,7 +8921,7 @@
     "lineNumber": 817
   },
   {
-    "__docId__": 415,
+    "__docId__": 414,
     "kind": "test",
     "name": "describe177",
     "testId": 177,
@@ -8934,7 +8934,7 @@
     "lineNumber": 830
   },
   {
-    "__docId__": 416,
+    "__docId__": 415,
     "kind": "test",
     "name": "it178",
     "testId": 178,
@@ -8947,7 +8947,7 @@
     "lineNumber": 831
   },
   {
-    "__docId__": 417,
+    "__docId__": 416,
     "kind": "test",
     "name": "it179",
     "testId": 179,
@@ -8960,7 +8960,7 @@
     "lineNumber": 841
   },
   {
-    "__docId__": 418,
+    "__docId__": 417,
     "kind": "test",
     "name": "it180",
     "testId": 180,
@@ -8973,7 +8973,7 @@
     "lineNumber": 852
   },
   {
-    "__docId__": 419,
+    "__docId__": 418,
     "kind": "test",
     "name": "it181",
     "testId": 181,
@@ -8986,7 +8986,7 @@
     "lineNumber": 866
   },
   {
-    "__docId__": 420,
+    "__docId__": 419,
     "kind": "test",
     "name": "it182",
     "testId": 182,
@@ -8999,7 +8999,7 @@
     "lineNumber": 880
   },
   {
-    "__docId__": 421,
+    "__docId__": 420,
     "kind": "test",
     "name": "it183",
     "testId": 183,
@@ -9012,7 +9012,7 @@
     "lineNumber": 892
   },
   {
-    "__docId__": 422,
+    "__docId__": 421,
     "kind": "test",
     "name": "it184",
     "testId": 184,
@@ -9025,7 +9025,7 @@
     "lineNumber": 906
   },
   {
-    "__docId__": 423,
+    "__docId__": 422,
     "kind": "test",
     "name": "it185",
     "testId": 185,
@@ -9038,7 +9038,7 @@
     "lineNumber": 924
   },
   {
-    "__docId__": 424,
+    "__docId__": 423,
     "kind": "test",
     "name": "describe186",
     "testId": 186,
@@ -9051,7 +9051,7 @@
     "lineNumber": 943
   },
   {
-    "__docId__": 425,
+    "__docId__": 424,
     "kind": "test",
     "name": "it187",
     "testId": 187,
@@ -9064,7 +9064,7 @@
     "lineNumber": 964
   },
   {
-    "__docId__": 426,
+    "__docId__": 425,
     "kind": "test",
     "name": "it188",
     "testId": 188,
@@ -9077,7 +9077,7 @@
     "lineNumber": 971
   },
   {
-    "__docId__": 427,
+    "__docId__": 426,
     "kind": "test",
     "name": "it189",
     "testId": 189,
@@ -9090,7 +9090,7 @@
     "lineNumber": 978
   },
   {
-    "__docId__": 428,
+    "__docId__": 427,
     "kind": "test",
     "name": "it190",
     "testId": 190,
@@ -9103,7 +9103,7 @@
     "lineNumber": 984
   },
   {
-    "__docId__": 429,
+    "__docId__": 428,
     "kind": "test",
     "name": "it191",
     "testId": 191,
@@ -9116,7 +9116,7 @@
     "lineNumber": 990
   },
   {
-    "__docId__": 430,
+    "__docId__": 429,
     "kind": "test",
     "name": "it192",
     "testId": 192,
@@ -9129,10 +9129,10 @@
     "lineNumber": 996
   },
   {
-    "__docId__": 431,
+    "__docId__": 430,
     "kind": "testFile",
     "name": "tests/inputelement.spec.js",
-    "content": "import {Q} from 'index';\nimport ObjectArray from 'dot-object-array';\n\nwindow.Q = Q;\n\n/**\n*  @test {InputElement}\n*/\n\ndescribe('InputElement', function () {\n  /**\n  *  @test {InputElement#constructor}\n  */\n  describe('Constructor', function () {\n    it('should create input text with value', function () {\n      let i = Q('+input', {type: 'text', value: 'fixture'});\n\n      i.node.nodeName.should.equal('INPUT');\n      i.type.should.equal('text');\n      i.value.should.equal('fixture');\n    });\n\n    it('should create input text with required', function () {\n      let i = Q('+input', {type: 'text', required: 'required'});\n\n      i.rules.required.should.not.equal('undefined');\n      i.validate().should.be.false;\n      i.value = 'fixture';\n      i.validate().should.be.true;\n    });\n  });\n\n  /**\n  *  @test {InputElement}.name\n  */\n  it('should return name attribute as name', function () {\n    let i = Q('+input', {name: 'fixture', id: 'fixture2'});\n\n    i.name.should.equal('fixture');\n  });\n\n  it('should return id attribute as name', function () {\n    let i = Q('+input', {id: 'fixture2'});\n\n    i.name.should.equal('fixture2');\n  });\n\n  it('should return randomized uniqid name', function () {\n    let i = Q('+input');\n\n    i.name.length.should.not.equal(0);\n  });\n\n  /**\n  *  @test {InputElement.type}\n  *  @test {InputElement#val}\n  */\n  describe('Type and values', function () {\n    let i;\n\n    window.beforeEach(function () {\n      i = Q('+input');\n    });\n\n    describe('Textual input', function () {\n      it('should set type, set and retrieve value', function () {\n        i.type = 'email';\n        i.attr('type').should.equal('email');\n        i.val('fixture@fixture.com');\n        i.val().should.equal('fixture@fixture.com');\n      });\n    });\n\n    describe('Boolean inputs', function () {\n      it('should set type, set and retrieve value', function () {\n        i.type = 'checkbox';\n        i.attr('type').should.equal('checkbox');\n\n        i.val().should.equal(0);\n        i.node.checked = true;\n        i.val().should.equal(1);\n        i.node.checked = false;\n        i.val('test');\n        expect(i.val()).to.be.undefined;\n        i.node.checked = true;\n        i.val().should.equal('test');\n      });\n    });\n\n    describe('Select input', function () {\n      it('should set type, set and retrieve value', function () {\n        i = Q('+select', {\n          options: {\n            f1: 'fixture1',\n            f2: 'fixture2'\n          }\n        });\n\n        i.type.should.equal('select');\n        i.value.should.equal('f1');\n\n        i = Q('+select', {\n          value: 'f2',\n          options: {\n            f1: 'fixture1',\n            f2: 'fixture2'\n          }\n        });\n        i.value.should.equal('f2');\n\n        i = Q('+select', {\n          value: 'f3',\n          options: {\n            f1: 'fixture1',\n            f2: 'fixture2'\n          }\n        });\n        i.value.should.equal('f1');\n      });\n    });\n\n    describe('Textarea input', function () {\n      it('should set type, set and retrieve value', function () {\n        i = Q('+textarea');\n        i.attr('type').should.equal('textarea');\n        Q('body').append(i);\n\n        i.val().should.equal('');\n        i.val('fixture');\n        i.val().should.equal('fixture');\n        i.val('fixture2');\n        i.val().should.equal('fixture2');\n\n        i.remove();\n      });\n    });\n  });\n\n  /**\n  *  @test {InputElement#rule}\n  *  @test {InputElement.value}\n  *  @test {InputElement#validate}\n  */\n  describe('Rule', function () {\n    let i;\n    const sameas = Q('+input', {name: 'sameas', type: 'text', value: 'fixture'});\n    const rules = new ObjectArray({\n      required: [\n        {val: 'fixture', res: true},\n        {val: '', res: false},\n        {val: 0, res: true}\n      ],\n      int: [\n        {val: 10, res: true},\n        {val: -5, res: true},\n        {val: 0, res: true},\n        {val: '', res: false},\n        {val: 'a', res: false},\n        {val: '1a', res: false}\n      ],\n      number: [\n        {val: 10, res: true},\n        {val: -5, res: true},\n        {val: 0, res: true},\n        {val: 10.5, res: true},\n        {val: -10.5, res: true},\n        {val: '', res: false},\n        {val: 'a', res: false},\n        {val: 'a.10', res: false}\n      ],\n      email: [\n        {val: 'fixture@fixture.com', res: true},\n        {val: '', res: false},\n        {val: 0, res: false},\n        {val: 'fixture@', res: false},\n        {val: '@fixture.com', res: false},\n        {val: 'fixture@fixture', res: false}\n      ]\n    });\n\n    window.beforeEach(function () {\n      i = Q('+input');\n    });\n\n    it('should apply rule: sameas with empty value', function () {\n      Q('body').append(sameas);\n      i.rule('sameas', '@sameas');\n      i.validate().should.equal(false);\n      sameas.remove();\n    });\n\n    it('should apply rule: sameas with same values', function () {\n      Q('body').append(sameas);\n      i.rule('sameas', '@sameas');\n      i.value = 'fixture';\n      i.validate().should.equal(true);\n      sameas.remove();\n    });\n\n    it('should apply rule: sameas with different values', function () {\n      Q('body').append(sameas);\n      i.rule('sameas', '@sameas');\n      i.value = 'fixture3';\n      i.validate().should.equal(false);\n      sameas.remove();\n    });\n\n    rules.forEach(function (cases, rule) {\n      cases.forEach(function (c) {\n        it('should apply rule : ' + rule + ' with case : ' + JSON.stringify(c), function () {\n          i.rule(rule);\n          i.value = c.val;\n          i.validate().should.equal(c.res);\n        });\n      });\n    });\n\n    it('should apply custom rule', function () {\n      i.rule('custom', /fix/);\n      i.validate().should.be.false;\n      i.value = 'fixture';\n      i.validate().should.be.true;\n    });\n\n    it('should not evaluate string as rule', function () {\n      expect(i.rule.bind(i, 'pattern', 'notARegexp'))\n        .to.not.throw('Custom rule value must be a regular expression or callback');\n      i.rules.should.be.empty;\n    });\n\n    it('should evaluate string as rule', function () {\n      expect(i.rule.bind(i, 'pattern', 'notARegexp', null, true))\n        .to.not.throw('Custom rule value must be a regular expression or callback');\n      i.rules.should.not.be.empty;\n    });\n\n    it('should apply callback', function () {\n      var i = Q('+<input type=\"text\">');\n\n      i.rule('myRule', function () {\n        return this.value > 5;\n      }, 'value must be over 5');\n\n      i.value = 3;\n      i.validate().should.be.false;\n      i.errors.should.eql({\n        myRule: 'value must be over 5'\n      });\n      i.value = 6;\n      i.validate().should.be.true;\n    });\n  });\n\n  /**\n  *  @test {InputElement#rules}\n  *  @test {InputElement#errors}\n  */\n  describe('Rules', function () {\n    it('should apply rules', function () {\n      let i = Q('+input', {\n        required: 'required'\n      });\n\n      i.rule('fixture', /1/, 'this must be a one');\n      i.rules.should.not.be.empty;\n      i.validate();\n      i.errors.should.eql({\n        required: 'FIELD_REQUIRED',\n        fixture: 'this must be a one'\n      });\n      i.value = 'a';\n      i.val('a');\n      i.validate();\n      i.errors.should.eql({\n        fixture: 'this must be a one'\n      });\n      i.value = 1;\n      i.validate();\n      i.errors.should.be.empty;\n    });\n  });\n\n  /**\n  *  @test {label}\n  */\n  describe('Label method', function () {\n    it('should output a label', function () {\n      let i = Q('+input', {\n        name: 'fixture'\n      });\n\n      i.label('label').outerHTML.should.equal('<label for=\"fixture\">label</label>');\n    });\n  });\n\n  /**\n  *  @test {tooltip}\n  */\n  describe('Tooltip method', function () {\n    it('should output a tooltip', function () {\n      let i = Q('+input', {\n        name: 'fixture'\n      });\n\n      i.tooltip('tooltip').outerHTML.should.equal('<span data-for=\"fixture\" data-type=\"tooltip\">tooltip</span>');\n    });\n  });\n\n  describe('Checkbox value getter and setter', function () {\n    it('should get 0 as value', function () {\n      let check = Q('+input', {\n        type: 'checkbox'\n      });\n\n      check.node.checked.should.be.false;\n      check.value.should.equal(0);\n    });\n\n    it('should get 1 as value', function () {\n      let check = Q('+input', {\n        type: 'checkbox',\n        checked: 'checked'\n      });\n\n      check.node.checked.should.be.true;\n      check.value.should.equal(1);\n    });\n\n    it('should get undefined as value', function () {\n      let check = Q('+input', {\n        type: 'checkbox',\n        value: 'fixture'\n      });\n\n      check.node.checked.should.be.false;\n      expect(check.value).to.be.undefined;\n    });\n\n    it('should get value attribute as value', function () {\n      let check = Q('+input', {\n        type: 'checkbox',\n        value: 'fixture',\n        checked: 'checked'\n      });\n\n      check.node.checked.should.be.true;\n      check.value.should.equal('fixture');\n    });\n\n    it('should toggle checked state', function () {\n      let check = Q('+input', {\n        type: 'checkbox'\n      });\n\n      check.node.checked.should.be.false;\n      check.value = true;\n      check.node.checked.should.be.true;\n      check.value = false;\n      check.node.checked.should.be.false;\n      check.value = 1;\n      check.node.checked.should.be.true;\n      check.value = 0;\n      check.node.checked.should.be.false;\n      check.value = '1';\n      check.node.checked.should.be.true;\n      check.value = '0';\n      check.node.checked.should.be.false;\n    });\n\n    it('should set value', function () {\n      let check = Q('+input', {\n        type: 'checkbox'\n      });\n\n      check.value = 'fixture';\n      check.node.checked.should.be.false;\n      check.node.value.should.equal('fixture');\n    });\n  });\n});\n",
+    "content": "import {Q} from 'index';\nimport ObjectArray from 'dot-object-array';\n\nwindow.Q = Q;\n\n/**\n*  @test {InputElement}\n*/\n\ndescribe('InputElement', function () {\n  /**\n  *  @test {InputElement#constructor}\n  */\n  describe('Constructor', function () {\n    it('should create input text with value', function () {\n      let i = Q('+input', {type: 'text', value: 'fixture'});\n\n      i.node.nodeName.should.equal('INPUT');\n      i.type.should.equal('text');\n      i.value.should.equal('fixture');\n    });\n\n    it('should create input text with required', function () {\n      let i = Q('+input', {type: 'text', required: 'required'});\n\n      i.rules.required.should.not.equal('undefined');\n      i.validate().should.be.false;\n      i.value = 'fixture';\n      i.validate().should.be.true;\n    });\n  });\n\n  /**\n  *  @test {InputElement}.name\n  */\n  it('should return name attribute as name', function () {\n    let i = Q('+input', {name: 'fixture', id: 'fixture2'});\n\n    i.name.should.equal('fixture');\n  });\n\n  it('should return id attribute as name', function () {\n    let i = Q('+input', {id: 'fixture2'});\n\n    i.name.should.equal('fixture2');\n  });\n\n  it('should return randomized uniqid name', function () {\n    let i = Q('+input');\n\n    i.name.length.should.not.equal(0);\n  });\n\n  /**\n  *  @test {InputElement.type}\n  *  @test {InputElement#val}\n  */\n  describe('Type and values', function () {\n    let i;\n\n    window.beforeEach(function () {\n      i = Q('+input');\n    });\n\n    describe('Textual input', function () {\n      it('should set type, set and retrieve value', function () {\n        i.type = 'email';\n        i.attr('type').should.equal('email');\n        i.val('fixture@fixture.com');\n        i.val().should.equal('fixture@fixture.com');\n      });\n    });\n\n    describe('Boolean inputs', function () {\n      it('should set type, set and retrieve value', function () {\n        i.type = 'checkbox';\n        i.attr('type').should.equal('checkbox');\n\n        i.val().should.equal(0);\n        i.node.checked = true;\n        i.val().should.equal(1);\n        i.node.checked = false;\n        i.val('test');\n        expect(i.val()).to.be.undefined;\n        i.node.checked = true;\n        i.val().should.equal('test');\n      });\n    });\n\n    describe('Select input', function () {\n      it('should set type, set and retrieve value', function () {\n        i = Q('+select', {\n          options: {\n            f1: 'fixture1',\n            f2: 'fixture2'\n          }\n        });\n\n        i.type.should.equal('select');\n        i.value.should.equal('f1');\n\n        i = Q('+select', {\n          value: 'f2',\n          options: {\n            f1: 'fixture1',\n            f2: 'fixture2'\n          }\n        });\n        i.value.should.equal('f2');\n\n        i = Q('+select', {\n          value: 'f3',\n          options: {\n            f1: 'fixture1',\n            f2: 'fixture2'\n          }\n        });\n        i.value.should.equal('');\n      });\n    });\n\n    describe('Textarea input', function () {\n      it('should set type, set and retrieve value', function () {\n        i = Q('+textarea');\n        i.attr('type').should.equal('textarea');\n        Q('body').append(i);\n\n        i.val().should.equal('');\n        i.val('fixture');\n        i.val().should.equal('fixture');\n        i.val('fixture2');\n        i.val().should.equal('fixture2');\n\n        i.remove();\n      });\n    });\n  });\n\n  /**\n  *  @test {InputElement#rule}\n  *  @test {InputElement.value}\n  *  @test {InputElement#validate}\n  */\n  describe('Rule', function () {\n    let i;\n    const sameas = Q('+input', {name: 'sameas', type: 'text', value: 'fixture'});\n    const rules = new ObjectArray({\n      required: [\n        {val: 'fixture', res: true},\n        {val: '', res: false},\n        {val: 0, res: true}\n      ],\n      int: [\n        {val: 10, res: true},\n        {val: -5, res: true},\n        {val: 0, res: true},\n        {val: '', res: false},\n        {val: 'a', res: false},\n        {val: '1a', res: false}\n      ],\n      number: [\n        {val: 10, res: true},\n        {val: -5, res: true},\n        {val: 0, res: true},\n        {val: 10.5, res: true},\n        {val: -10.5, res: true},\n        {val: '', res: false},\n        {val: 'a', res: false},\n        {val: 'a.10', res: false}\n      ],\n      email: [\n        {val: 'fixture@fixture.com', res: true},\n        {val: '', res: false},\n        {val: 0, res: false},\n        {val: 'fixture@', res: false},\n        {val: '@fixture.com', res: false},\n        {val: 'fixture@fixture', res: false}\n      ]\n    });\n\n    window.beforeEach(function () {\n      i = Q('+input');\n    });\n\n    it('should apply rule: sameas with empty value', function () {\n      Q('body').append(sameas);\n      i.rule('sameas', '@sameas');\n      i.validate().should.equal(false);\n      sameas.remove();\n    });\n\n    it('should apply rule: sameas with same values', function () {\n      Q('body').append(sameas);\n      i.rule('sameas', '@sameas');\n      i.value = 'fixture';\n      i.validate().should.equal(true);\n      sameas.remove();\n    });\n\n    it('should apply rule: sameas with different values', function () {\n      Q('body').append(sameas);\n      i.rule('sameas', '@sameas');\n      i.value = 'fixture3';\n      i.validate().should.equal(false);\n      sameas.remove();\n    });\n\n    rules.forEach(function (cases, rule) {\n      cases.forEach(function (c) {\n        it('should apply rule : ' + rule + ' with case : ' + JSON.stringify(c), function () {\n          i.rule(rule);\n          i.value = c.val;\n          i.validate().should.equal(c.res);\n        });\n      });\n    });\n\n    it('should apply custom rule', function () {\n      i.rule('custom', /fix/);\n      i.validate().should.be.false;\n      i.value = 'fixture';\n      i.validate().should.be.true;\n    });\n\n    it('should not evaluate string as rule', function () {\n      expect(i.rule.bind(i, 'pattern', 'notARegexp'))\n        .to.not.throw('Custom rule value must be a regular expression or callback');\n      i.rules.should.be.empty;\n    });\n\n    it('should evaluate string as rule', function () {\n      expect(i.rule.bind(i, 'pattern', 'notARegexp', null, true))\n        .to.not.throw('Custom rule value must be a regular expression or callback');\n      i.rules.should.not.be.empty;\n    });\n\n    it('should apply callback', function () {\n      var i = Q('+<input type=\"text\">');\n\n      i.rule('myRule', function () {\n        return this.value > 5;\n      }, 'value must be over 5');\n\n      i.value = 3;\n      i.validate().should.be.false;\n      i.errors.should.eql({\n        myRule: 'value must be over 5'\n      });\n      i.value = 6;\n      i.validate().should.be.true;\n    });\n  });\n\n  /**\n  *  @test {InputElement#rules}\n  *  @test {InputElement#errors}\n  */\n  describe('Rules', function () {\n    it('should apply rules', function () {\n      let i = Q('+input', {\n        required: 'required'\n      });\n\n      i.rule('fixture', /1/, 'this must be a one');\n      i.rules.should.not.be.empty;\n      i.validate();\n      i.errors.should.eql({\n        required: 'FIELD_REQUIRED',\n        fixture: 'this must be a one'\n      });\n      i.value = 'a';\n      i.val('a');\n      i.validate();\n      i.errors.should.eql({\n        fixture: 'this must be a one'\n      });\n      i.value = 1;\n      i.validate();\n      i.errors.should.be.empty;\n    });\n  });\n\n  /**\n  *  @test {label}\n  */\n  describe('Label method', function () {\n    it('should output a label', function () {\n      let i = Q('+input', {\n        name: 'fixture'\n      });\n\n      i.label('label').outerHTML.should.equal('<label for=\"fixture\">label</label>');\n    });\n  });\n\n  /**\n  *  @test {tooltip}\n  */\n  describe('Tooltip method', function () {\n    it('should output a tooltip', function () {\n      let i = Q('+input', {\n        name: 'fixture'\n      });\n\n      i.tooltip('tooltip').outerHTML.should.equal('<span data-for=\"fixture\" data-type=\"tooltip\">tooltip</span>');\n    });\n  });\n\n  describe('Checkbox value getter and setter', function () {\n    it('should get 0 as value', function () {\n      let check = Q('+input', {\n        type: 'checkbox'\n      });\n\n      check.node.checked.should.be.false;\n      check.value.should.equal(0);\n    });\n\n    it('should get 1 as value', function () {\n      let check = Q('+input', {\n        type: 'checkbox',\n        checked: 'checked'\n      });\n\n      check.node.checked.should.be.true;\n      check.value.should.equal(1);\n    });\n\n    it('should get undefined as value', function () {\n      let check = Q('+input', {\n        type: 'checkbox',\n        value: 'fixture'\n      });\n\n      check.node.checked.should.be.false;\n      expect(check.value).to.be.undefined;\n    });\n\n    it('should get value attribute as value', function () {\n      let check = Q('+input', {\n        type: 'checkbox',\n        value: 'fixture',\n        checked: 'checked'\n      });\n\n      check.node.checked.should.be.true;\n      check.value.should.equal('fixture');\n    });\n\n    it('should toggle checked state', function () {\n      let check = Q('+input', {\n        type: 'checkbox'\n      });\n\n      check.node.checked.should.be.false;\n      check.value = true;\n      check.node.checked.should.be.true;\n      check.value = false;\n      check.node.checked.should.be.false;\n      check.value = 1;\n      check.node.checked.should.be.true;\n      check.value = 0;\n      check.node.checked.should.be.false;\n      check.value = '1';\n      check.node.checked.should.be.true;\n      check.value = '0';\n      check.node.checked.should.be.false;\n    });\n\n    it('should set value', function () {\n      let check = Q('+input', {\n        type: 'checkbox'\n      });\n\n      check.value = 'fixture';\n      check.node.checked.should.be.false;\n      check.node.value.should.equal('fixture');\n    });\n  });\n\n  describe('Select tag', function () {\n    var select = Q(`+<select>\n      <option id=\"option1\" value=\"1\" selected>Fixture1</option>\n      <option id=\"option2\" value=\"2\">Fixture2</option>\n      <option id=\"option3\" value=\"3\">Fixture3</option>\n    </select>`);\n\n    it('should get value', function () {\n      expect(select.value).to.equal('1');\n    });\n\n    it('should set value', function () {\n      select.value = 2;\n      Q('#option2', select).node.selected.should.be.true;\n    });\n  });\n});\n",
     "static": true,
     "longname": "F:/Projets/Elementify/tastes/tests/inputelement.spec.js",
     "access": null,
@@ -9140,7 +9140,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 432,
+    "__docId__": 431,
     "kind": "test",
     "name": "describe193",
     "testId": 193,
@@ -9156,7 +9156,7 @@
     ]
   },
   {
-    "__docId__": 433,
+    "__docId__": 432,
     "kind": "test",
     "name": "describe194",
     "testId": 194,
@@ -9172,7 +9172,7 @@
     ]
   },
   {
-    "__docId__": 434,
+    "__docId__": 433,
     "kind": "test",
     "name": "it195",
     "testId": 195,
@@ -9185,7 +9185,7 @@
     "lineNumber": 15
   },
   {
-    "__docId__": 435,
+    "__docId__": 434,
     "kind": "test",
     "name": "it196",
     "testId": 196,
@@ -9198,7 +9198,7 @@
     "lineNumber": 23
   },
   {
-    "__docId__": 436,
+    "__docId__": 435,
     "kind": "test",
     "name": "it197",
     "testId": 197,
@@ -9214,7 +9214,7 @@
     ]
   },
   {
-    "__docId__": 437,
+    "__docId__": 436,
     "kind": "test",
     "name": "it198",
     "testId": 198,
@@ -9227,7 +9227,7 @@
     "lineNumber": 42
   },
   {
-    "__docId__": 438,
+    "__docId__": 437,
     "kind": "test",
     "name": "it199",
     "testId": 199,
@@ -9240,7 +9240,7 @@
     "lineNumber": 48
   },
   {
-    "__docId__": 439,
+    "__docId__": 438,
     "kind": "test",
     "name": "describe200",
     "testId": 200,
@@ -9257,7 +9257,7 @@
     ]
   },
   {
-    "__docId__": 440,
+    "__docId__": 439,
     "kind": "test",
     "name": "describe201",
     "testId": 201,
@@ -9270,7 +9270,7 @@
     "lineNumber": 65
   },
   {
-    "__docId__": 441,
+    "__docId__": 440,
     "kind": "test",
     "name": "it202",
     "testId": 202,
@@ -9283,7 +9283,7 @@
     "lineNumber": 66
   },
   {
-    "__docId__": 442,
+    "__docId__": 441,
     "kind": "test",
     "name": "describe203",
     "testId": 203,
@@ -9296,7 +9296,7 @@
     "lineNumber": 74
   },
   {
-    "__docId__": 443,
+    "__docId__": 442,
     "kind": "test",
     "name": "it204",
     "testId": 204,
@@ -9309,7 +9309,7 @@
     "lineNumber": 75
   },
   {
-    "__docId__": 444,
+    "__docId__": 443,
     "kind": "test",
     "name": "describe205",
     "testId": 205,
@@ -9322,7 +9322,7 @@
     "lineNumber": 90
   },
   {
-    "__docId__": 445,
+    "__docId__": 444,
     "kind": "test",
     "name": "it206",
     "testId": 206,
@@ -9335,7 +9335,7 @@
     "lineNumber": 91
   },
   {
-    "__docId__": 446,
+    "__docId__": 445,
     "kind": "test",
     "name": "describe207",
     "testId": 207,
@@ -9348,7 +9348,7 @@
     "lineNumber": 122
   },
   {
-    "__docId__": 447,
+    "__docId__": 446,
     "kind": "test",
     "name": "it208",
     "testId": 208,
@@ -9361,7 +9361,7 @@
     "lineNumber": 123
   },
   {
-    "__docId__": 448,
+    "__docId__": 447,
     "kind": "test",
     "name": "describe209",
     "testId": 209,
@@ -9379,7 +9379,7 @@
     ]
   },
   {
-    "__docId__": 449,
+    "__docId__": 448,
     "kind": "test",
     "name": "it210",
     "testId": 210,
@@ -9392,7 +9392,7 @@
     "lineNumber": 185
   },
   {
-    "__docId__": 450,
+    "__docId__": 449,
     "kind": "test",
     "name": "it211",
     "testId": 211,
@@ -9405,7 +9405,7 @@
     "lineNumber": 192
   },
   {
-    "__docId__": 451,
+    "__docId__": 450,
     "kind": "test",
     "name": "it212",
     "testId": 212,
@@ -9418,7 +9418,7 @@
     "lineNumber": 200
   },
   {
-    "__docId__": 452,
+    "__docId__": 451,
     "kind": "test",
     "name": "it213",
     "testId": 213,
@@ -9430,7 +9430,7 @@
     "lineNumber": 210
   },
   {
-    "__docId__": 453,
+    "__docId__": 452,
     "kind": "test",
     "name": "it214",
     "testId": 214,
@@ -9443,7 +9443,7 @@
     "lineNumber": 218
   },
   {
-    "__docId__": 454,
+    "__docId__": 453,
     "kind": "test",
     "name": "it215",
     "testId": 215,
@@ -9456,7 +9456,7 @@
     "lineNumber": 225
   },
   {
-    "__docId__": 455,
+    "__docId__": 454,
     "kind": "test",
     "name": "it216",
     "testId": 216,
@@ -9469,7 +9469,7 @@
     "lineNumber": 231
   },
   {
-    "__docId__": 456,
+    "__docId__": 455,
     "kind": "test",
     "name": "it217",
     "testId": 217,
@@ -9482,7 +9482,7 @@
     "lineNumber": 237
   },
   {
-    "__docId__": 457,
+    "__docId__": 456,
     "kind": "test",
     "name": "describe218",
     "testId": 218,
@@ -9499,7 +9499,7 @@
     ]
   },
   {
-    "__docId__": 458,
+    "__docId__": 457,
     "kind": "test",
     "name": "it219",
     "testId": 219,
@@ -9512,7 +9512,7 @@
     "lineNumber": 259
   },
   {
-    "__docId__": 459,
+    "__docId__": 458,
     "kind": "test",
     "name": "describe220",
     "testId": 220,
@@ -9528,7 +9528,7 @@
     ]
   },
   {
-    "__docId__": 460,
+    "__docId__": 459,
     "kind": "test",
     "name": "it221",
     "testId": 221,
@@ -9541,7 +9541,7 @@
     "lineNumber": 287
   },
   {
-    "__docId__": 461,
+    "__docId__": 460,
     "kind": "test",
     "name": "describe222",
     "testId": 222,
@@ -9557,7 +9557,7 @@
     ]
   },
   {
-    "__docId__": 462,
+    "__docId__": 461,
     "kind": "test",
     "name": "it223",
     "testId": 223,
@@ -9570,7 +9570,7 @@
     "lineNumber": 300
   },
   {
-    "__docId__": 463,
+    "__docId__": 462,
     "kind": "test",
     "name": "describe224",
     "testId": 224,
@@ -9583,7 +9583,7 @@
     "lineNumber": 309
   },
   {
-    "__docId__": 464,
+    "__docId__": 463,
     "kind": "test",
     "name": "it225",
     "testId": 225,
@@ -9596,7 +9596,7 @@
     "lineNumber": 310
   },
   {
-    "__docId__": 465,
+    "__docId__": 464,
     "kind": "test",
     "name": "it226",
     "testId": 226,
@@ -9609,7 +9609,7 @@
     "lineNumber": 319
   },
   {
-    "__docId__": 466,
+    "__docId__": 465,
     "kind": "test",
     "name": "it227",
     "testId": 227,
@@ -9622,7 +9622,7 @@
     "lineNumber": 329
   },
   {
-    "__docId__": 467,
+    "__docId__": 466,
     "kind": "test",
     "name": "it228",
     "testId": 228,
@@ -9635,7 +9635,7 @@
     "lineNumber": 339
   },
   {
-    "__docId__": 468,
+    "__docId__": 467,
     "kind": "test",
     "name": "it229",
     "testId": 229,
@@ -9648,7 +9648,7 @@
     "lineNumber": 350
   },
   {
-    "__docId__": 469,
+    "__docId__": 468,
     "kind": "test",
     "name": "it230",
     "testId": 230,
@@ -9661,7 +9661,46 @@
     "lineNumber": 370
   },
   {
+    "__docId__": 469,
+    "kind": "test",
+    "name": "describe231",
+    "testId": 231,
+    "memberof": "tests/inputelement.spec.js~describe193",
+    "testDepth": 1,
+    "static": true,
+    "longname": "tests/inputelement.spec.js~describe193.describe231",
+    "access": null,
+    "description": "Select tag",
+    "lineNumber": 381
+  },
+  {
     "__docId__": 470,
+    "kind": "test",
+    "name": "it232",
+    "testId": 232,
+    "memberof": "tests/inputelement.spec.js~describe193.describe231",
+    "testDepth": 2,
+    "static": true,
+    "longname": "tests/inputelement.spec.js~describe193.describe231.it232",
+    "access": null,
+    "description": "should get value",
+    "lineNumber": 388
+  },
+  {
+    "__docId__": 471,
+    "kind": "test",
+    "name": "it233",
+    "testId": 233,
+    "memberof": "tests/inputelement.spec.js~describe193.describe231",
+    "testDepth": 2,
+    "static": true,
+    "longname": "tests/inputelement.spec.js~describe193.describe231.it233",
+    "access": null,
+    "description": "should set value",
+    "lineNumber": 392
+  },
+  {
+    "__docId__": 472,
     "kind": "testFile",
     "name": "tests/q.spec.js",
     "content": "import {Q} from 'index';\n\ndescribe('Q magic', function () {\n  describe('Element creation', function () {\n    it('should returns a void HtmlElement', function () {\n      let e = Q();\n\n      e.enhanced.should.equal(true);\n      e.node.nodeType.should.equal(11);\n    });\n\n    it('should return element unchanged', function () {\n      let e = Q('+div');\n      let i = Q(e);\n\n      e.should.eql(i);\n    });\n\n    it('should create an HtmlElement from a node', function () {\n      let e = document.createElement('div');\n      let i = Q(e);\n\n      i.enhanced.should.equal(true);\n      i.node.should.eql(e);\n    });\n\n    it('should create an HtmlElement from string', function () {\n      let e = Q('+<ul style=\"display:none\" id=\"list\" class=\"list\">' +\n        '<li id=\"li11\"></li>' +\n        '<li id=\"li12\">' +\n          '<ul id=\"sublist\">' +\n            '<li id=\"li21\"></li>' +\n            '<li id=\"li22\" class=\"lisubsub\"></li>' +\n            '<li id=\"li23\" class=\"li23 lisubsub\"></li>' +\n          '</ul>' +\n        '</li>' +\n        '<li><form id=\"form\"><input type=\"text\"><input type=\"text\" id=\"name\" name=\"fixture\"></form></li>' +\n       '</ul>');\n\n      e.enhanced.should.equal(true);\n      e.node.nodeName.should.equal('UL');\n      document.body.appendChild(e.node);\n    });\n  });\n\n  describe('Element query', function () {\n    it('should throw an exception if invalid query selector', function () {\n      expect(Q.bind(Q, '*diva')).to.throw('Invalid CSS query Selector');\n    });\n\n    it('should find #li11 in DOM and memory', function () {\n      let e = Q('#list');\n\n      Q('#li11').node.id.should.equal('li11');\n      e.remove();\n      Q('#li11').length.should.equal(0);\n      Q('#li11', e).node.id.should.equal('li11');\n      document.body.appendChild(e.node);\n    });\n\n    it('should find .li23 in DOM and memory', function () {\n      let e = Q('#list');\n\n      Q('.li23').node.id.should.equal('li23');\n      e.remove();\n      Q('.li23').length.should.equal(0);\n      Q('.li23', e).node.id.should.equal('li23');\n      document.body.appendChild(e.node);\n    });\n\n    it('should find @fixture in DOM and memory', function () {\n      let e = Q('#list');\n\n      Q('@fixture').node.id.should.equal('name');\n      e.remove();\n      Q('@fixture').length.should.equal(0);\n      Q('@fixture', e).node.id.should.equal('name');\n      document.body.appendChild(e.node);\n    });\n\n    it('should find =form in DOM and memory', function () {\n      let e = Q('#list');\n\n      Q('=form').node.id.should.equal('form');\n      e.remove();\n      Q('=form').length.should.equal(0);\n      Q('=form', e).node.id.should.equal('form');\n      document.body.appendChild(e.node);\n    });\n\n    it('should find li.li23 in DOM and memory', function () {\n      let e = Q('#list');\n\n      Q('li.li23').node.id.should.equal('li23');\n      e.remove();\n      Q('li.li23').length.should.equal(0);\n      Q('li.li23', e).node.id.should.equal('li23');\n      document.body.appendChild(e.node);\n    });\n  });\n});\n",
@@ -9672,170 +9711,170 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 471,
+    "__docId__": 473,
     "kind": "test",
-    "name": "describe231",
-    "testId": 231,
+    "name": "describe234",
+    "testId": 234,
     "memberof": "tests/q.spec.js",
     "testDepth": 0,
     "static": true,
-    "longname": "tests/q.spec.js~describe231",
+    "longname": "tests/q.spec.js~describe234",
     "access": null,
     "description": "Q magic",
     "lineNumber": 3
   },
   {
-    "__docId__": 472,
+    "__docId__": 474,
     "kind": "test",
-    "name": "describe232",
-    "testId": 232,
-    "memberof": "tests/q.spec.js~describe231",
+    "name": "describe235",
+    "testId": 235,
+    "memberof": "tests/q.spec.js~describe234",
     "testDepth": 1,
     "static": true,
-    "longname": "tests/q.spec.js~describe231.describe232",
+    "longname": "tests/q.spec.js~describe234.describe235",
     "access": null,
     "description": "Element creation",
     "lineNumber": 4
   },
   {
-    "__docId__": 473,
+    "__docId__": 475,
     "kind": "test",
-    "name": "it233",
-    "testId": 233,
-    "memberof": "tests/q.spec.js~describe231.describe232",
+    "name": "it236",
+    "testId": 236,
+    "memberof": "tests/q.spec.js~describe234.describe235",
     "testDepth": 2,
     "static": true,
-    "longname": "tests/q.spec.js~describe231.describe232.it233",
+    "longname": "tests/q.spec.js~describe234.describe235.it236",
     "access": null,
     "description": "should returns a void HtmlElement",
     "lineNumber": 5
   },
   {
-    "__docId__": 474,
+    "__docId__": 476,
     "kind": "test",
-    "name": "it234",
-    "testId": 234,
-    "memberof": "tests/q.spec.js~describe231.describe232",
+    "name": "it237",
+    "testId": 237,
+    "memberof": "tests/q.spec.js~describe234.describe235",
     "testDepth": 2,
     "static": true,
-    "longname": "tests/q.spec.js~describe231.describe232.it234",
+    "longname": "tests/q.spec.js~describe234.describe235.it237",
     "access": null,
     "description": "should return element unchanged",
     "lineNumber": 12
   },
   {
-    "__docId__": 475,
+    "__docId__": 477,
     "kind": "test",
-    "name": "it235",
-    "testId": 235,
-    "memberof": "tests/q.spec.js~describe231.describe232",
+    "name": "it238",
+    "testId": 238,
+    "memberof": "tests/q.spec.js~describe234.describe235",
     "testDepth": 2,
     "static": true,
-    "longname": "tests/q.spec.js~describe231.describe232.it235",
+    "longname": "tests/q.spec.js~describe234.describe235.it238",
     "access": null,
     "description": "should create an HtmlElement from a node",
     "lineNumber": 19
   },
   {
-    "__docId__": 476,
+    "__docId__": 478,
     "kind": "test",
-    "name": "it236",
-    "testId": 236,
-    "memberof": "tests/q.spec.js~describe231.describe232",
+    "name": "it239",
+    "testId": 239,
+    "memberof": "tests/q.spec.js~describe234.describe235",
     "testDepth": 2,
     "static": true,
-    "longname": "tests/q.spec.js~describe231.describe232.it236",
+    "longname": "tests/q.spec.js~describe234.describe235.it239",
     "access": null,
     "description": "should create an HtmlElement from string",
     "lineNumber": 27
   },
   {
-    "__docId__": 477,
+    "__docId__": 479,
     "kind": "test",
-    "name": "describe237",
-    "testId": 237,
-    "memberof": "tests/q.spec.js~describe231",
+    "name": "describe240",
+    "testId": 240,
+    "memberof": "tests/q.spec.js~describe234",
     "testDepth": 1,
     "static": true,
-    "longname": "tests/q.spec.js~describe231.describe237",
+    "longname": "tests/q.spec.js~describe234.describe240",
     "access": null,
     "description": "Element query",
     "lineNumber": 46
   },
   {
-    "__docId__": 478,
+    "__docId__": 480,
     "kind": "test",
-    "name": "it238",
-    "testId": 238,
-    "memberof": "tests/q.spec.js~describe231.describe237",
+    "name": "it241",
+    "testId": 241,
+    "memberof": "tests/q.spec.js~describe234.describe240",
     "testDepth": 2,
     "static": true,
-    "longname": "tests/q.spec.js~describe231.describe237.it238",
+    "longname": "tests/q.spec.js~describe234.describe240.it241",
     "access": null,
     "description": "should throw an exception if invalid query selector",
     "lineNumber": 47
   },
   {
-    "__docId__": 479,
+    "__docId__": 481,
     "kind": "test",
-    "name": "it239",
-    "testId": 239,
-    "memberof": "tests/q.spec.js~describe231.describe237",
+    "name": "it242",
+    "testId": 242,
+    "memberof": "tests/q.spec.js~describe234.describe240",
     "testDepth": 2,
     "static": true,
-    "longname": "tests/q.spec.js~describe231.describe237.it239",
+    "longname": "tests/q.spec.js~describe234.describe240.it242",
     "access": null,
     "description": "should find #li11 in DOM and memory",
     "lineNumber": 51
   },
   {
-    "__docId__": 480,
+    "__docId__": 482,
     "kind": "test",
-    "name": "it240",
-    "testId": 240,
-    "memberof": "tests/q.spec.js~describe231.describe237",
+    "name": "it243",
+    "testId": 243,
+    "memberof": "tests/q.spec.js~describe234.describe240",
     "testDepth": 2,
     "static": true,
-    "longname": "tests/q.spec.js~describe231.describe237.it240",
+    "longname": "tests/q.spec.js~describe234.describe240.it243",
     "access": null,
     "description": "should find .li23 in DOM and memory",
     "lineNumber": 61
   },
   {
-    "__docId__": 481,
+    "__docId__": 483,
     "kind": "test",
-    "name": "it241",
-    "testId": 241,
-    "memberof": "tests/q.spec.js~describe231.describe237",
+    "name": "it244",
+    "testId": 244,
+    "memberof": "tests/q.spec.js~describe234.describe240",
     "testDepth": 2,
     "static": true,
-    "longname": "tests/q.spec.js~describe231.describe237.it241",
+    "longname": "tests/q.spec.js~describe234.describe240.it244",
     "access": null,
     "description": "should find @fixture in DOM and memory",
     "lineNumber": 71
   },
   {
-    "__docId__": 482,
+    "__docId__": 484,
     "kind": "test",
-    "name": "it242",
-    "testId": 242,
-    "memberof": "tests/q.spec.js~describe231.describe237",
+    "name": "it245",
+    "testId": 245,
+    "memberof": "tests/q.spec.js~describe234.describe240",
     "testDepth": 2,
     "static": true,
-    "longname": "tests/q.spec.js~describe231.describe237.it242",
+    "longname": "tests/q.spec.js~describe234.describe240.it245",
     "access": null,
     "description": "should find =form in DOM and memory",
     "lineNumber": 81
   },
   {
-    "__docId__": 483,
+    "__docId__": 485,
     "kind": "test",
-    "name": "it243",
-    "testId": 243,
-    "memberof": "tests/q.spec.js~describe231.describe237",
+    "name": "it246",
+    "testId": 246,
+    "memberof": "tests/q.spec.js~describe234.describe240",
     "testDepth": 2,
     "static": true,
-    "longname": "tests/q.spec.js~describe231.describe237.it243",
+    "longname": "tests/q.spec.js~describe234.describe240.it246",
     "access": null,
     "description": "should find li.li23 in DOM and memory",
     "lineNumber": 91

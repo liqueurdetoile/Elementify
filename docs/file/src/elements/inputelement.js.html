@@ -242,12 +242,6 @@ export default class InputElement extends HtmlElement {
         this.element.value = val;
         this.html(val);
         break;
-      case &apos;select&apos;: // Validate value is an option
-        let o, n = 1;
-
-        while ((o = this.child(n++)).length &amp;&amp; val !== o.value);
-        if (o.length) this.value = val;
-        break;
       case &apos;checkbox&apos; :
       case &apos;radio&apos; :
         if (val === &apos;true&apos; || val === 1 || val === &apos;1&apos;) val = true;

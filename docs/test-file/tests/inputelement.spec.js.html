@@ -179,7 +179,7 @@ describe(&apos;InputElement&apos;, function () {
             f2: &apos;fixture2&apos;
           }
         });
-        i.value.should.equal(&apos;f1&apos;);
+        i.value.should.equal(&apos;&apos;);
       });
     });
 
@@ -439,6 +439,23 @@ describe(&apos;InputElement&apos;, function () {
       check.value = &apos;fixture&apos;;
       check.node.checked.should.be.false;
       check.node.value.should.equal(&apos;fixture&apos;);
+    });
+  });
+
+  describe(&apos;Select tag&apos;, function () {
+    var select = Q(`+&lt;select&gt;
+      &lt;option id=&quot;option1&quot; value=&quot;1&quot; selected&gt;Fixture1&lt;/option&gt;
+      &lt;option id=&quot;option2&quot; value=&quot;2&quot;&gt;Fixture2&lt;/option&gt;
+      &lt;option id=&quot;option3&quot; value=&quot;3&quot;&gt;Fixture3&lt;/option&gt;
+    &lt;/select&gt;`);
+
+    it(&apos;should get value&apos;, function () {
+      expect(select.value).to.equal(&apos;1&apos;);
+    });
+
+    it(&apos;should set value&apos;, function () {
+      select.value = 2;
+      Q(&apos;#option2&apos;, select).node.selected.should.be.true;
     });
   });
 });
