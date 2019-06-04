@@ -9,10 +9,10 @@ module.exports = merge(base, {
   output: {
     path: path.resolve('./dev'),
     filename: 'elementify.js',
-    chunkFilename: 'modules/[name].js'    
+    chunkFilename: 'modules/[name].js'
   },
   plugins: [
-    new CleanWebpackPlugin(['dev'], {root: path.resolve('./')}),
-    new BundleAnalyzerPlugin(),
+    new CleanWebpackPlugin(),
+    new BundleAnalyzerPlugin()
   ]
 });
