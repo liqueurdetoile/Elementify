@@ -6,6 +6,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 
 module.exports = merge(base, {
   devtool: 'source-map',
+  mode: 'development',
   output: {
     path: path.resolve('./dev'),
     filename: 'elementify.js',

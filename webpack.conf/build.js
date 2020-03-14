@@ -8,6 +8,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = merge(base, {
   devtool: false,
+  mode: 'production',
   output: {
     path: path.resolve('./dist'),
     filename: 'elementify.min.js',
