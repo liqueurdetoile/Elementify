@@ -3,6 +3,7 @@ const base = require('./base.js');
 
 module.exports = merge(base, {
   devtool: 'inline-source-map',
+  mode: 'development',
   module: {
     rules: [
       {
